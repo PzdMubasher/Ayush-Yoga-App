@@ -72,6 +72,7 @@ flutter:
     - assets/images/warrior_pose.png
     - assets/images/mountain_pose.png
     - assets/images/plank_pose.png
+    - assets/data/pose_rules.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

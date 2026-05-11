@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math' as math;
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:camera/camera.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 import 'package:flutter_tts/flutter_tts.dart';
@@ -30,14 +32,33 @@ class _CameraScreenState extends State<CameraScreen> {
   final FlutterTts _tts = FlutterTts();
   Timer? _ttsTimer;
   InputImageRotation? _currentRotation;
+  List<dynamic> _allPoseRules = [];
+  Map<String, dynamic>? _currentPoseRules;
 
   @override
   void initState() {
     super.initState();
     _targetPoseName = widget.pose.name;
     _initializePoseDetector();
+    _loadPoseRules();
     _initializeCamera();
     _initializeTTS();
+  }
+
+  Future<void> _loadPoseRules() async {
+    try {
+      final String response = await rootBundle.loadString('assets/data/pose_rules.json');
+      final data = await json.decode(response);
+      setState(() {
+        _allPoseRules = data;
+        _currentPoseRules = _allPoseRules.firstWhere(
+          (element) => element['poseName'] == _targetPoseName,
+          orElse: () => null,
+        );
+      });
+    } catch (e) {
+      debugPrint("Error loading JSON: $e");
+    }
   }
 
   void _initializePoseDetector() {
@@ -52,7 +73,7 @@ class _CameraScreenState extends State<CameraScreen> {
     await _tts.setLanguage("en-US");
     await _tts.setSpeechRate(0.5);
     await _tts.setVolume(1.0);
-    String welcomeMsg = "Beginning $_targetPoseName. Please observe the reference image on your screen.";
+    String welcomeMsg = "Beginning $_targetPoseName. Please observe the reference image.";
     await _tts.speak(welcomeMsg);
   }
 
@@ -65,7 +86,7 @@ class _CameraScreenState extends State<CameraScreen> {
       await _controller!.initialize();
       if (!mounted) return;
       _controller!.startImageStream(_processCameraImage);
-      setState(() { _currentStatus = "Ready! Align your body with the guide."; });
+      setState(() { _currentStatus = "Ready! Align your body."; });
     } catch (e) { debugPrint("Camera error: $e"); }
   }
 
@@ -132,69 +153,78 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
   double _getAngle(PoseLandmark p1, PoseLandmark p2, PoseLandmark p3) {
-    double angle = math.atan2(p3.y - p2.y, p3.x - p2.x) - math.atan2(p1.y - p2.y, p1.x - p2.x);
-    angle = (angle * 180 / math.pi).abs();
+    double angle = (math.atan2(p3.y - p2.y, p3.x - p2.x) - math.atan2(p1.y - p2.y, p1.x - p2.x)).abs();
+    angle = angle * 180 / math.pi;
     if (angle > 180) angle = 360 - angle;
     return angle;
   }
 
   void _updatePoseStatus(Pose pose) {
-    final lShoulder = pose.landmarks[PoseLandmarkType.leftShoulder];
-    final lElbow = pose.landmarks[PoseLandmarkType.leftElbow];
-    final lWrist = pose.landmarks[PoseLandmarkType.leftWrist];
-    final rShoulder = pose.landmarks[PoseLandmarkType.rightShoulder];
-    final rElbow = pose.landmarks[PoseLandmarkType.rightElbow];
-    final rWrist = pose.landmarks[PoseLandmarkType.rightWrist];
-    final lHip = pose.landmarks[PoseLandmarkType.leftHip];
-    final lKnee = pose.landmarks[PoseLandmarkType.leftKnee];
-    final lAnkle = pose.landmarks[PoseLandmarkType.leftAnkle];
+    if (_currentPoseRules == null) return;
 
-    if (lShoulder == null || lElbow == null || lWrist == null || rShoulder == null || rElbow == null || rWrist == null || lHip == null || lKnee == null || lAnkle == null) {
-      setState(() { _currentStatus = "Stand back for full body view"; _accuracy = 0.0; });
-      return;
+    final landmarks = pose.landmarks;
+    bool allRulesPassed = true;
+    String feedback = "Perfect position! Keep holding.";
+
+    final List<dynamic> rules = _currentPoseRules!['rules'];
+    
+    for (var rule in rules) {
+      String joint = rule['joint'];
+      double? angle;
+
+      // Dynamic joint mapping
+      if (joint.contains("arm")) {
+        final shoulder = joint.startsWith("left") ? landmarks[PoseLandmarkType.leftShoulder] : landmarks[PoseLandmarkType.rightShoulder];
+        final elbow = joint.startsWith("left") ? landmarks[PoseLandmarkType.leftElbow] : landmarks[PoseLandmarkType.rightElbow];
+        final wrist = joint.startsWith("left") ? landmarks[PoseLandmarkType.leftWrist] : landmarks[PoseLandmarkType.rightWrist];
+        if (shoulder != null && elbow != null && wrist != null) angle = _getAngle(shoulder, elbow, wrist);
+      } else if (joint.contains("knee") || joint.contains("leg")) {
+        final hip = joint.startsWith("left") ? landmarks[PoseLandmarkType.leftHip] : landmarks[PoseLandmarkType.rightHip];
+        final knee = joint.startsWith("left") ? landmarks[PoseLandmarkType.leftKnee] : landmarks[PoseLandmarkType.rightKnee];
+        final ankle = joint.startsWith("left") ? landmarks[PoseLandmarkType.leftAnkle] : landmarks[PoseLandmarkType.rightAnkle];
+        if (hip != null && knee != null && ankle != null) angle = _getAngle(hip, knee, ankle);
+      } else if (joint == "spine") {
+        final shoulder = landmarks[PoseLandmarkType.leftShoulder];
+        final hip = landmarks[PoseLandmarkType.leftHip];
+        final knee = landmarks[PoseLandmarkType.leftKnee];
+        if (shoulder != null && hip != null && knee != null) angle = _getAngle(shoulder, hip, knee);
+      }
+
+      if (angle != null) {
+        if (angle < rule['idealMin']) {
+          allRulesPassed = false;
+          feedback = rule['messageLow'];
+          break;
+        } else if (angle > rule['idealMax']) {
+          allRulesPassed = false;
+          feedback = rule['messageHigh'] ?? "Adjust your position";
+          break;
+        }
+      } else {
+        allRulesPassed = false;
+        feedback = "Stand back for full body view";
+        break;
+      }
     }
 
-    double lArmAngle = _getAngle(lShoulder, lElbow, lWrist);
-    double rArmAngle = _getAngle(rShoulder, rElbow, rWrist);
-    double lLegAngle = _getAngle(lHip, lKnee, lAnkle);
+    setState(() {
+      _accuracy = allRulesPassed ? 0.95 : 0.4;
+      _currentStatus = feedback;
+    });
 
-    bool isCorrect = false;
-    String status = "Matching...";
-
-    if (_targetPoseName.contains("Tree")) {
-      bool armsUp = lArmAngle > 150 && rArmAngle > 150 && lWrist.y < lShoulder.y;
-      bool legBent = lLegAngle < 100 || _getAngle(pose.landmarks[PoseLandmarkType.rightHip]!, pose.landmarks[PoseLandmarkType.rightKnee]!, pose.landmarks[PoseLandmarkType.rightAnkle]!) < 100;
-      isCorrect = armsUp && legBent;
-      status = isCorrect ? "Perfect Vrikshasana!" : (armsUp ? "Place your foot on the inner thigh" : "Reach your arms to the sky");
-    } else if (_targetPoseName.contains("Warrior")) {
-      bool armsWide = (lArmAngle > 150 && rArmAngle > 150) && (lWrist.y > lShoulder.y - 50 && lWrist.y < lShoulder.y + 50);
-      isCorrect = armsWide;
-      status = isCorrect ? "Strong Virabhadrasana!" : "Extend your arms at shoulder height";
-    } else if (_targetPoseName.contains("Plank")) {
-      // Plank: Straight arms and straight body (legs angle near 180)
-      bool armsStraight = lArmAngle > 160 && rArmAngle > 160;
-      bool bodyStraight = lLegAngle > 160;
-      isCorrect = armsStraight && bodyStraight;
-      status = isCorrect ? "Strong Plank!" : "Keep your body in a straight line";
-    } else {
-      isCorrect = lArmAngle > 160 && rArmAngle > 160;
-      status = isCorrect ? "Steady Tadasana!" : "Stand tall and lengthen your spine";
-    }
-
-    setState(() { _accuracy = isCorrect ? 0.95 : 0.4; _currentStatus = status; });
-    if (isCorrect) _provideVoiceFeedback("Focus on your breath. Excellent hold.");
-    else _provideVoiceFeedback(status);
+    _provideVoiceFeedback(feedback);
   }
 
   void _provideVoiceFeedback(String message) {
     if (_ttsTimer?.isActive ?? false) return;
     _tts.speak(message);
-    _ttsTimer = Timer(const Duration(seconds: 7), () {});
+    _ttsTimer = Timer(const Duration(seconds: 6), () {});
   }
 
   String _getGuideImage() {
     if (_targetPoseName.contains("Tree")) return "assets/images/tree_pose.png";
     if (_targetPoseName.contains("Warrior")) return "assets/images/warrior_pose.png";
+    if (_targetPoseName.contains("Plank")) return "assets/images/plank_pose.png";
     return "assets/images/mountain_pose.png";
   }
 
@@ -214,25 +244,14 @@ class _CameraScreenState extends State<CameraScreen> {
           Transform.scale(scale: scale, child: Center(child: CameraPreview(_controller!))),
           if (_poses.isNotEmpty && _currentRotation != null)
             CustomPaint(painter: PosePainter(_poses, _controller!.value.previewSize!, _currentRotation!, isFrontCamera: _controller!.description.lensDirection == CameraLensDirection.front)),
-          
-          // Reference Guide Image
           Positioned(
             top: 60, right: 20,
             child: Container(
               width: 120, height: 160,
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.9),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.greenAccent, width: 2),
-                boxShadow: const [BoxShadow(blurRadius: 15, color: Colors.black45)],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(14),
-                child: Image.asset(_getGuideImage(), fit: BoxFit.contain),
-              ),
+              decoration: BoxDecoration(color: Colors.white.withOpacity(0.9), borderRadius: BorderRadius.circular(16), border: Border.all(color: Colors.greenAccent, width: 2), boxShadow: const [BoxShadow(blurRadius: 15, color: Colors.black45)]),
+              child: ClipRRect(borderRadius: BorderRadius.circular(14), child: Image.asset(_getGuideImage(), fit: BoxFit.contain)),
             ),
           ),
-
           Positioned(
             top: 60, left: 20,
             child: Column(
@@ -266,7 +285,7 @@ class _CameraScreenState extends State<CameraScreen> {
             bottom: 40, left: 20, right: 20,
             child: Row(
               children: [
-                _buildStatTile("Poses", "$_poseCount", Icons.visibility),
+                _buildStatTile("Landmarks", "${_poses.isNotEmpty ? _poses.first.landmarks.length : 0}", Icons.visibility),
                 const SizedBox(width: 12),
                 _buildStatTile("Accuracy", "${(_accuracy * 100).toInt()}%", Icons.check_circle),
                 const Spacer(),
