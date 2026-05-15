@@ -72,6 +72,19 @@ flutter:
     - assets/images/warrior_pose.png
     - assets/images/mountain_pose.png
     - assets/images/plank_pose.png
+    - assets/images/category_learn.png
+    - assets/images/category_surya.png
+    - assets/images/child_pose.png
+    - assets/images/cobra_pose.png
+    - assets/images/downward_dog.png
+    - assets/images/tree_pose.png
+    - assets/images/lotus_pose.png
+    - assets/images/butterfly_pose.png
+    - assets/images/cat_cow.png
+    - assets/images/boat_pose.png
+    - assets/images/warrior_pose_1.png
+    - assets/images/bridge_pose.png
+    - assets/images/triangle_pose.png
     - assets/data/pose_rules.json
 
   # An image asset can refer to one or more resolution-specific "variants", see

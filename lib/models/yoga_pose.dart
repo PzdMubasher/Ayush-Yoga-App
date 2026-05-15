@@ -1,55 +1,117 @@
 import 'package:flutter/material.dart';
 
-enum PoseType {
-  tree,
-  warrior,
-  plank,
-  mountain,
+enum PoseType { beginner, weightLoss, meditation, strength, morning, sleep, therapy, women, office, heart, breathing, energy, kids, surya, power, other }
+
+class YogaCategory {
+  final String name;
+  final String description;
+  final String icon;
+  final Color color;
+  final List<YogaPose> poses;
+
+  YogaCategory({
+    required this.name,
+    required this.description,
+    required this.icon,
+    required this.color,
+    required this.poses,
+  });
+
+  static List<YogaCategory> get categories => [
+    YogaCategory(name: 'Beginner Yoga', description: 'Basic foundation poses', icon: '🧘', color: Colors.teal, 
+      poses: YogaPose.poses.where((p) => p.tags.contains('beginner')).toList()),
+    YogaCategory(name: 'Weight Loss', description: 'Burn calories fast', icon: '🔥', color: Colors.orange, 
+      poses: YogaPose.poses.where((p) => p.tags.contains('weightLoss')).toList()),
+    YogaCategory(name: 'Meditation', description: 'Find your inner peace', icon: '😌', color: Colors.purple, 
+      poses: YogaPose.poses.where((p) => p.tags.contains('meditation')).toList()),
+    YogaCategory(name: 'Strength', description: 'Build muscle & power', icon: '💪', color: Colors.red, 
+      poses: YogaPose.poses.where((p) => p.tags.contains('strength')).toList()),
+    YogaCategory(name: 'Morning Yoga', description: 'Start your day fresh', icon: '☀️', color: Colors.amber, 
+      poses: YogaPose.poses.where((p) => p.tags.contains('morning')).toList()),
+    YogaCategory(name: 'Sleep Yoga', description: 'Relax for deep rest', icon: '🌙', color: Colors.indigo, 
+      poses: YogaPose.poses.where((p) => p.tags.contains('sleep')).toList()),
+    YogaCategory(name: 'Therapy Yoga', description: 'Healing & pain relief', icon: '🩺', color: Colors.blue, 
+      poses: YogaPose.poses.where((p) => p.tags.contains('therapy')).toList()),
+    YogaCategory(name: 'Women’s Yoga', description: 'Female health focus', icon: '👩', color: Colors.pink, 
+      poses: YogaPose.poses.where((p) => p.tags.contains('women')).toList()),
+    YogaCategory(name: 'Office Stretch', description: 'Relieve desk stress', icon: '🧍', color: Colors.brown, 
+      poses: YogaPose.poses.where((p) => p.tags.contains('office')).toList()),
+    YogaCategory(name: 'Breathing', description: 'Pranayama exercises', icon: '🫁', color: Colors.lightBlue, 
+      poses: YogaPose.poses.where((p) => p.tags.contains('breathing')).toList()),
+    YogaCategory(name: 'Energy Boost', description: 'Wake up your body', icon: '⚡', color: Colors.yellow, 
+      poses: YogaPose.poses.where((p) => p.tags.contains('energy')).toList()),
+    YogaCategory(name: 'Kids Yoga', description: 'Fun yoga for children', icon: '🧒', color: Colors.pinkAccent, 
+      poses: YogaPose.poses.where((p) => p.tags.contains('kids')).toList()),
+    YogaCategory(name: 'Surya Namaskar', description: 'Sun Salutation sequence', icon: '🧎', color: Colors.orangeAccent, 
+      poses: YogaPose.poses.where((p) => p.tags.contains('surya')).toList()),
+    YogaCategory(name: 'Power Yoga', description: 'High intensity flow', icon: '🔥', color: Colors.redAccent, 
+      poses: YogaPose.poses.where((p) => p.tags.contains('power')).toList()),
+  ];
 }
 
 class YogaPose {
   final String name;
   final String description;
-  final PoseType type;
-  final String instruction;
+  final List<String> benefits;
+  final List<String> tags;
   final String imageUrl;
 
   YogaPose({
     required this.name,
     required this.description,
-    required this.type,
-    required this.instruction,
+    required this.benefits,
+    required this.tags,
     required this.imageUrl,
   });
 
   static List<YogaPose> get poses => [
-        YogaPose(
-          name: 'Tree Pose',
-          description: 'Vrikshasana - Improves balance and stability.',
-          type: PoseType.tree,
-          instruction: 'Place your foot on your inner thigh. Reach your arms to the sky.',
-          imageUrl: 'assets/images/tree_pose.png',
-        ),
-        YogaPose(
-          name: 'Warrior Pose',
-          description: 'Virabhadrasana - Strengthens legs and opens hips.',
-          type: PoseType.warrior,
-          instruction: 'Extend your arms at shoulder height. Bend your front knee.',
-          imageUrl: 'assets/images/warrior_pose.png',
-        ),
-        YogaPose(
-          name: 'Plank Pose',
-          description: 'Phalakasana - Strengthens the core.',
-          type: PoseType.plank,
-          instruction: 'Hold your body in a straight line from head to heels.',
-          imageUrl: 'assets/images/plank_pose.png',
-        ),
-        YogaPose(
-          name: 'Mountain Pose',
-          description: 'Tadasana - Improves posture and focus.',
-          type: PoseType.mountain,
-          instruction: 'Stand tall and lengthen your spine. Keep arms by your side.',
-          imageUrl: 'assets/images/mountain_pose.png',
-        ),
-      ];
+    // --- BEGINNER ---
+    YogaPose(name: 'Mountain Pose', description: 'Tadasana - Basic standing', benefits: ['Fixes posture', 'Improves balance'], tags: ['beginner', 'morning', 'therapy'], imageUrl: 'assets/images/mountain_pose.png'),
+    YogaPose(name: 'Child Pose', description: 'Balasana - Relaxation', benefits: ['Calms mind', 'Stretches back'], tags: ['beginner', 'sleep', 'therapy'], imageUrl: 'assets/images/child_pose.png'),
+    YogaPose(name: 'Cat-Cow Pose', description: 'Spinal flexibility', benefits: ['Relieves back pain', 'Stretches spine'], tags: ['beginner', 'therapy', 'women', 'office'], imageUrl: 'assets/images/cat_cow.png'),
+    YogaPose(name: 'Cobra Pose', description: 'Bhujangasana', benefits: ['Back flexibility', 'Opens chest'], tags: ['beginner', 'strength', 'morning', 'therapy'], imageUrl: 'assets/images/cobra_pose.png'),
+    YogaPose(name: 'Downward Dog', description: 'Adho Mukha Svanasana', benefits: ['Stretches body', 'Improves circulation'], tags: ['beginner', 'strength', 'energy'], imageUrl: 'assets/images/downward_dog.png'),
+    YogaPose(name: 'Tree Pose', description: 'Vrikshasana - Balance', benefits: ['Balance', 'Leg strength'], tags: ['beginner', 'kids', 'energy'], imageUrl: 'assets/images/tree_pose.png'),
+
+    // --- WEIGHT LOSS & POWER ---
+    YogaPose(name: 'Surya Namaskar', description: '12-step Sun Salutation', benefits: ['Full body detox', 'Weight loss'], tags: ['surya', 'weightLoss', 'energy', 'morning'], imageUrl: 'assets/images/category_surya.png'),
+    YogaPose(name: 'Boat Pose', description: 'Navasana - Core power', benefits: ['Strengthens abs', 'Improves digestion'], tags: ['weightLoss', 'strength'], imageUrl: 'assets/images/boat_pose.png'),
+    YogaPose(name: 'Plank Pose', description: 'Phalakasana', benefits: ['Core strength', 'Tones arms'], tags: ['strength', 'weightLoss', 'power', 'energy'], imageUrl: 'assets/images/plank_pose.png'),
+    YogaPose(name: 'Warrior II', description: 'Virabhadrasana II', benefits: ['Leg strength', 'Stamina'], tags: ['strength', 'weightLoss', 'power', 'energy', 'morning'], imageUrl: 'assets/images/warrior_pose.png'),
+    YogaPose(name: 'Chair Pose', description: 'Utkatasana', benefits: ['Lower body strength', 'Heart health'], tags: ['weightLoss', 'energy', 'strength'], imageUrl: 'assets/images/category_learn.png'),
+    YogaPose(name: 'Bridge Pose', description: 'Setu Bandhasana', benefits: ['Thyroid health', 'Back strength'], tags: ['weightLoss', 'women', 'therapy', 'strength'], imageUrl: 'assets/images/bridge_pose.png'),
+
+    // --- MEDITATION & BREATHING ---
+    YogaPose(name: 'Deep Breathing', description: 'Calm your system', benefits: ['Reduces anxiety', 'Lowers heart rate'], tags: ['meditation', 'breathing'], imageUrl: 'assets/images/category_learn.png'),
+    YogaPose(name: 'Lotus Pose', description: 'Padmasana - Classic meditation', benefits: ['Improves focus', 'Calms mind'], tags: ['meditation'], imageUrl: 'assets/images/lotus_pose.png'),
+    YogaPose(name: 'Anulom Vilom', description: 'Alternate Nostril Breathing', benefits: ['Stress relief', 'Mental clarity'], tags: ['breathing', 'meditation', 'sleep'], imageUrl: 'assets/images/category_learn.png'),
+    YogaPose(name: 'Kapalbhati', description: 'Skull Shining Breath', benefits: ['Digestive health', 'Energizes body'], tags: ['breathing', 'energy'], imageUrl: 'assets/images/category_learn.png'),
+    YogaPose(name: 'Bhramari', description: 'Bee Breath', benefits: ['Calms nervous system', 'Focus'], tags: ['breathing', 'meditation'], imageUrl: 'assets/images/category_learn.png'),
+    YogaPose(name: 'Savasana', description: 'Corpse Pose', benefits: ['Deep relaxation', 'Reduces BP'], tags: ['meditation', 'sleep'], imageUrl: 'assets/images/category_learn.png'),
+
+    // --- STRENGTH & FLEXIBILITY ---
+    YogaPose(name: 'Triangle Pose', description: 'Trikonasana', benefits: ['Stretches hips', 'Improves digestion'], tags: ['strength', 'morning'], imageUrl: 'assets/images/triangle_pose.png'),
+    YogaPose(name: 'Side Plank', description: 'Vasisthasana', benefits: ['Oblique strength', 'Balance'], tags: ['strength', 'power'], imageUrl: 'assets/images/plank_pose.png'),
+    YogaPose(name: 'Dolphin Pose', description: 'Shoulder opener', benefits: ['Strengthens arms', 'Calms brain'], tags: ['strength'], imageUrl: 'assets/images/category_learn.png'),
+    YogaPose(name: 'Camel Pose', description: 'Ustrasana', benefits: ['Opens heart', 'Improves posture'], tags: ['strength', 'energy'], imageUrl: 'assets/images/category_learn.png'),
+    YogaPose(name: 'Bow Pose', description: 'Dhanurasana', benefits: ['Stretches front body', 'Strong back'], tags: ['strength', 'power'], imageUrl: 'assets/images/category_learn.png'),
+
+    // --- THERAPY & WOMEN ---
+    YogaPose(name: 'Butterfly Pose', description: 'Baddha Konasana', benefits: ['Pelvic health', 'Stress relief'], tags: ['women', 'therapy', 'kids'], imageUrl: 'assets/images/butterfly_pose.png'),
+    YogaPose(name: 'Goddess Pose', description: 'Utkata Konasana', benefits: ['Hip strength', 'Female wellness'], tags: ['women'], imageUrl: 'assets/images/category_learn.png'),
+    YogaPose(name: 'Neck Stretch', description: 'Relieve neck tension', benefits: ['Fixes neck pain'], tags: ['office', 'therapy'], imageUrl: 'assets/images/category_learn.png'),
+    YogaPose(name: 'Shoulder Rolls', description: 'Open shoulders', benefits: ['Relieves tension'], tags: ['office', 'therapy'], imageUrl: 'assets/images/category_learn.png'),
+    
+    // --- OFFICE ---
+    YogaPose(name: 'Chair Twist', description: 'Seated spinal twist', benefits: ['Relieves back pain', 'Digestive health'], tags: ['office', 'therapy'], imageUrl: 'assets/images/category_learn.png'),
+    YogaPose(name: 'Wrist Stretch', description: 'Relieve typing stress', benefits: ['Carpal tunnel relief'], tags: ['office'], imageUrl: 'assets/images/category_learn.png'),
+
+    // --- POWER YOGA ---
+    YogaPose(name: 'Crow Pose', description: 'Bakasana - Arm balance', benefits: ['Arm strength', 'Balance'], tags: ['power', 'strength'], imageUrl: 'assets/images/category_learn.png'),
+    YogaPose(name: 'Chaturanga', description: 'Low Plank', benefits: ['Full body strength', 'Tones arms'], tags: ['power', 'strength'], imageUrl: 'assets/images/category_learn.png'),
+    
+    // --- KIDS ---
+    YogaPose(name: 'Frog Pose', description: 'Fun leg stretch', benefits: ['Hip opening', 'Fun for kids'], tags: ['kids'], imageUrl: 'assets/images/category_learn.png'),
+    YogaPose(name: 'Lion Breath', description: 'Relieve tension', benefits: ['Face muscle relaxation'], tags: ['kids', 'energy'], imageUrl: 'assets/images/category_learn.png'),
+  ];
 }

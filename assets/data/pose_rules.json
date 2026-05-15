@@ -1,82 +1,70 @@
 [
   {
-    "poseName": "Tree Pose",
-    "rules": [
+    "poseName": "Mountain Pose",
+    "steps": [
       {
-        "joint": "left_arm",
-        "idealMin": 150,
-        "idealMax": 180,
-        "messageLow": "Reach your arms higher to the sky"
-      },
-      {
-        "joint": "right_arm",
-        "idealMin": 150,
-        "idealMax": 180,
-        "messageLow": "Reach your arms higher to the sky"
-      },
-      {
-        "joint": "bent_leg",
-        "idealMin": 30,
-        "idealMax": 100,
-        "messageHigh": "Place your foot on your inner thigh"
+        "stepName": "Perfect Posture",
+        "instruction": "Stand tall with feet together.",
+        "rules": [
+          { "joint": "spine", "idealMin": 160, "idealMax": 180, "messageLow": "Lengthen your spine" }
+        ]
       }
     ]
   },
   {
-    "poseName": "Warrior Pose",
-    "rules": [
+    "poseName": "Tree Pose",
+    "steps": [
       {
-        "joint": "left_arm_height",
-        "idealMin": 160,
-        "idealMax": 180,
-        "messageLow": "Extend your left arm straight"
+        "stepName": "Leg Placement",
+        "instruction": "Place your foot on your inner thigh.",
+        "rules": [
+          { "joint": "bent_leg", "idealMin": 30, "idealMax": 100, "messageHigh": "Balance your foot higher" }
+        ]
       },
       {
-        "joint": "right_arm_height",
-        "idealMin": 160,
-        "idealMax": 180,
-        "messageLow": "Extend your right arm straight"
-      },
-      {
-        "joint": "front_knee",
-        "idealMin": 85,
-        "idealMax": 105,
-        "messageLow": "Bend your front knee more",
-        "messageHigh": "Reduce your front knee bend"
+        "stepName": "Balance",
+        "instruction": "Reach your arms to the sky.",
+        "rules": [
+          { "joint": "left_arm", "idealMin": 150, "idealMax": 180, "messageLow": "Arms up" },
+          { "joint": "right_arm", "idealMin": 150, "idealMax": 180, "messageLow": "Arms up" }
+        ]
       }
     ]
   },
   {
     "poseName": "Plank Pose",
-    "rules": [
+    "steps": [
       {
-        "joint": "arms",
-        "idealMin": 160,
-        "idealMax": 180,
-        "messageLow": "Keep your arms straight and strong"
-      },
-      {
-        "joint": "body_line",
-        "idealMin": 160,
-        "idealMax": 180,
-        "messageLow": "Keep your body in a straight line"
+        "stepName": "Strong Core",
+        "instruction": "Keep your body in a straight line.",
+        "rules": [
+          { "joint": "body_line", "idealMin": 160, "idealMax": 180, "messageLow": "Don't drop your hips" },
+          { "joint": "arms", "idealMin": 160, "idealMax": 180, "messageLow": "Keep arms straight" }
+        ]
       }
     ]
   },
   {
-    "poseName": "Mountain Pose",
-    "rules": [
+    "poseName": "Warrior II",
+    "steps": [
       {
-        "joint": "spine",
-        "idealMin": 160,
-        "idealMax": 180,
-        "messageLow": "Stand tall and lengthen your spine"
-      },
+        "stepName": "Arms Extended",
+        "instruction": "Extend arms at shoulder height.",
+        "rules": [
+          { "joint": "left_arm", "idealMin": 160, "idealMax": 180, "messageLow": "Straighten your arms" }
+        ]
+      }
+    ]
+  },
+  {
+    "poseName": "Surya Namaskar",
+    "steps": [
       {
-        "joint": "arms_side",
-        "idealMin": 160,
-        "idealMax": 180,
-        "messageLow": "Keep arms by your side"
+        "stepName": "Prayer Position",
+        "instruction": "Bring hands together in Pranamasana.",
+        "rules": [
+          { "joint": "spine", "idealMin": 160, "idealMax": 180, "messageLow": "Stand tall" }
+        ]
       }
     ]
   }

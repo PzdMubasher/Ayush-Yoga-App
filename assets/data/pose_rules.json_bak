@@ -1,0 +1,83 @@
+[
+  {
+    "poseName": "Tree Pose",
+    "rules": [
+      {
+        "joint": "left_arm",
+        "idealMin": 150,
+        "idealMax": 180,
+        "messageLow": "Reach your arms higher to the sky"
+      },
+      {
+        "joint": "right_arm",
+        "idealMin": 150,
+        "idealMax": 180,
+        "messageLow": "Reach your arms higher to the sky"
+      },
+      {
+        "joint": "bent_leg",
+        "idealMin": 30,
+        "idealMax": 100,
+        "messageHigh": "Place your foot on your inner thigh"
+      }
+    ]
+  },
+  {
+    "poseName": "Warrior Pose",
+    "rules": [
+      {
+        "joint": "left_arm_height",
+        "idealMin": 160,
+        "idealMax": 180,
+        "messageLow": "Extend your left arm straight"
+      },
+      {
+        "joint": "right_arm_height",
+        "idealMin": 160,
+        "idealMax": 180,
+        "messageLow": "Extend your right arm straight"
+      },
+      {
+        "joint": "front_knee",
+        "idealMin": 85,
+        "idealMax": 105,
+        "messageLow": "Bend your front knee more",
+        "messageHigh": "Reduce your front knee bend"
+      }
+    ]
+  },
+  {
+    "poseName": "Plank Pose",
+    "rules": [
+      {
+        "joint": "arms",
+        "idealMin": 160,
+        "idealMax": 180,
+        "messageLow": "Keep your arms straight and strong"
+      },
+      {
+        "joint": "body_line",
+        "idealMin": 160,
+        "idealMax": 180,
+        "messageLow": "Keep your body in a straight line"
+      }
+    ]
+  },
+  {
+    "poseName": "Mountain Pose",
+    "rules": [
+      {
+        "joint": "spine",
+        "idealMin": 160,
+        "idealMax": 180,
+        "messageLow": "Stand tall and lengthen your spine"
+      },
+      {
+        "joint": "arms_side",
+        "idealMin": 160,
+        "idealMax": 180,
+        "messageLow": "Keep arms by your side"
+      }
+    ]
+  }
+]
