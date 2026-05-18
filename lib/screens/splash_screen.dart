@@ -140,7 +140,9 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                       ),
                     ],
                   ),
-                  child: Image.asset('assets/images/logo.png', fit: BoxFit.contain),
+                  child: ClipOval(
+                    child: Image.asset('assets/images/Ayush_yoga.jpeg', fit: BoxFit.cover),
+                  ),
                 ),
               ),
               const SizedBox(height: 30),
