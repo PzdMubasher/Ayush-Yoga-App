@@ -19,6 +19,12 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   bool _showLanguageSelection = false;
   String _selectedLang = 'en';
 
+  // Typewriter animation variables
+  String _fullQuote = "";
+  String _displayedQuote = "";
+  int _charIndex = 0;
+  Timer? _typewriterTimer;
+
   @override
   void initState() {
     super.initState();
@@ -30,15 +36,35 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
     _controller.forward();
 
+    _startTypewriter("Yoga is the journey to the self.");
     _checkLanguageStatus();
+  }
+
+  void _startTypewriter(String quote) {
+    _typewriterTimer?.cancel();
+    setState(() {
+      _fullQuote = quote;
+      _displayedQuote = "";
+      _charIndex = 0;
+    });
+    _typewriterTimer = Timer.periodic(const Duration(milliseconds: 40), (timer) {
+      if (_charIndex < _fullQuote.length) {
+        setState(() {
+          _displayedQuote += _fullQuote[_charIndex];
+          _charIndex++;
+        });
+      } else {
+        _typewriterTimer?.cancel();
+      }
+    });
   }
 
   Future<void> _checkLanguageStatus() async {
     final prefs = await SharedPreferences.getInstance();
     final bool isLanguageSet = prefs.getBool('is_language_set') ?? false;
 
-    // Minimum splash duration
-    await Future.delayed(const Duration(milliseconds: 2000));
+    // Minimum splash duration (increased to 4 seconds)
+    await Future.delayed(const Duration(milliseconds: 4000));
     if (!mounted) return;
 
     if (isLanguageSet) {
@@ -49,6 +75,9 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         _showLanguageSelection = true;
         _selectedLang = langProvider.currentLanguage;
       });
+      _startTypewriter(_selectedLang == 'hi' 
+          ? "योग स्वयं की यात्रा है।" 
+          : "Yoga is the journey to the self.");
     }
   }
 
@@ -69,7 +98,31 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   @override
   void dispose() {
     _controller.dispose();
+    _typewriterTimer?.cancel();
     super.dispose();
+  }
+
+  Widget _buildTopLogoCard(String assetPath) {
+    return Container(
+      width: 95,
+      height: 95,
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.15),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Image.asset(assetPath, fit: BoxFit.contain),
+      ),
+    );
   }
 
   Widget _buildLanguageOption(String code, String name) {
@@ -79,25 +132,28 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         setState(() {
           _selectedLang = code;
         });
+        _startTypewriter(code == 'hi' 
+            ? "योग स्वयं की यात्रा है।" 
+            : "Yoga is the journey to the self.");
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
-        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+        padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 14),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.white.withOpacity(0.25) : Colors.white.withOpacity(0.05),
-          borderRadius: BorderRadius.circular(20),
+          color: isSelected ? const Color(0xFF023220) : Colors.grey.shade100,
+          borderRadius: BorderRadius.circular(18),
           border: Border.all(
-            color: isSelected ? const Color(0xFF00FF88) : Colors.white24,
+            color: isSelected ? const Color(0xFF00FF88) : Colors.grey.shade300,
             width: 2,
           ),
-          boxShadow: isSelected ? [BoxShadow(color: const Color(0xFF00FF88).withOpacity(0.3), blurRadius: 10)] : [],
+          boxShadow: isSelected ? [BoxShadow(color: const Color(0xFF00FF88).withOpacity(0.2), blurRadius: 8)] : [],
         ),
         child: Text(
           name,
           style: TextStyle(
-            color: Colors.white,
+            color: isSelected ? Colors.white : Colors.grey.shade800,
             fontSize: 16,
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
           ),
         ),
       ),
@@ -117,121 +173,194 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             colors: [Color(0xFF051C15), Color(0xFF023220)],
           ),
         ),
-        child: FadeTransition(
-          opacity: _fadeAnimation,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ScaleTransition(
-                scale: _scaleAnimation,
-                child: Container(
-                  width: 150,
-                  height: 150,
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.05),
-                    shape: BoxShape.circle,
-                    border: Border.all(color: const Color(0xFF00FF88).withOpacity(0.5), width: 2),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFF00FF88).withOpacity(0.15),
-                        blurRadius: 40,
-                        spreadRadius: 10,
-                      ),
-                    ],
-                  ),
-                  child: ClipOval(
-                    child: Image.asset('assets/images/Ayush_yoga.jpeg', fit: BoxFit.cover),
-                  ),
+        child: Stack(
+          children: [
+            // Background Image Overlay (Serene Meditation image watermark)
+            Positioned.fill(
+              child: Opacity(
+                opacity: 0.12,
+                child: Image.asset(
+                  'assets/images/meditation.png',
+                  fit: BoxFit.cover,
                 ),
               ),
-              const SizedBox(height: 30),
-              const Text(
-                'AYUSH YOGA',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 32,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 6,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                _selectedLang == 'hi' ? 'आत्मा और शरीर का मिलन' : 'Harmonize Your Soul',
-                style: TextStyle(
-                  color: const Color(0xFF00FF88).withOpacity(0.8),
-                  fontSize: 16,
-                  fontStyle: FontStyle.italic,
-                  letterSpacing: 2,
-                ),
-              ),
-              if (_showLanguageSelection) ...[
-                const SizedBox(height: 50),
-                AnimatedOpacity(
-                  opacity: _showLanguageSelection ? 1.0 : 0.0,
-                  duration: const Duration(milliseconds: 800),
-                  child: Column(
-                    children: [
-                      Text(
-                        _selectedLang == 'hi' ? 'भाषा चुनें / Select Language' : 'Select Language / भाषा चुनें',
-                        style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 1,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
+            ),
+            // Content
+            FadeTransition(
+              opacity: _fadeAnimation,
+              child: SafeArea(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 24),
+                    
+                    // Top: Logos Side-by-Side inside elegant white rounded cards (Reference Style)
+                    ScaleTransition(
+                      scale: _scaleAnimation,
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          _buildLanguageOption('en', 'English'),
-                          const SizedBox(width: 16),
-                          _buildLanguageOption('hi', 'हिन्दी'),
+                          _buildTopLogoCard('assets/images/Ayush_yoga.jpeg'),
+                          const SizedBox(width: 20),
+                          _buildTopLogoCard('assets/images/final_logo.png'),
                         ],
                       ),
-                      const SizedBox(height: 40),
-                      ElevatedButton(
-                        onPressed: () async {
-                          final langProvider = Provider.of<LanguageProvider>(context, listen: false);
-                          await langProvider.setLanguage(_selectedLang);
-                          _navigateToHome();
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF00FF88),
-                          foregroundColor: const Color(0xFF051C15),
-                          padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          elevation: 8,
-                          shadowColor: const Color(0xFF00FF88).withOpacity(0.5),
-                        ),
+                    ),
+                    
+                    const Spacer(),
+                    
+                    // Center: App Branding
+                    const Text(
+                      'AYUSH YOGA',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 34,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 6,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      _selectedLang == 'hi' ? 'आत्मा और शरीर का मिलन' : 'Harmonize Your Soul',
+                      style: TextStyle(
+                        color: const Color(0xFF00FF88).withOpacity(0.8),
+                        fontSize: 16,
+                        fontStyle: FontStyle.italic,
+                        letterSpacing: 2,
+                      ),
+                    ),
+                    
+                    const SizedBox(height: 24),
+                    
+                    // Animated Typewriter Quote
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 40),
+                      child: SizedBox(
+                        height: 50, // Fixed height to prevent UI bouncing
                         child: Text(
-                          _selectedLang == 'hi' ? 'आगे बढ़ें' : 'Continue',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1,
+                          _displayedQuote,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.9),
+                            fontSize: 15,
+                            fontStyle: FontStyle.italic,
+                            fontWeight: FontWeight.w500,
+                            height: 1.4,
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    
+                    const Spacer(),
+                    
+                    // Bottom Card (Translucent White Container matching reference layout) - ALWAYS VISIBLE
+                    Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.92),
+                        borderRadius: BorderRadius.circular(30),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 20,
+                            offset: const Offset(0, 10),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // Ministry of Ayush Banner inside the bottom card
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(color: Colors.grey.shade200),
+                              ),
+                              child: Image.asset(
+                                'assets/images/ministry.png', 
+                                height: 48, 
+                                fit: BoxFit.contain
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            
+                            if (_showLanguageSelection) ...[
+                              // Language instruction
+                              Text(
+                                _selectedLang == 'hi' ? 'भाषा चुनें / Select Language' : 'Select Language / भाषा चुनें',
+                                style: TextStyle(
+                                  color: Colors.grey.shade800,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              
+                              // Buttons English / हिन्दी
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  _buildLanguageOption('en', 'English'),
+                                  const SizedBox(width: 16),
+                                  _buildLanguageOption('hi', 'हिन्दी'),
+                                ],
+                              ),
+                              const SizedBox(height: 24),
+                              
+                              // Continue Button
+                              SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    final langProvider = Provider.of<LanguageProvider>(context, listen: false);
+                                    await langProvider.setLanguage(_selectedLang);
+                                    _navigateToHome();
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFF00FF88),
+                                    foregroundColor: const Color(0xFF051C15),
+                                    padding: const EdgeInsets.symmetric(vertical: 18),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    elevation: 4,
+                                    shadowColor: const Color(0xFF00FF88).withOpacity(0.4),
+                                  ),
+                                  child: Text(
+                                    _selectedLang == 'hi' ? 'आगे बढ़ें' : 'Continue',
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 1,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ] else ...[
+                              const SizedBox(height: 10),
+                              const SizedBox(
+                                width: 30,
+                                height: 30,
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF023220)),
+                                  strokeWidth: 3,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                            ],
+                          ],
+                        ),
+                      ),
+                    const SizedBox(height: 24),
+                  ],
                 ),
-              ] else ...[
-                const SizedBox(height: 100),
-                const SizedBox(
-                  width: 30,
-                  height: 30,
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF00FF88)),
-                    strokeWidth: 3,
-                  ),
-                ),
-              ],
-            ],
-          ),
+              ),
+            ),
+          ],
         ),
       ),
     );

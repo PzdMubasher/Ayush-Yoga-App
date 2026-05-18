@@ -88,10 +88,19 @@ class _CameraScreenState extends State<CameraScreen> {
       if (_secondsRemaining > 0) {
         setState(() => _secondsRemaining--);
       } else {
-        _sessionTimer?.cancel();
-        _moveToNextStep();
+        _completeSession();
       }
     });
+  }
+
+  void _completeSession() {
+    _sessionTimer?.cancel();
+    setState(() { 
+      _currentStatus = "⏱️ Time's Up! Workout Complete. Namaste."; 
+      _accuracy = 1.0; 
+      _currentStepIndex = _steps.length; // Stop processing steps
+    });
+    _speakInstruction("Time is up. Workout complete. Well done. Namaste.");
   }
 
   String _formatTime(int seconds) {
@@ -140,7 +149,12 @@ class _CameraScreenState extends State<CameraScreen> {
   Future<void> _initializeCamera() async {
     final cameras = await availableCameras();
     final front = cameras.firstWhere((c) => c.lensDirection == CameraLensDirection.front, orElse: () => cameras.first);
-    _controller = CameraController(front, ResolutionPreset.medium, enableAudio: false, imageFormatGroup: Platform.isAndroid ? ImageFormatGroup.yuv420 : ImageFormatGroup.bgra8888);
+    _controller = CameraController(
+      front, 
+      ResolutionPreset.medium, 
+      enableAudio: false, 
+      imageFormatGroup: Platform.isAndroid ? ImageFormatGroup.yuv420 : ImageFormatGroup.bgra8888
+    );
     try {
       await _controller!.initialize();
       if (!mounted) return;
@@ -194,18 +208,46 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
   InputImage? _buildInputImage(CameraImage image) {
-    final sensorOrientation = _controller!.description.sensorOrientation;
+    final camera = _controller!.description;
+    final sensorOrientation = camera.sensorOrientation;
     InputImageRotation? rotation;
-    if (Platform.isAndroid) {
-      rotation = InputImageRotationValue.fromRawValue(sensorOrientation % 360);
+    if (Platform.isIOS) {
+      rotation = InputImageRotationValue.fromRawValue(sensorOrientation);
+    } else if (Platform.isAndroid) {
+      var rotationCompensation = 0;
+      if (camera.lensDirection == CameraLensDirection.front) {
+        rotationCompensation = (sensorOrientation + rotationCompensation) % 360;
+      } else {
+        rotationCompensation = (sensorOrientation - rotationCompensation + 360) % 360;
+      }
+      rotation = InputImageRotationValue.fromRawValue(rotationCompensation);
     }
     if (rotation == null) return null;
+
+    if (Platform.isIOS) {
+      final format = InputImageFormatValue.fromRawValue(image.format.raw);
+      if (format != InputImageFormat.bgra8888) return null;
+      if (image.planes.isEmpty) return null;
+      final WriteBuffer allBytes = WriteBuffer();
+      for (final Plane plane in image.planes) {
+        allBytes.putUint8List(plane.bytes);
+      }
+      return InputImage.fromBytes(
+        bytes: allBytes.done().buffer.asUint8List(),
+        metadata: InputImageMetadata(
+          size: Size(image.width.toDouble(), image.height.toDouble()),
+          rotation: rotation,
+          format: InputImageFormat.bgra8888,
+          bytesPerRow: image.planes[0].bytesPerRow,
+        ),
+      );
+    }
     
+    // Android YUV_420_888 -> NV21 conversion
     final width = image.width;
     final height = image.height;
     final yPlane = image.planes[0];
     
-    // Check if camera gives us a single plane (already NV21)
     if (image.planes.length == 1) {
       return InputImage.fromBytes(
         bytes: yPlane.bytes,
@@ -218,7 +260,6 @@ class _CameraScreenState extends State<CameraScreen> {
       );
     }
     
-    // YUV_420_888 → NV21 conversion (3 planes)
     final uPlane = image.planes[1];
     final vPlane = image.planes[2];
     final uvPixelStride = uPlane.bytesPerPixel ?? 1;
@@ -226,7 +267,6 @@ class _CameraScreenState extends State<CameraScreen> {
     
     final nv21 = Uint8List(width * height * 3 ~/ 2);
     
-    // Copy Y plane (respecting row stride — bytesPerRow may be > width due to alignment padding)
     if (yPlane.bytesPerRow == width) {
       nv21.setRange(0, width * height, yPlane.bytes);
     } else {
@@ -239,18 +279,14 @@ class _CameraScreenState extends State<CameraScreen> {
       }
     }
     
-    // Copy UV planes (also respecting row stride!)
     int uvIndex = width * height;
     final uvHeight = height ~/ 2;
     
     if (uvPixelStride == 2) {
-      // UV already interleaved — but must strip row padding
       if (uvRowStride == width) {
-        // No padding — bulk copy
         final uvSize = math.min(vPlane.bytes.length, width * uvHeight);
         nv21.setRange(uvIndex, uvIndex + uvSize, vPlane.bytes);
       } else {
-        // Has padding — copy row by row
         for (int row = 0; row < uvHeight; row++) {
           final srcOffset = row * uvRowStride;
           final dstOffset = uvIndex + row * width;
@@ -261,7 +297,6 @@ class _CameraScreenState extends State<CameraScreen> {
         }
       }
     } else {
-      // Manual interleave (rare devices)
       final uvWidth = width ~/ 2;
       for (int row = 0; row < uvHeight; row++) {
         for (int col = 0; col < uvWidth; col++) {
@@ -289,29 +324,46 @@ class _CameraScreenState extends State<CameraScreen> {
     if (_currentStepIndex >= _steps.length) return;
 
     final currentStep = _steps[_currentStepIndex];
-    final rules = currentStep['rules'] as List<dynamic>;
+    final currentRules = currentStep['rules'] as List<dynamic>;
     
-    // If no rules, just show the instruction (fallback poses)
-    if (rules.isEmpty) {
+    // If no rules in the entire pose, just show the instruction (fallback poses)
+    if (_steps.every((s) => (s['rules'] as List).isEmpty)) {
       setState(() { 
         _accuracy = 0.7; 
-        _currentStatus = "Great! Hold the pose"; 
+        _currentStatus = "Great! Hold the pose... ${_formatTime(_secondsRemaining)}"; 
       });
       return;
     }
     
+    // Accumulate all rules from Step 0 to _currentStepIndex.
+    // Newer rules for the same joint overwrite older rules to avoid contradictions (e.g. Cobra Pose).
+    final Map<String, Map<String, dynamic>> activeRulesMap = {};
+    for (int i = 0; i <= _currentStepIndex; i++) {
+      final step = _steps[i];
+      final stepRules = step['rules'] as List<dynamic>;
+      for (var rule in stepRules) {
+        final joint = rule['joint'] as String;
+        activeRulesMap[joint] = Map<String, dynamic>.from(rule);
+      }
+    }
+    final activeRules = activeRulesMap.values.toList();
+    
     bool allRulesPassed = true;
     String feedback = currentStep['instruction'];
 
-    for (var rule in rules) {
+    for (var rule in activeRules) {
       double? angle = _calculateAngle(pose, rule['joint']);
       
-      // Level adjustments
+      // Level adjustments (stricter for better accuracy)
       double tolerance = 0;
-      if (widget.level == "Beginner") tolerance = 15;
+      if (widget.level == "Beginner") tolerance = 10;
       if (widget.level == "Intermediate") tolerance = 5;
 
-      if (angle == null || angle < (rule['idealMin'] - tolerance) || angle > (rule['idealMax'] + tolerance)) {
+      if (angle == null) {
+        allRulesPassed = false;
+        feedback = "Position yourself clearly in the camera view";
+        break;
+      } else if (angle < (rule['idealMin'] - tolerance) || angle > (rule['idealMax'] + tolerance)) {
         allRulesPassed = false;
         feedback = rule['messageLow'] ?? rule['messageHigh'] ?? feedback;
         break;
@@ -326,7 +378,10 @@ class _CameraScreenState extends State<CameraScreen> {
       if (widget.level == "Intermediate") requiredHold = 7;
       if (widget.level == "Advanced") requiredHold = 15;
 
-      if (duration >= requiredHold) {
+      if (_currentStepIndex == _steps.length - 1) {
+        // Final Step: Don't advance, just hold until session timer ends!
+        setState(() { _accuracy = 1.0; _currentStatus = "✅ Perfect! Keep holding... ${_formatTime(_secondsRemaining)}"; });
+      } else if (duration >= requiredHold) {
         _moveToNextStep();
       } else {
         setState(() { _accuracy = 1.0; _currentStatus = "✅ Perfect! Hold... ${requiredHold - duration}s"; });
@@ -346,43 +401,85 @@ class _CameraScreenState extends State<CameraScreen> {
         _currentStatus = _steps[_currentStepIndex]['instruction'];
       });
       _speakInstruction("Perfect. " + _steps[_currentStepIndex]['instruction']);
-    } else {
-      setState(() { _currentStatus = "🧘 Session Complete! Namaste."; _accuracy = 1.0; });
-      _speakInstruction("Workout complete. Well done. Namaste.");
     }
   }
 
   double? _calculateAngle(Pose pose, String joint) {
     final landmarks = pose.landmarks;
+
+    double? getValidAngle(PoseLandmark? p1, PoseLandmark? p2, PoseLandmark? p3, {bool requireUpright = false}) {
+      if (p1 == null || p2 == null || p3 == null) return null;
+      
+      // Strict check: limbs must be clearly visible (likelihood > 0.45) to prevent guessing when sitting/lying down
+      if (p1.likelihood < 0.45 || p2.likelihood < 0.45 || p3.likelihood < 0.45) return null;
+      
+      // If we require the person to be standing/upright (e.g. spine checks),
+      // the shoulder (p1) must be physically above the hip (p2). In ML Kit Y=0 is the top.
+      if (requireUpright && p1.y > p2.y - 30) return null;
+
+      return _getAngle(p1, p2, p3);
+    }
+
     if (joint.contains("arm")) {
       final s = joint.startsWith("left") ? landmarks[PoseLandmarkType.leftShoulder] : landmarks[PoseLandmarkType.rightShoulder];
       final e = joint.startsWith("left") ? landmarks[PoseLandmarkType.leftElbow] : landmarks[PoseLandmarkType.rightElbow];
       final w = joint.startsWith("left") ? landmarks[PoseLandmarkType.leftWrist] : landmarks[PoseLandmarkType.rightWrist];
-      if (s != null && e != null && w != null) return _getAngle(s, e, w);
+      return getValidAngle(s, e, w);
     } else if (joint.contains("knee") || joint.contains("leg") || joint.contains("bent")) {
       final h = joint.startsWith("left") ? landmarks[PoseLandmarkType.leftHip] : landmarks[PoseLandmarkType.rightHip];
       final k = joint.startsWith("left") ? landmarks[PoseLandmarkType.leftKnee] : landmarks[PoseLandmarkType.rightKnee];
       final a = joint.startsWith("left") ? landmarks[PoseLandmarkType.leftAnkle] : landmarks[PoseLandmarkType.rightAnkle];
-      if (h != null && k != null && a != null) return _getAngle(h, k, a);
+      return getValidAngle(h, k, a);
     } else if (joint == "spine" || joint == "body_line") {
       final s = landmarks[PoseLandmarkType.leftShoulder];
       final h = landmarks[PoseLandmarkType.leftHip];
       final k = landmarks[PoseLandmarkType.leftKnee];
-      if (s != null && h != null && k != null) return _getAngle(s, h, k);
+      
+      // Enforce strict upright check only for standing vertical poses.
+      // Dynamic, inverted, horizontal, or bending poses (like Surya Namaskar, Triangle Pose, Camel, Crow, etc.) should bypass this.
+      final uprightStandingPoses = [
+        "Mountain Pose", "Tree Pose", "Warrior I", "Warrior II", 
+        "Chair Pose", "Goddess Pose"
+      ];
+      bool requireUpright = uprightStandingPoses.contains(_targetPoseName);
+      
+      // Special case for sitting upright poses:
+      // When sitting cross-legged (Lotus, Deep Breathing, etc.), the knee is horizontal to the hip.
+      // So shoulder-hip-knee angle is ~90 deg, but the rules expect 155-180 (straight back).
+      // We substitute the knee with an imaginary point directly below the hip to measure torso verticality!
+      final sittingUprightPoses = [
+        "Lotus Pose", "Deep Breathing", "Anulom Vilom", "Kapalbhati",
+        "Bhramari", "Neck Stretch", "Butterfly Pose", "Chair Twist", "Lion Breath", "Boat Pose"
+      ];
+      
+      if (sittingUprightPoses.contains(_targetPoseName)) {
+        // Enforce basic visibility and upright checks manually before substituting points
+        if (s == null || h == null) return null;
+        if (s.likelihood < 0.45 || h.likelihood < 0.45) return null;
+        if (requireUpright && s.y > h.y - 30) return null;
+        
+        return _getAngleFromPoints(s.x, s.y, h.x, h.y, h.x, h.y + 100);
+      }
+      
+      return getValidAngle(s, h, k, requireUpright: requireUpright);
     } else if (joint == "arms") {
       final s = landmarks[PoseLandmarkType.leftShoulder];
       final e = landmarks[PoseLandmarkType.leftElbow];
       final w = landmarks[PoseLandmarkType.leftWrist];
-      if (s != null && e != null && w != null) return _getAngle(s, e, w);
+      return getValidAngle(s, e, w);
     }
     return null;
   }
 
-  double _getAngle(PoseLandmark p1, PoseLandmark p2, PoseLandmark p3) {
-    double angle = (math.atan2(p3.y - p2.y, p3.x - p2.x) - math.atan2(p1.y - p2.y, p1.x - p2.x)).abs();
+  double _getAngleFromPoints(double p1x, double p1y, double p2x, double p2y, double p3x, double p3y) {
+    double angle = (math.atan2(p3y - p2y, p3x - p2x) - math.atan2(p1y - p2y, p1x - p2x)).abs();
     angle = angle * 180 / math.pi;
     if (angle > 180) angle = 360 - angle;
     return angle;
+  }
+
+  double _getAngle(PoseLandmark p1, PoseLandmark p2, PoseLandmark p3) {
+    return _getAngleFromPoints(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y);
   }
 
   void _speakInstruction(String msg) {
@@ -428,79 +525,92 @@ class _CameraScreenState extends State<CameraScreen> {
       return const Scaffold(backgroundColor: Colors.black, body: Center(child: CircularProgressIndicator()));
     }
     
-    final screenSize = MediaQuery.of(context).size;
-    
-    // Determine status color based on accuracy
-    Color statusColor = Colors.white;
-    if (_accuracy >= 1.0) statusColor = const Color(0xFF00FF88);
-    else if (_accuracy >= 0.7) statusColor = Colors.orangeAccent;
-    
-    // Build landmark dots as direct widgets (guaranteed to render)
-    List<Widget> landmarkWidgets = [];
-    if (_poses.isNotEmpty) {
-      final pose = _poses.first;
-      // Draw dots for each landmark
-      for (final entry in pose.landmarks.entries) {
-        final offset = _landmarkToScreen(entry.value, screenSize);
-        landmarkWidgets.add(
-          Positioned(
-            left: offset.dx - 6,
-            top: offset.dy - 6,
-            child: Container(
-              width: 12, height: 12,
-              decoration: BoxDecoration(
-                color: const Color(0xFF00FF88),
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.white, width: 2),
-                boxShadow: [BoxShadow(color: const Color(0xFF00FF88).withOpacity(0.5), blurRadius: 8)],
-              ),
-            ),
-          ),
-        );
-      }
-      
-      // Draw lines between landmarks
-      final connections = [
-        [PoseLandmarkType.leftShoulder, PoseLandmarkType.rightShoulder],
-        [PoseLandmarkType.leftShoulder, PoseLandmarkType.leftElbow],
-        [PoseLandmarkType.leftElbow, PoseLandmarkType.leftWrist],
-        [PoseLandmarkType.rightShoulder, PoseLandmarkType.rightElbow],
-        [PoseLandmarkType.rightElbow, PoseLandmarkType.rightWrist],
-        [PoseLandmarkType.leftShoulder, PoseLandmarkType.leftHip],
-        [PoseLandmarkType.rightShoulder, PoseLandmarkType.rightHip],
-        [PoseLandmarkType.leftHip, PoseLandmarkType.rightHip],
-        [PoseLandmarkType.leftHip, PoseLandmarkType.leftKnee],
-        [PoseLandmarkType.leftKnee, PoseLandmarkType.leftAnkle],
-        [PoseLandmarkType.rightHip, PoseLandmarkType.rightKnee],
-        [PoseLandmarkType.rightKnee, PoseLandmarkType.rightAnkle],
-      ];
-      
-      for (final conn in connections) {
-        final lm1 = pose.landmarks[conn[0]];
-        final lm2 = pose.landmarks[conn[1]];
-        if (lm1 != null && lm2 != null) {
-          final p1 = _landmarkToScreen(lm1, screenSize);
-          final p2 = _landmarkToScreen(lm2, screenSize);
-          landmarkWidgets.add(
-            Positioned.fill(
-              child: CustomPaint(
-                painter: _LinePainter(p1, p2),
-              ),
-            ),
-          );
-        }
-      }
-    }
+    // Determine tracking colors
+    Color poseColor = _accuracy >= 1.0 ? const Color(0xFF00FF88) : Colors.redAccent;
+    Color statusColor = _accuracy >= 1.0 ? const Color(0xFF00FF88) : Colors.orangeAccent;
     
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(
         fit: StackFit.expand,
         children: [
-          CameraPreview(_controller!),
-          
-          // Direct skeleton widgets (dots + lines)
-          ...landmarkWidgets,
+          // CENTERED & ASPECT RATIO BOX for Camera and Landmarks (prevents stretching)
+          Center(
+            child: AspectRatio(
+              aspectRatio: 1 / _controller!.value.aspectRatio,
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final widgetSize = Size(constraints.maxWidth, constraints.maxHeight);
+                  
+                  // Build landmark dots as direct widgets
+                  List<Widget> landmarkWidgets = [];
+                  if (_poses.isNotEmpty) {
+                    final pose = _poses.first;
+                    
+                    // Draw lines between landmarks
+                    final connections = [
+                      [PoseLandmarkType.leftShoulder, PoseLandmarkType.rightShoulder],
+                      [PoseLandmarkType.leftShoulder, PoseLandmarkType.leftElbow],
+                      [PoseLandmarkType.leftElbow, PoseLandmarkType.leftWrist],
+                      [PoseLandmarkType.rightShoulder, PoseLandmarkType.rightElbow],
+                      [PoseLandmarkType.rightElbow, PoseLandmarkType.rightWrist],
+                      [PoseLandmarkType.leftShoulder, PoseLandmarkType.leftHip],
+                      [PoseLandmarkType.rightShoulder, PoseLandmarkType.rightHip],
+                      [PoseLandmarkType.leftHip, PoseLandmarkType.rightHip],
+                      [PoseLandmarkType.leftHip, PoseLandmarkType.leftKnee],
+                      [PoseLandmarkType.leftKnee, PoseLandmarkType.leftAnkle],
+                      [PoseLandmarkType.rightHip, PoseLandmarkType.rightKnee],
+                      [PoseLandmarkType.rightKnee, PoseLandmarkType.rightAnkle],
+                    ];
+                    
+                    for (final conn in connections) {
+                      final lm1 = pose.landmarks[conn[0]];
+                      final lm2 = pose.landmarks[conn[1]];
+                      if (lm1 != null && lm2 != null) {
+                        final p1 = _landmarkToScreen(lm1, widgetSize);
+                        final p2 = _landmarkToScreen(lm2, widgetSize);
+                        landmarkWidgets.add(
+                          Positioned.fill(
+                            child: CustomPaint(
+                              painter: _LinePainter(p1, p2, poseColor),
+                            ),
+                          ),
+                        );
+                      }
+                    }
+
+                    // Draw dots for each landmark
+                    for (final entry in pose.landmarks.entries) {
+                      final offset = _landmarkToScreen(entry.value, widgetSize);
+                      landmarkWidgets.add(
+                        Positioned(
+                          left: offset.dx - 6,
+                          top: offset.dy - 6,
+                          child: Container(
+                            width: 12, height: 12,
+                            decoration: BoxDecoration(
+                              color: poseColor,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white, width: 2),
+                              boxShadow: [BoxShadow(color: poseColor.withOpacity(0.5), blurRadius: 8)],
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                  }
+                  
+                  return Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      CameraPreview(_controller!),
+                      ...landmarkWidgets,
+                    ],
+                  );
+                },
+              ),
+            ),
+          ),
           
           // --- TOP STATUS BAR ---
           Positioned(
@@ -682,17 +792,18 @@ class _CameraScreenState extends State<CameraScreen> {
 class _LinePainter extends CustomPainter {
   final Offset p1;
   final Offset p2;
-  _LinePainter(this.p1, this.p2);
+  final Color color;
+  _LinePainter(this.p1, this.p2, this.color);
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = const Color(0xFF00FF88)
+      ..color = color
       ..strokeWidth = 4.0
       ..strokeCap = StrokeCap.round;
     canvas.drawLine(p1, p2, paint);
   }
 
   @override
-  bool shouldRepaint(_LinePainter old) => old.p1 != p1 || old.p2 != p2;
+  bool shouldRepaint(_LinePainter old) => old.p1 != p1 || old.p2 != p2 || old.color != color;
 }
