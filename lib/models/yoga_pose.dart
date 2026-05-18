@@ -78,40 +78,48 @@ class YogaPose {
     YogaPose(name: 'Boat Pose', description: 'Navasana - Core power', benefits: ['Strengthens abs', 'Improves digestion'], tags: ['weightLoss', 'strength'], imageUrl: 'assets/images/boat_pose.png'),
     YogaPose(name: 'Plank Pose', description: 'Phalakasana', benefits: ['Core strength', 'Tones arms'], tags: ['strength', 'weightLoss', 'power', 'energy'], imageUrl: 'assets/images/plank_pose.png'),
     YogaPose(name: 'Warrior II', description: 'Virabhadrasana II', benefits: ['Leg strength', 'Stamina'], tags: ['strength', 'weightLoss', 'power', 'energy', 'morning'], imageUrl: 'assets/images/warrior_pose.png'),
-    YogaPose(name: 'Chair Pose', description: 'Utkatasana', benefits: ['Lower body strength', 'Heart health'], tags: ['weightLoss', 'energy', 'strength'], imageUrl: 'assets/images/category_learn.png'),
+    YogaPose(name: 'Warrior I', description: 'Virabhadrasana I', benefits: ['Focus', 'Lower body strength'], tags: ['strength', 'energy'], imageUrl: 'assets/images/warrior_pose_1.png'),
+    YogaPose(name: 'Warrior III', description: 'Virabhadrasana III', benefits: ['Balance', 'Core strength'], tags: ['strength', 'power', 'energy'], imageUrl: 'assets/images/warrior3_pose.png'),
+    YogaPose(name: 'Extended Side Angle', description: 'Utthita Parsvakonasana', benefits: ['Stretches legs', 'Opens chest'], tags: ['strength', 'morning'], imageUrl: 'assets/images/extended_side_angle.png'),
+    YogaPose(name: 'Triangle Pose', description: 'Trikonasana', benefits: ['Stretches hips', 'Improves digestion'], tags: ['strength', 'morning'], imageUrl: 'assets/images/triangle_pose.png'),
+    YogaPose(name: 'Half Moon Pose', description: 'Ardha Chandrasana', benefits: ['Coordination', 'Core power'], tags: ['strength', 'power', 'energy'], imageUrl: 'assets/images/half_moon.png'),
     YogaPose(name: 'Bridge Pose', description: 'Setu Bandhasana', benefits: ['Thyroid health', 'Back strength'], tags: ['weightLoss', 'women', 'therapy', 'strength'], imageUrl: 'assets/images/bridge_pose.png'),
 
     // --- MEDITATION & BREATHING ---
-    YogaPose(name: 'Deep Breathing', description: 'Calm your system', benefits: ['Reduces anxiety', 'Lowers heart rate'], tags: ['meditation', 'breathing'], imageUrl: 'assets/images/category_learn.png'),
+    YogaPose(name: 'Deep Breathing', description: 'Calm your system', benefits: ['Reduces anxiety', 'Lowers heart rate'], tags: ['meditation', 'breathing'], imageUrl: 'assets/images/meditation.png'),
     YogaPose(name: 'Lotus Pose', description: 'Padmasana - Classic meditation', benefits: ['Improves focus', 'Calms mind'], tags: ['meditation'], imageUrl: 'assets/images/lotus_pose.png'),
-    YogaPose(name: 'Anulom Vilom', description: 'Alternate Nostril Breathing', benefits: ['Stress relief', 'Mental clarity'], tags: ['breathing', 'meditation', 'sleep'], imageUrl: 'assets/images/category_learn.png'),
-    YogaPose(name: 'Kapalbhati', description: 'Skull Shining Breath', benefits: ['Digestive health', 'Energizes body'], tags: ['breathing', 'energy'], imageUrl: 'assets/images/category_learn.png'),
-    YogaPose(name: 'Bhramari', description: 'Bee Breath', benefits: ['Calms nervous system', 'Focus'], tags: ['breathing', 'meditation'], imageUrl: 'assets/images/category_learn.png'),
-    YogaPose(name: 'Savasana', description: 'Corpse Pose', benefits: ['Deep relaxation', 'Reduces BP'], tags: ['meditation', 'sleep'], imageUrl: 'assets/images/category_learn.png'),
+    YogaPose(name: 'Anulom Vilom', description: 'Alternate Nostril Breathing', benefits: ['Stress relief', 'Mental clarity'], tags: ['breathing', 'meditation', 'sleep'], imageUrl: 'assets/images/meditation.png'),
+    YogaPose(name: 'Kapalbhati', description: 'Skull Shining Breath', benefits: ['Digestive health', 'Energizes body'], tags: ['breathing', 'energy'], imageUrl: 'assets/images/meditation.png'),
+    YogaPose(name: 'Bhramari', description: 'Bee Breath', benefits: ['Calms nervous system', 'Focus'], tags: ['breathing', 'meditation'], imageUrl: 'assets/images/meditation.png'),
+    YogaPose(name: 'Savasana', description: 'Corpse Pose', benefits: ['Deep relaxation', 'Reduces BP'], tags: ['meditation', 'sleep'], imageUrl: 'assets/images/savasana.png'),
 
     // --- STRENGTH & FLEXIBILITY ---
     YogaPose(name: 'Triangle Pose', description: 'Trikonasana', benefits: ['Stretches hips', 'Improves digestion'], tags: ['strength', 'morning'], imageUrl: 'assets/images/triangle_pose.png'),
-    YogaPose(name: 'Side Plank', description: 'Vasisthasana', benefits: ['Oblique strength', 'Balance'], tags: ['strength', 'power'], imageUrl: 'assets/images/plank_pose.png'),
-    YogaPose(name: 'Dolphin Pose', description: 'Shoulder opener', benefits: ['Strengthens arms', 'Calms brain'], tags: ['strength'], imageUrl: 'assets/images/category_learn.png'),
-    YogaPose(name: 'Camel Pose', description: 'Ustrasana', benefits: ['Opens heart', 'Improves posture'], tags: ['strength', 'energy'], imageUrl: 'assets/images/category_learn.png'),
-    YogaPose(name: 'Bow Pose', description: 'Dhanurasana', benefits: ['Stretches front body', 'Strong back'], tags: ['strength', 'power'], imageUrl: 'assets/images/category_learn.png'),
+    YogaPose(name: 'Side Plank', description: 'Vasisthasana', benefits: ['Oblique strength', 'Balance'], tags: ['strength', 'power'], imageUrl: 'assets/images/side_plank.png'),
+    YogaPose(name: 'Dolphin Pose', description: 'Shoulder opener', benefits: ['Strengthens arms', 'Calms brain'], tags: ['strength'], imageUrl: 'assets/images/dolphin_pose.png'),
+    YogaPose(name: 'Camel Pose', description: 'Ustrasana', benefits: ['Opens heart', 'Improves posture'], tags: ['strength', 'energy'], imageUrl: 'assets/images/camel_pose.png'),
+    YogaPose(name: 'Bow Pose', description: 'Dhanurasana', benefits: ['Stretches front body', 'Strong back'], tags: ['strength', 'power'], imageUrl: 'assets/images/bow_pose.png'),
 
     // --- THERAPY & WOMEN ---
     YogaPose(name: 'Butterfly Pose', description: 'Baddha Konasana', benefits: ['Pelvic health', 'Stress relief'], tags: ['women', 'therapy', 'kids'], imageUrl: 'assets/images/butterfly_pose.png'),
-    YogaPose(name: 'Goddess Pose', description: 'Utkata Konasana', benefits: ['Hip strength', 'Female wellness'], tags: ['women'], imageUrl: 'assets/images/category_learn.png'),
-    YogaPose(name: 'Neck Stretch', description: 'Relieve neck tension', benefits: ['Fixes neck pain'], tags: ['office', 'therapy'], imageUrl: 'assets/images/category_learn.png'),
-    YogaPose(name: 'Shoulder Rolls', description: 'Open shoulders', benefits: ['Relieves tension'], tags: ['office', 'therapy'], imageUrl: 'assets/images/category_learn.png'),
+    YogaPose(name: 'Pigeon Pose', description: 'Eka Pada Rajakapotasana', benefits: ['Deep hip stretch', 'Relieves tension'], tags: ['therapy', 'women', 'strength'], imageUrl: 'assets/images/pigeon_pose.png'),
+    YogaPose(name: 'Garland Pose', description: 'Malasana', benefits: ['Hip mobility', 'Strengthens ankles'], tags: ['beginner', 'women', 'therapy'], imageUrl: 'assets/images/garland_pose.png'),
+    YogaPose(name: 'Eagle Pose', description: 'Garudasana', benefits: ['Joint health', 'Balance'], tags: ['strength', 'energy', 'power'], imageUrl: 'assets/images/eagle_pose.png'),
+    YogaPose(name: 'Fish Pose', description: 'Matsyasana', benefits: ['Opens chest', 'Improves breathing'], tags: ['therapy', 'breathing', 'meditation'], imageUrl: 'assets/images/fish_pose.png'),
+    YogaPose(name: 'Goddess Pose', description: 'Utkata Konasana', benefits: ['Hip strength', 'Female wellness'], tags: ['women'], imageUrl: 'assets/images/goddess_pose.png'),
+    YogaPose(name: 'Neck Stretch', description: 'Relieve neck tension', benefits: ['Fixes neck pain'], tags: ['office', 'therapy'], imageUrl: 'assets/images/logo.png'),
+    YogaPose(name: 'Shoulder Rolls', description: 'Open shoulders', benefits: ['Relieves tension'], tags: ['office', 'therapy'], imageUrl: 'assets/images/logo.png'),
     
     // --- OFFICE ---
-    YogaPose(name: 'Chair Twist', description: 'Seated spinal twist', benefits: ['Relieves back pain', 'Digestive health'], tags: ['office', 'therapy'], imageUrl: 'assets/images/category_learn.png'),
-    YogaPose(name: 'Wrist Stretch', description: 'Relieve typing stress', benefits: ['Carpal tunnel relief'], tags: ['office'], imageUrl: 'assets/images/category_learn.png'),
+    YogaPose(name: 'Chair Twist', description: 'Seated spinal twist', benefits: ['Relieves back pain', 'Digestive health'], tags: ['office', 'therapy'], imageUrl: 'assets/images/logo.png'),
+    YogaPose(name: 'Wrist Stretch', description: 'Relieve typing stress', benefits: ['Carpal tunnel relief'], tags: ['office'], imageUrl: 'assets/images/logo.png'),
 
     // --- POWER YOGA ---
-    YogaPose(name: 'Crow Pose', description: 'Bakasana - Arm balance', benefits: ['Arm strength', 'Balance'], tags: ['power', 'strength'], imageUrl: 'assets/images/category_learn.png'),
-    YogaPose(name: 'Chaturanga', description: 'Low Plank', benefits: ['Full body strength', 'Tones arms'], tags: ['power', 'strength'], imageUrl: 'assets/images/category_learn.png'),
+    YogaPose(name: 'Crow Pose', description: 'Bakasana - Arm balance', benefits: ['Arm strength', 'Balance'], tags: ['power', 'strength'], imageUrl: 'assets/images/crow_pose.png'),
+    YogaPose(name: 'Chaturanga', description: 'Low Plank', benefits: ['Full body strength', 'Tones arms'], tags: ['power', 'strength'], imageUrl: 'assets/images/chaturanga.png'),
     
     // --- KIDS ---
-    YogaPose(name: 'Frog Pose', description: 'Fun leg stretch', benefits: ['Hip opening', 'Fun for kids'], tags: ['kids'], imageUrl: 'assets/images/category_learn.png'),
-    YogaPose(name: 'Lion Breath', description: 'Relieve tension', benefits: ['Face muscle relaxation'], tags: ['kids', 'energy'], imageUrl: 'assets/images/category_learn.png'),
+    YogaPose(name: 'Frog Pose', description: 'Fun leg stretch', benefits: ['Hip opening', 'Fun for kids'], tags: ['kids'], imageUrl: 'assets/images/logo.png'),
+    YogaPose(name: 'Lion Breath', description: 'Relieve tension', benefits: ['Face muscle relaxation'], tags: ['kids', 'energy'], imageUrl: 'assets/images/logo.png'),
   ];
 }

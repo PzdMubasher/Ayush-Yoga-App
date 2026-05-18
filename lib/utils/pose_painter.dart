@@ -1,116 +1,99 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
 class PosePainter extends CustomPainter {
-  PosePainter(this.poses, this.imageSize, this.rotation, {this.isFrontCamera = false});
-
   final List<Pose> poses;
-  final Size imageSize;
+  final Size absoluteImageSize;
   final InputImageRotation rotation;
   final bool isFrontCamera;
 
+  PosePainter(this.poses, this.absoluteImageSize, this.rotation, {this.isFrontCamera = true});
+
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 4.0
-      ..color = Colors.greenAccent;
+    if (size.width == 0 || size.height == 0) return;
 
-    final leftPaint = Paint()
+    final linePaint = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 3.0
-      ..color = Colors.blueAccent;
+      ..strokeWidth = 5.0
+      ..strokeCap = StrokeCap.round
+      ..color = const Color(0xFF00FF88); // Bright neon green
 
-    final rightPaint = Paint()
+    final jointPaint = Paint()
+      ..style = PaintingStyle.fill
+      ..color = Colors.white;
+
+    final jointBorderPaint = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 3.0
-      ..color = Colors.orangeAccent;
+      ..strokeWidth = 2.0
+      ..color = const Color(0xFF00FF88);
 
     for (final pose in poses) {
-      void paintLine(
-          PoseLandmarkType type1, PoseLandmarkType type2, Paint paint) {
-        final landmark1 = pose.landmarks[type1];
-        final landmark2 = pose.landmarks[type2];
+      // Draw joints
+      pose.landmarks.forEach((_, landmark) {
+        final offset = _translateLandmark(landmark, size);
+        canvas.drawCircle(offset, 6, jointPaint);
+        canvas.drawCircle(offset, 6, jointBorderPaint);
+      });
 
-        if (landmark1 == null || landmark2 == null) return;
-
-        canvas.drawLine(
-            Offset(translateX(landmark1.x, rotation, size, imageSize),
-                translateY(landmark1.y, rotation, size, imageSize)),
-            Offset(translateX(landmark2.x, rotation, size, imageSize),
-                translateY(landmark2.y, rotation, size, imageSize)),
-            paint);
+      // Draw skeleton connections
+      void drawBone(PoseLandmarkType t1, PoseLandmarkType t2) {
+        final j1 = pose.landmarks[t1];
+        final j2 = pose.landmarks[t2];
+        if (j1 != null && j2 != null) {
+          canvas.drawLine(
+            _translateLandmark(j1, size),
+            _translateLandmark(j2, size),
+            linePaint,
+          );
+        }
       }
 
-      // Draw arms
-      paintLine(PoseLandmarkType.leftShoulder, PoseLandmarkType.leftElbow, leftPaint);
-      paintLine(PoseLandmarkType.leftElbow, PoseLandmarkType.leftWrist, leftPaint);
-      paintLine(PoseLandmarkType.rightShoulder, PoseLandmarkType.rightElbow, rightPaint);
-      paintLine(PoseLandmarkType.rightElbow, PoseLandmarkType.rightWrist, rightPaint);
-
-      // Draw Body
-      paintLine(PoseLandmarkType.leftShoulder, PoseLandmarkType.rightShoulder, paint);
-      paintLine(PoseLandmarkType.leftHip, PoseLandmarkType.rightHip, paint);
-      paintLine(PoseLandmarkType.leftShoulder, PoseLandmarkType.leftHip, paint);
-      paintLine(PoseLandmarkType.rightShoulder, PoseLandmarkType.rightHip, paint);
-
-      // Draw legs
-      paintLine(PoseLandmarkType.leftHip, PoseLandmarkType.leftKnee, leftPaint);
-      paintLine(PoseLandmarkType.leftKnee, PoseLandmarkType.leftAnkle, leftPaint);
-      paintLine(PoseLandmarkType.rightHip, PoseLandmarkType.rightKnee, rightPaint);
-      paintLine(PoseLandmarkType.rightKnee, PoseLandmarkType.rightAnkle, rightPaint);
-
-      // Draw points
-      pose.landmarks.forEach((_, landmark) {
-        canvas.drawCircle(
-            Offset(
-              translateX(landmark.x, rotation, size, imageSize),
-              translateY(landmark.y, rotation, size, imageSize),
-            ),
-            4,
-            Paint()..color = Colors.white);
-      });
+      // Body
+      drawBone(PoseLandmarkType.leftShoulder, PoseLandmarkType.rightShoulder);
+      drawBone(PoseLandmarkType.leftShoulder, PoseLandmarkType.leftHip);
+      drawBone(PoseLandmarkType.rightShoulder, PoseLandmarkType.rightHip);
+      drawBone(PoseLandmarkType.leftHip, PoseLandmarkType.rightHip);
+      // Arms
+      drawBone(PoseLandmarkType.leftShoulder, PoseLandmarkType.leftElbow);
+      drawBone(PoseLandmarkType.leftElbow, PoseLandmarkType.leftWrist);
+      drawBone(PoseLandmarkType.rightShoulder, PoseLandmarkType.rightElbow);
+      drawBone(PoseLandmarkType.rightElbow, PoseLandmarkType.rightWrist);
+      // Legs
+      drawBone(PoseLandmarkType.leftHip, PoseLandmarkType.leftKnee);
+      drawBone(PoseLandmarkType.leftKnee, PoseLandmarkType.leftAnkle);
+      drawBone(PoseLandmarkType.rightHip, PoseLandmarkType.rightKnee);
+      drawBone(PoseLandmarkType.rightKnee, PoseLandmarkType.rightAnkle);
     }
+  }
+
+  Offset _translateLandmark(PoseLandmark landmark, Size canvasSize) {
+    double x, y;
+
+    switch (rotation) {
+      case InputImageRotation.rotation90deg:
+        x = landmark.x * canvasSize.width / absoluteImageSize.height;
+        y = landmark.y * canvasSize.height / absoluteImageSize.width;
+        break;
+      case InputImageRotation.rotation270deg:
+        x = canvasSize.width - landmark.x * canvasSize.width / absoluteImageSize.height;
+        y = landmark.y * canvasSize.height / absoluteImageSize.width;
+        break;
+      default:
+        x = landmark.x * canvasSize.width / absoluteImageSize.width;
+        y = landmark.y * canvasSize.height / absoluteImageSize.height;
+    }
+
+    // Mirror for front camera
+    if (isFrontCamera) {
+      x = canvasSize.width - x;
+    }
+
+    return Offset(x, y);
   }
 
   @override
   bool shouldRepaint(covariant PosePainter oldDelegate) {
-    return oldDelegate.imageSize != imageSize || oldDelegate.poses != poses;
-  }
-
-  double translateX(
-      double x, InputImageRotation rotation, Size size, Size imageSize) {
-    double adjustedX = x;
-    if (Platform.isAndroid && isFrontCamera) {
-      // Flip X for front camera mirroring
-      if (rotation == InputImageRotation.rotation90deg || rotation == InputImageRotation.rotation270deg) {
-        adjustedX = imageSize.height - x;
-      } else {
-        adjustedX = imageSize.width - x;
-      }
-    }
-
-    switch (rotation) {
-      case InputImageRotation.rotation90deg:
-        return adjustedX * size.width / imageSize.height;
-      case InputImageRotation.rotation270deg:
-        return size.width - adjustedX * size.width / imageSize.height;
-      case InputImageRotation.rotation180deg:
-        return size.width - adjustedX * size.width / imageSize.width;
-      default:
-        return adjustedX * size.width / imageSize.width;
-    }
-  }
-
-  double translateY(
-      double y, InputImageRotation rotation, Size size, Size imageSize) {
-    switch (rotation) {
-      case InputImageRotation.rotation90deg:
-      case InputImageRotation.rotation270deg:
-        return y * size.height / imageSize.width;
-      default:
-        return y * size.height / imageSize.height;
-    }
+    return oldDelegate.poses != poses;
   }
 }

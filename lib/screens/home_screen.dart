@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
             pinned: true,
             backgroundColor: const Color(0xFF004D40),
             flexibleSpace: FlexibleSpaceBar(
-              title: Text('Yoga Trainer AI', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: 20)),
+              title: Text('Yoga Trainer', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: 20)),
               background: Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
@@ -133,8 +133,8 @@ class _HomeScreenState extends State<HomeScreen> {
         width: 160,
         margin: const EdgeInsets.only(right: 16),
         decoration: BoxDecoration(
+          color: category.color.withOpacity(0.15),
           borderRadius: BorderRadius.circular(20),
-          image: DecorationImage(image: AssetImage(category.image), fit: BoxFit.cover),
         ),
         child: Container(
           decoration: BoxDecoration(

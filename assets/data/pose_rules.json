@@ -2,70 +2,276 @@
   {
     "poseName": "Mountain Pose",
     "steps": [
-      {
-        "stepName": "Perfect Posture",
-        "instruction": "Stand tall with feet together.",
-        "rules": [
-          { "joint": "spine", "idealMin": 160, "idealMax": 180, "messageLow": "Lengthen your spine" }
-        ]
-      }
+      {"stepName": "Stand Tall", "instruction": "Stand with feet together, arms at sides", "rules": [{"joint": "spine", "idealMin": 160, "idealMax": 180, "messageLow": "Straighten your back more"}]},
+      {"stepName": "Arms Up", "instruction": "Raise both arms overhead, palms facing", "rules": [{"joint": "left_arm", "idealMin": 150, "idealMax": 180, "messageLow": "Raise your arms higher"}, {"joint": "right_arm", "idealMin": 150, "idealMax": 180, "messageLow": "Raise your arms higher"}]},
+      {"stepName": "Hold", "instruction": "Hold and breathe deeply. Feel rooted.", "rules": [{"joint": "spine", "idealMin": 160, "idealMax": 180, "messageLow": "Keep your spine tall"}]}
     ]
   },
   {
     "poseName": "Tree Pose",
     "steps": [
-      {
-        "stepName": "Leg Placement",
-        "instruction": "Place your foot on your inner thigh.",
-        "rules": [
-          { "joint": "bent_leg", "idealMin": 30, "idealMax": 100, "messageHigh": "Balance your foot higher" }
-        ]
-      },
-      {
-        "stepName": "Balance",
-        "instruction": "Reach your arms to the sky.",
-        "rules": [
-          { "joint": "left_arm", "idealMin": 150, "idealMax": 180, "messageLow": "Arms up" },
-          { "joint": "right_arm", "idealMin": 150, "idealMax": 180, "messageLow": "Arms up" }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Plank Pose",
-    "steps": [
-      {
-        "stepName": "Strong Core",
-        "instruction": "Keep your body in a straight line.",
-        "rules": [
-          { "joint": "body_line", "idealMin": 160, "idealMax": 180, "messageLow": "Don't drop your hips" },
-          { "joint": "arms", "idealMin": 160, "idealMax": 180, "messageLow": "Keep arms straight" }
-        ]
-      }
+      {"stepName": "Stand Straight", "instruction": "Stand tall on both feet first", "rules": [{"joint": "spine", "idealMin": 160, "idealMax": 180, "messageLow": "Stand up straight"}]},
+      {"stepName": "Lift Leg", "instruction": "Place one foot on inner thigh of other leg", "rules": [{"joint": "left_bent_knee", "idealMin": 20, "idealMax": 110, "messageHigh": "Bend your knee more to place foot on thigh"}]},
+      {"stepName": "Arms Up", "instruction": "Raise arms overhead, palms together", "rules": [{"joint": "left_arm", "idealMin": 150, "idealMax": 180, "messageLow": "Stretch arms up"}, {"joint": "right_arm", "idealMin": 150, "idealMax": 180, "messageLow": "Stretch arms up"}]},
+      {"stepName": "Balance", "instruction": "Hold the balance. Breathe steadily.", "rules": [{"joint": "spine", "idealMin": 160, "idealMax": 180, "messageLow": "Keep your back straight"}]}
     ]
   },
   {
     "poseName": "Warrior II",
     "steps": [
-      {
-        "stepName": "Arms Extended",
-        "instruction": "Extend arms at shoulder height.",
-        "rules": [
-          { "joint": "left_arm", "idealMin": 160, "idealMax": 180, "messageLow": "Straighten your arms" }
-        ]
-      }
+      {"stepName": "Wide Stance", "instruction": "Step feet wide apart, 3-4 feet", "rules": [{"joint": "spine", "idealMin": 155, "idealMax": 180, "messageLow": "Stand tall, don't lean"}]},
+      {"stepName": "Bend Front Knee", "instruction": "Bend your front knee to 90 degrees", "rules": [{"joint": "left_bent_knee", "idealMin": 70, "idealMax": 120, "messageLow": "Bend your front knee more", "messageHigh": "Don't bend too much"}]},
+      {"stepName": "Extend Arms", "instruction": "Stretch both arms out at shoulder height", "rules": [{"joint": "left_arm", "idealMin": 155, "idealMax": 180, "messageLow": "Straighten your left arm"}, {"joint": "right_arm", "idealMin": 155, "idealMax": 180, "messageLow": "Straighten your right arm"}]},
+      {"stepName": "Hold & Gaze", "instruction": "Look over your front hand. Hold strong!", "rules": [{"joint": "spine", "idealMin": 160, "idealMax": 180, "messageLow": "Keep torso upright"}]}
+    ]
+  },
+  {
+    "poseName": "Warrior I",
+    "steps": [
+      {"stepName": "Lunge Position", "instruction": "Step one foot forward into a lunge", "rules": [{"joint": "left_bent_knee", "idealMin": 70, "idealMax": 120, "messageLow": "Bend your front knee deeper"}]},
+      {"stepName": "Arms Up", "instruction": "Raise both arms overhead", "rules": [{"joint": "left_arm", "idealMin": 150, "idealMax": 180, "messageLow": "Reach arms higher"}, {"joint": "right_arm", "idealMin": 150, "idealMax": 180, "messageLow": "Reach arms higher"}]},
+      {"stepName": "Hold", "instruction": "Square your hips forward. Hold.", "rules": [{"joint": "spine", "idealMin": 155, "idealMax": 180, "messageLow": "Straighten your torso"}]}
+    ]
+  },
+  {
+    "poseName": "Plank Pose",
+    "steps": [
+      {"stepName": "Get Down", "instruction": "Place hands on floor, shoulder-width apart", "rules": [{"joint": "arms", "idealMin": 155, "idealMax": 180, "messageLow": "Straighten your arms"}]},
+      {"stepName": "Straight Body", "instruction": "Keep body in one straight line head to heels", "rules": [{"joint": "body_line", "idealMin": 155, "idealMax": 180, "messageLow": "Lift your hips, don't sag"}]},
+      {"stepName": "Hold Strong", "instruction": "Engage your core! Hold this position.", "rules": [{"joint": "body_line", "idealMin": 155, "idealMax": 180, "messageLow": "Don't drop your hips"}, {"joint": "arms", "idealMin": 155, "idealMax": 180, "messageLow": "Keep arms locked"}]}
+    ]
+  },
+  {
+    "poseName": "Cobra Pose",
+    "steps": [
+      {"stepName": "Lie Down", "instruction": "Lie face down, palms under shoulders", "rules": [{"joint": "spine", "idealMin": 20, "idealMax": 80, "messageHigh": "Lower down first"}]},
+      {"stepName": "Lift Chest", "instruction": "Press hands down, lift your chest up", "rules": [{"joint": "spine", "idealMin": 90, "idealMax": 150, "messageLow": "Lift your chest higher"}]},
+      {"stepName": "Hold & Breathe", "instruction": "Look up, shoulders back. Breathe.", "rules": [{"joint": "spine", "idealMin": 90, "idealMax": 150, "messageLow": "Keep chest lifted"}]}
+    ]
+  },
+  {
+    "poseName": "Child Pose",
+    "steps": [
+      {"stepName": "Kneel Down", "instruction": "Kneel on the floor, sit on your heels", "rules": [{"joint": "left_bent_knee", "idealMin": 10, "idealMax": 60, "messageHigh": "Bend your knees more"}]},
+      {"stepName": "Fold Forward", "instruction": "Stretch arms forward, rest forehead on mat", "rules": [{"joint": "spine", "idealMin": 30, "idealMax": 100, "messageHigh": "Lower your body down more"}]},
+      {"stepName": "Relax", "instruction": "Relax completely. Breathe deeply.", "rules": [{"joint": "spine", "idealMin": 30, "idealMax": 100, "messageHigh": "Stay low and relaxed"}]}
+    ]
+  },
+  {
+    "poseName": "Boat Pose",
+    "steps": [
+      {"stepName": "Sit Up", "instruction": "Sit with knees bent, feet flat on floor", "rules": [{"joint": "spine", "idealMin": 70, "idealMax": 130, "messageLow": "Sit up taller"}]},
+      {"stepName": "Lift Legs", "instruction": "Lean back slightly, lift legs off the floor", "rules": [{"joint": "body_line", "idealMin": 40, "idealMax": 110, "messageHigh": "Keep your V-shape tighter"}]},
+      {"stepName": "Arms Forward", "instruction": "Extend arms forward, parallel to floor", "rules": [{"joint": "left_arm", "idealMin": 140, "idealMax": 180, "messageLow": "Extend your arms straight"}]},
+      {"stepName": "Hold V-Shape", "instruction": "Balance on your sit bones. Hold!", "rules": [{"joint": "body_line", "idealMin": 40, "idealMax": 110, "messageHigh": "Keep the V-shape"}]}
+    ]
+  },
+  {
+    "poseName": "Butterfly Pose",
+    "steps": [
+      {"stepName": "Sit Down", "instruction": "Sit with spine straight on the floor", "rules": [{"joint": "spine", "idealMin": 140, "idealMax": 180, "messageLow": "Straighten your back"}]},
+      {"stepName": "Feet Together", "instruction": "Bring soles of feet together, knees out", "rules": [{"joint": "left_bent_knee", "idealMin": 20, "idealMax": 90, "messageHigh": "Open your knees wider"}]},
+      {"stepName": "Flutter", "instruction": "Gently flutter knees up and down like wings", "rules": [{"joint": "spine", "idealMin": 140, "idealMax": 180, "messageLow": "Keep spine tall while fluttering"}]}
+    ]
+  },
+  {
+    "poseName": "Downward Dog",
+    "steps": [
+      {"stepName": "Hands Down", "instruction": "Place hands on floor, shoulder-width apart", "rules": [{"joint": "arms", "idealMin": 150, "idealMax": 180, "messageLow": "Straighten your arms"}]},
+      {"stepName": "Hips Up", "instruction": "Push hips up and back, form an inverted V", "rules": [{"joint": "body_line", "idealMin": 40, "idealMax": 100, "messageHigh": "Push hips higher"}]},
+      {"stepName": "Hold", "instruction": "Press heels toward floor. Hold the pose.", "rules": [{"joint": "arms", "idealMin": 150, "idealMax": 180, "messageLow": "Keep arms straight"}, {"joint": "left_leg", "idealMin": 140, "idealMax": 180, "messageLow": "Straighten your legs more"}]}
+    ]
+  },
+  {
+    "poseName": "Bridge Pose",
+    "steps": [
+      {"stepName": "Lie Down", "instruction": "Lie on your back, knees bent, feet flat", "rules": [{"joint": "left_bent_knee", "idealMin": 40, "idealMax": 100, "messageHigh": "Bend knees to 90 degrees"}]},
+      {"stepName": "Lift Hips", "instruction": "Press feet down, lift your hips up high", "rules": [{"joint": "body_line", "idealMin": 100, "idealMax": 160, "messageLow": "Lift your hips higher"}]},
+      {"stepName": "Hold", "instruction": "Squeeze glutes, hold the bridge!", "rules": [{"joint": "body_line", "idealMin": 100, "idealMax": 160, "messageLow": "Keep hips lifted"}]}
+    ]
+  },
+  {
+    "poseName": "Triangle Pose",
+    "steps": [
+      {"stepName": "Wide Stance", "instruction": "Stand with feet wide apart", "rules": [{"joint": "spine", "idealMin": 150, "idealMax": 180, "messageLow": "Stand tall"}]},
+      {"stepName": "Reach Down", "instruction": "Reach one hand to ankle, other arm up", "rules": [{"joint": "spine", "idealMin": 60, "idealMax": 120, "messageLow": "Bend to the side more"}]},
+      {"stepName": "Look Up", "instruction": "Look up at your top hand. Hold.", "rules": [{"joint": "left_arm", "idealMin": 150, "idealMax": 180, "messageLow": "Extend top arm straight up"}]}
+    ]
+  },
+  {
+    "poseName": "Cat-Cow Pose",
+    "steps": [
+      {"stepName": "Table Top", "instruction": "Get on hands and knees, back flat", "rules": [{"joint": "spine", "idealMin": 150, "idealMax": 180, "messageLow": "Flatten your back"}]},
+      {"stepName": "Cat: Round Up", "instruction": "Round your back up like a cat, chin to chest", "rules": [{"joint": "spine", "idealMin": 80, "idealMax": 140, "messageLow": "Round your back more"}]},
+      {"stepName": "Cow: Dip Down", "instruction": "Drop belly, lift head and tailbone up", "rules": [{"joint": "spine", "idealMin": 140, "idealMax": 180, "messageLow": "Arch your back more"}]}
+    ]
+  },
+  {
+    "poseName": "Lotus Pose",
+    "steps": [
+      {"stepName": "Sit Tall", "instruction": "Sit cross-legged with spine straight", "rules": [{"joint": "spine", "idealMin": 155, "idealMax": 180, "messageLow": "Straighten your spine"}]},
+      {"stepName": "Hands on Knees", "instruction": "Place hands on knees, palms up", "rules": [{"joint": "spine", "idealMin": 155, "idealMax": 180, "messageLow": "Keep sitting tall"}]},
+      {"stepName": "Meditate", "instruction": "Close eyes. Breathe slowly and deeply.", "rules": [{"joint": "spine", "idealMin": 155, "idealMax": 180, "messageLow": "Maintain straight posture"}]}
+    ]
+  },
+  {
+    "poseName": "Chair Pose",
+    "steps": [
+      {"stepName": "Stand Tall", "instruction": "Stand with feet together", "rules": [{"joint": "spine", "idealMin": 155, "idealMax": 180, "messageLow": "Stand straight first"}]},
+      {"stepName": "Sit Back", "instruction": "Bend knees like sitting in a chair", "rules": [{"joint": "left_bent_knee", "idealMin": 80, "idealMax": 130, "messageLow": "Bend your knees more"}]},
+      {"stepName": "Arms Up", "instruction": "Raise arms overhead. Hold the squat!", "rules": [{"joint": "left_arm", "idealMin": 150, "idealMax": 180, "messageLow": "Raise arms higher"}, {"joint": "right_arm", "idealMin": 150, "idealMax": 180, "messageLow": "Raise arms higher"}]}
     ]
   },
   {
     "poseName": "Surya Namaskar",
     "steps": [
-      {
-        "stepName": "Prayer Position",
-        "instruction": "Bring hands together in Pranamasana.",
-        "rules": [
-          { "joint": "spine", "idealMin": 160, "idealMax": 180, "messageLow": "Stand tall" }
-        ]
-      }
+      {"stepName": "Prayer", "instruction": "Stand tall, bring palms together at chest", "rules": [{"joint": "spine", "idealMin": 160, "idealMax": 180, "messageLow": "Stand tall"}]},
+      {"stepName": "Arms Up", "instruction": "Inhale, raise arms overhead and arch back", "rules": [{"joint": "left_arm", "idealMin": 150, "idealMax": 180, "messageLow": "Stretch arms up"}]},
+      {"stepName": "Forward Bend", "instruction": "Exhale, fold forward touching toes", "rules": [{"joint": "spine", "idealMin": 20, "idealMax": 80, "messageHigh": "Bend forward more"}]},
+      {"stepName": "Look Up", "instruction": "Inhale, look up with flat back", "rules": [{"joint": "spine", "idealMin": 80, "idealMax": 140, "messageLow": "Lift your chest"}]}
+    ]
+  },
+  {
+    "poseName": "Savasana",
+    "steps": [
+      {"stepName": "Lie Flat", "instruction": "Lie flat on your back, arms at sides", "rules": [{"joint": "spine", "idealMin": 155, "idealMax": 180, "messageLow": "Lie completely flat"}]},
+      {"stepName": "Relax", "instruction": "Close your eyes. Let every muscle relax.", "rules": [{"joint": "spine", "idealMin": 155, "idealMax": 180, "messageLow": "Stay relaxed and flat"}]}
+    ]
+  },
+  {
+    "poseName": "Side Plank",
+    "steps": [
+      {"stepName": "Plank First", "instruction": "Start in a plank position", "rules": [{"joint": "body_line", "idealMin": 155, "idealMax": 180, "messageLow": "Keep body straight"}]},
+      {"stepName": "Roll to Side", "instruction": "Rotate body to one side, stack feet", "rules": [{"joint": "arms", "idealMin": 155, "idealMax": 180, "messageLow": "Keep bottom arm straight"}]},
+      {"stepName": "Top Arm Up", "instruction": "Raise top arm to sky. Hold!", "rules": [{"joint": "body_line", "idealMin": 155, "idealMax": 180, "messageLow": "Keep hips lifted"}]}
+    ]
+  },
+  {
+    "poseName": "Goddess Pose",
+    "steps": [
+      {"stepName": "Wide Stance", "instruction": "Stand with feet wide, toes turned out", "rules": [{"joint": "spine", "idealMin": 155, "idealMax": 180, "messageLow": "Stand tall"}]},
+      {"stepName": "Deep Squat", "instruction": "Bend knees deeply over toes", "rules": [{"joint": "left_bent_knee", "idealMin": 70, "idealMax": 120, "messageLow": "Bend knees deeper"}]},
+      {"stepName": "Arms Out", "instruction": "Arms at shoulder height, elbows bent 90°", "rules": [{"joint": "left_arm", "idealMin": 70, "idealMax": 120, "messageLow": "Bend elbows to 90 degrees"}]}
+    ]
+  },
+  {
+    "poseName": "Camel Pose",
+    "steps": [
+      {"stepName": "Kneel", "instruction": "Kneel with knees hip-width apart", "rules": [{"joint": "spine", "idealMin": 140, "idealMax": 180, "messageLow": "Kneel upright"}]},
+      {"stepName": "Arch Back", "instruction": "Lean back, reach hands to your heels", "rules": [{"joint": "spine", "idealMin": 80, "idealMax": 140, "messageLow": "Arch back more to reach heels"}]},
+      {"stepName": "Open Chest", "instruction": "Push hips forward, open your chest to sky", "rules": [{"joint": "spine", "idealMin": 80, "idealMax": 140, "messageLow": "Open chest more"}]}
+    ]
+  },
+  {
+    "poseName": "Crow Pose",
+    "steps": [
+      {"stepName": "Squat Down", "instruction": "Squat with feet together, hands on floor", "rules": [{"joint": "left_bent_knee", "idealMin": 20, "idealMax": 80, "messageHigh": "Squat lower"}]},
+      {"stepName": "Lean Forward", "instruction": "Place knees on back of arms, lean forward", "rules": [{"joint": "arms", "idealMin": 60, "idealMax": 130, "messageLow": "Bend elbows slightly"}]},
+      {"stepName": "Lift Feet", "instruction": "Slowly lift both feet off the ground!", "rules": [{"joint": "arms", "idealMin": 60, "idealMax": 130, "messageLow": "Keep leaning forward"}]}
+    ]
+  },
+  {
+    "poseName": "Chaturanga",
+    "steps": [
+      {"stepName": "Plank Start", "instruction": "Start in high plank position", "rules": [{"joint": "body_line", "idealMin": 155, "idealMax": 180, "messageLow": "Keep body straight"}]},
+      {"stepName": "Lower Down", "instruction": "Bend elbows to 90°, lower body halfway", "rules": [{"joint": "arms", "idealMin": 70, "idealMax": 120, "messageLow": "Bend elbows more"}]},
+      {"stepName": "Hold Low", "instruction": "Hold with elbows tucked! Core tight!", "rules": [{"joint": "body_line", "idealMin": 155, "idealMax": 180, "messageLow": "Don't let hips sag"}]}
+    ]
+  },
+  {
+    "poseName": "Bow Pose",
+    "steps": [
+      {"stepName": "Lie Face Down", "instruction": "Lie on your stomach", "rules": [{"joint": "spine", "idealMin": 140, "idealMax": 180, "messageLow": "Lie flat first"}]},
+      {"stepName": "Grab Ankles", "instruction": "Bend knees, reach back and grab ankles", "rules": [{"joint": "left_bent_knee", "idealMin": 30, "idealMax": 90, "messageHigh": "Bend knees more"}]},
+      {"stepName": "Lift Up", "instruction": "Pull ankles up, lift chest and thighs!", "rules": [{"joint": "spine", "idealMin": 80, "idealMax": 140, "messageLow": "Lift chest higher"}]}
+    ]
+  },
+  {
+    "poseName": "Dolphin Pose",
+    "steps": [
+      {"stepName": "Forearms Down", "instruction": "Place forearms on floor, shoulder-width apart", "rules": [{"joint": "arms", "idealMin": 60, "idealMax": 120, "messageLow": "Forearms flat on ground"}]},
+      {"stepName": "Hips Up", "instruction": "Lift hips up high like downward dog on forearms", "rules": [{"joint": "body_line", "idealMin": 40, "idealMax": 100, "messageHigh": "Push hips higher"}]},
+      {"stepName": "Hold", "instruction": "Press forearms down, push hips back. Hold.", "rules": [{"joint": "left_leg", "idealMin": 140, "idealMax": 180, "messageLow": "Straighten your legs"}]}
+    ]
+  },
+  {
+    "poseName": "Deep Breathing",
+    "steps": [
+      {"stepName": "Sit Comfortably", "instruction": "Sit tall in a comfortable position", "rules": [{"joint": "spine", "idealMin": 155, "idealMax": 180, "messageLow": "Sit up straight"}]},
+      {"stepName": "Breathe In", "instruction": "Inhale deeply through your nose for 4 seconds", "rules": [{"joint": "spine", "idealMin": 155, "idealMax": 180, "messageLow": "Keep your spine tall"}]},
+      {"stepName": "Breathe Out", "instruction": "Exhale slowly through mouth for 6 seconds", "rules": [{"joint": "spine", "idealMin": 155, "idealMax": 180, "messageLow": "Stay upright while breathing out"}]}
+    ]
+  },
+  {
+    "poseName": "Anulom Vilom",
+    "steps": [
+      {"stepName": "Sit Up", "instruction": "Sit in lotus or cross-legged position", "rules": [{"joint": "spine", "idealMin": 155, "idealMax": 180, "messageLow": "Straighten your spine"}]},
+      {"stepName": "Right Hand Up", "instruction": "Raise right hand to nose for alternate breathing", "rules": [{"joint": "right_arm", "idealMin": 30, "idealMax": 120, "messageLow": "Bring hand closer to nose"}]},
+      {"stepName": "Alternate", "instruction": "Close right nostril, breathe in left. Switch.", "rules": [{"joint": "spine", "idealMin": 155, "idealMax": 180, "messageLow": "Stay tall and relaxed"}]}
+    ]
+  },
+  {
+    "poseName": "Kapalbhati",
+    "steps": [
+      {"stepName": "Sit Tall", "instruction": "Sit cross-legged with spine erect", "rules": [{"joint": "spine", "idealMin": 155, "idealMax": 180, "messageLow": "Straighten your back"}]},
+      {"stepName": "Hands on Knees", "instruction": "Place hands on knees, relax shoulders", "rules": [{"joint": "spine", "idealMin": 155, "idealMax": 180, "messageLow": "Keep spine straight"}]},
+      {"stepName": "Pump Breath", "instruction": "Forceful exhales through nose, quick pumps!", "rules": [{"joint": "spine", "idealMin": 155, "idealMax": 180, "messageLow": "Stay upright while pumping"}]}
+    ]
+  },
+  {
+    "poseName": "Bhramari",
+    "steps": [
+      {"stepName": "Sit Comfortably", "instruction": "Sit with spine straight, close your eyes", "rules": [{"joint": "spine", "idealMin": 155, "idealMax": 180, "messageLow": "Sit up straight"}]},
+      {"stepName": "Fingers on Face", "instruction": "Place index fingers on ear cartilage", "rules": [{"joint": "spine", "idealMin": 155, "idealMax": 180, "messageLow": "Keep spine straight"}]},
+      {"stepName": "Hum", "instruction": "Inhale deep, exhale making a humming sound", "rules": [{"joint": "spine", "idealMin": 155, "idealMax": 180, "messageLow": "Stay tall while humming"}]}
+    ]
+  },
+  {
+    "poseName": "Neck Stretch",
+    "steps": [
+      {"stepName": "Sit or Stand", "instruction": "Sit or stand with straight spine", "rules": [{"joint": "spine", "idealMin": 155, "idealMax": 180, "messageLow": "Straighten your back"}]},
+      {"stepName": "Tilt Right", "instruction": "Slowly tilt head to right, ear to shoulder", "rules": [{"joint": "spine", "idealMin": 155, "idealMax": 180, "messageLow": "Keep body still, only move head"}]},
+      {"stepName": "Tilt Left", "instruction": "Now tilt head to left side. Hold each side.", "rules": [{"joint": "spine", "idealMin": 155, "idealMax": 180, "messageLow": "Keep spine straight"}]}
+    ]
+  },
+  {
+    "poseName": "Shoulder Rolls",
+    "steps": [
+      {"stepName": "Stand Ready", "instruction": "Stand with arms relaxed at sides", "rules": [{"joint": "spine", "idealMin": 155, "idealMax": 180, "messageLow": "Stand tall"}]},
+      {"stepName": "Roll Forward", "instruction": "Roll shoulders forward in big circles", "rules": [{"joint": "spine", "idealMin": 155, "idealMax": 180, "messageLow": "Keep your back straight"}]},
+      {"stepName": "Roll Backward", "instruction": "Now roll shoulders backward. Repeat 10x.", "rules": [{"joint": "spine", "idealMin": 155, "idealMax": 180, "messageLow": "Stay upright"}]}
+    ]
+  },
+  {
+    "poseName": "Chair Twist",
+    "steps": [
+      {"stepName": "Sit Up", "instruction": "Sit tall in a chair, feet flat on floor", "rules": [{"joint": "spine", "idealMin": 140, "idealMax": 180, "messageLow": "Sit up straight"}]},
+      {"stepName": "Twist Right", "instruction": "Twist torso to the right, hold chair back", "rules": [{"joint": "spine", "idealMin": 80, "idealMax": 150, "messageLow": "Twist more to the right"}]},
+      {"stepName": "Twist Left", "instruction": "Now twist to the left. Hold each side.", "rules": [{"joint": "spine", "idealMin": 80, "idealMax": 150, "messageLow": "Twist more to the left"}]}
+    ]
+  },
+  {
+    "poseName": "Wrist Stretch",
+    "steps": [
+      {"stepName": "Extend Arms", "instruction": "Extend one arm forward, palm up", "rules": [{"joint": "left_arm", "idealMin": 150, "idealMax": 180, "messageLow": "Straighten your arm"}]},
+      {"stepName": "Pull Back", "instruction": "Use other hand to pull fingers back gently", "rules": [{"joint": "left_arm", "idealMin": 150, "idealMax": 180, "messageLow": "Keep arm straight while stretching"}]},
+      {"stepName": "Switch", "instruction": "Switch hands and repeat. Hold 15 seconds each.", "rules": [{"joint": "right_arm", "idealMin": 150, "idealMax": 180, "messageLow": "Straighten your other arm now"}]}
+    ]
+  },
+  {
+    "poseName": "Frog Pose",
+    "steps": [
+      {"stepName": "Squat Down", "instruction": "Squat down with feet wide apart", "rules": [{"joint": "left_bent_knee", "idealMin": 30, "idealMax": 90, "messageHigh": "Squat lower like a frog"}]},
+      {"stepName": "Hands Down", "instruction": "Place hands on floor between your feet", "rules": [{"joint": "spine", "idealMin": 60, "idealMax": 130, "messageLow": "Lean forward a bit"}]},
+      {"stepName": "Hop!", "instruction": "Try little hops like a frog! Have fun!", "rules": [{"joint": "left_bent_knee", "idealMin": 30, "idealMax": 120, "messageLow": "Bend knees to hop"}]}
+    ]
+  },
+  {
+    "poseName": "Lion Breath",
+    "steps": [
+      {"stepName": "Kneel", "instruction": "Kneel or sit comfortably with back straight", "rules": [{"joint": "spine", "idealMin": 140, "idealMax": 180, "messageLow": "Sit up straight"}]},
+      {"stepName": "Inhale Deep", "instruction": "Take a deep breath in through your nose", "rules": [{"joint": "spine", "idealMin": 140, "idealMax": 180, "messageLow": "Stay upright"}]},
+      {"stepName": "ROAR!", "instruction": "Open mouth wide, stick tongue out, ROAR!", "rules": [{"joint": "spine", "idealMin": 140, "idealMax": 180, "messageLow": "Keep back straight while roaring"}]}
     ]
   }
 ]
