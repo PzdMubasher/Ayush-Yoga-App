@@ -66,7 +66,11 @@ class _CameraScreenState extends State<CameraScreen> {
 
   void _startPrepCountdown() {
     final langProvider = Provider.of<LanguageProvider>(context, listen: false);
-    _speakInstruction(langProvider.currentLanguage == 'hi' ? "तैयार हो जाइए! 3, 2, 1 में शुरू हो रहा है" : "Get ready! Starting in 3, 2, 1");
+    _speakInstruction(langProvider.currentLanguage == 'hi' 
+        ? "तैयार हो जाइए! 3, 2, 1 में शुरू हो रहा है" 
+        : langProvider.currentLanguage == 'te'
+            ? "సిద్ధంగా ఉండండి! మూడు, రెండు, ఒకటి లో ప్రారంభమవుతుంది"
+            : "Get ready! Starting in 3, 2, 1");
     Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_prepCountdown > 1) {
         setState(() => _prepCountdown--);
@@ -74,7 +78,11 @@ class _CameraScreenState extends State<CameraScreen> {
         timer.cancel();
         setState(() => _isPrepping = false);
         _startSessionTimer();
-        String initialMsg = langProvider.currentLanguage == 'hi' ? "शुरू करें! " : "Go! ";
+        String initialMsg = langProvider.currentLanguage == 'hi' 
+            ? "शुरू करें! " 
+            : langProvider.currentLanguage == 'te'
+                ? "ప్రారంభించండి! "
+                : "Go! ";
         if (_steps.isNotEmpty && _steps[0]['instruction'] != null) {
           initialMsg += langProvider.translateDynamic(_steps[0]['instruction'].toString());
         }
@@ -100,7 +108,12 @@ class _CameraScreenState extends State<CameraScreen> {
       _accuracy = 1.0; 
       _currentStepIndex = _steps.length; // Stop processing steps
     });
-    _speakInstruction("Time is up. Workout complete. Well done. Namaste.");
+    final langProvider = Provider.of<LanguageProvider>(context, listen: false);
+    _speakInstruction(langProvider.currentLanguage == 'hi'
+        ? "समय समाप्त। वर्कआउट पूरा हुआ। बहुत बढ़िया। नमस्ते।"
+        : langProvider.currentLanguage == 'te'
+            ? "సమయం ముగిసింది. వ్యాయామం పూర్తయింది. బాగా చేసారు. నమస్తే."
+            : "Time is up. Workout complete. Well done. Namaste.");
   }
 
   String _formatTime(int seconds) {
@@ -139,6 +152,8 @@ class _CameraScreenState extends State<CameraScreen> {
     final langProvider = Provider.of<LanguageProvider>(context, listen: false);
     if (langProvider.currentLanguage == 'hi') {
       await _tts.setLanguage("hi-IN");
+    } else if (langProvider.currentLanguage == 'te') {
+      await _tts.setLanguage("te-IN");
     } else {
       await _tts.setLanguage("en-US");
     }

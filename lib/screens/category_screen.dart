@@ -91,7 +91,7 @@ class CategoryScreen extends StatelessWidget {
                 crossAxisCount: 2,
                 mainAxisSpacing: 16,
                 crossAxisSpacing: 16,
-                childAspectRatio: 1.1,
+                childAspectRatio: 0.96,
               ),
               delegate: SliverChildBuilderDelegate(
                 (context, index) => _buildCategoryGridItem(context, langProvider, YogaCategory.categories[index]),
@@ -137,13 +137,13 @@ class CategoryScreen extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(14.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(category.icon, style: const TextStyle(fontSize: 32)),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 6),
                     Text(
                       langProvider.translateDynamic(category.name),
                       style: GoogleFonts.outfit(

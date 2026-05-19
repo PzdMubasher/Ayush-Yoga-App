@@ -125,7 +125,9 @@ class ProfileScreen extends StatelessWidget {
                 _buildLanguageTile(context, langProvider, 'en', 'English'),
                 const SizedBox(height: 16),
                 _buildLanguageTile(context, langProvider, 'hi', 'हिन्दी'),
-                
+                const SizedBox(height: 16),
+                _buildLanguageTile(context, langProvider, 'te', 'తెలుగు'),
+
                 const SizedBox(height: 40),
               ],
             ),

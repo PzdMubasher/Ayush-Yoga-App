@@ -77,7 +77,9 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       });
       _startTypewriter(_selectedLang == 'hi' 
           ? "योग स्वयं की यात्रा है।" 
-          : "Yoga is the journey to the self.");
+          : _selectedLang == 'te'
+              ? "యోగా స్వయం యొక్క ప్రయాణం."
+              : "Yoga is the journey to the self.");
     }
   }
 
@@ -132,13 +134,14 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         setState(() {
           _selectedLang = code;
         });
-        _startTypewriter(code == 'hi' 
-            ? "योग स्वयं की यात्रा है।" 
-            : "Yoga is the journey to the self.");
+        String quote = "Yoga is the journey to the self.";
+        if (code == 'hi') quote = "योग स्वयं की यात्रा है।";
+        if (code == 'te') quote = "యోగా స్వయం యొక్క ప్రయాణం.";
+        _startTypewriter(quote);
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
-        padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 14),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         decoration: BoxDecoration(
           color: isSelected ? const Color(0xFF023220) : Colors.grey.shade100,
           borderRadius: BorderRadius.circular(18),
@@ -201,7 +204,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                         children: [
                           _buildTopLogoCard('assets/images/Ayush_yoga.jpeg'),
                           const SizedBox(width: 20),
-                          _buildTopLogoCard('assets/images/final_logo.png'),
+                          _buildTopLogoCard('assets/images/image1.png'),
                         ],
                       ),
                     ),
@@ -290,7 +293,11 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                             if (_showLanguageSelection) ...[
                               // Language instruction
                               Text(
-                                _selectedLang == 'hi' ? 'भाषा चुनें / Select Language' : 'Select Language / भाषा चुनें',
+                                _selectedLang == 'hi'
+                                    ? 'भाषा चुनें / Select Language'
+                                    : _selectedLang == 'te'
+                                        ? 'భాష ఎంచుకోండి / Select Language'
+                                        : 'Select Language / भाषा चुनें',
                                 style: TextStyle(
                                   color: Colors.grey.shade800,
                                   fontSize: 14,
@@ -300,13 +307,15 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                               ),
                               const SizedBox(height: 16),
                               
-                              // Buttons English / हिन्दी
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                              // Buttons English / हिन्दी / తెలుగు
+                              Wrap(
+                                alignment: WrapAlignment.center,
+                                spacing: 10,
+                                runSpacing: 10,
                                 children: [
                                   _buildLanguageOption('en', 'English'),
-                                  const SizedBox(width: 16),
                                   _buildLanguageOption('hi', 'हिन्दी'),
+                                  _buildLanguageOption('te', 'తెలుగు'),
                                 ],
                               ),
                               const SizedBox(height: 24),
