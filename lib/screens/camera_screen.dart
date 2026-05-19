@@ -39,6 +39,7 @@ class _CameraScreenState extends State<CameraScreen> {
   int _secondsRemaining = 0;
   int _prepCountdown = 3;
   bool _isPrepping = true;
+  bool _showBackgroundGuide = true;
   DateTime? _lastProcessedTime;
   InputImageRotation? _currentRotation;
   Size? _imageSize;
@@ -120,6 +121,77 @@ class _CameraScreenState extends State<CameraScreen> {
     final mins = seconds ~/ 60;
     final secs = seconds % 60;
     return '${mins.toString().padLeft(2, '0')}:${secs.toString().padLeft(2, '0')}';
+  }
+
+  String _getStepGuideImage() {
+    if (_steps.isEmpty || _currentStepIndex >= _steps.length) {
+      return widget.pose.imageUrl;
+    }
+    
+    final step = _steps[_currentStepIndex];
+    final stepName = step['stepName']?.toString().toLowerCase() ?? '';
+    final instruction = step['instruction']?.toString().toLowerCase() ?? '';
+    
+    // Check if we are in the preparation/straight standing step
+    if (stepName.contains('straight') || stepName.contains('tall') || stepName.contains('prepar') ||
+        instruction.contains('stand straight') || instruction.contains('stand tall') || instruction.contains('feet together')) {
+      return 'assets/images/mountain_pose.png';
+    }
+    
+    // Check if we are in a lying down step
+    if (stepName.contains('lie') || stepName.contains('lying') || stepName.contains('prone') ||
+        instruction.contains('lie down') || instruction.contains('lying flat')) {
+      return 'assets/images/savasana.png';
+    }
+
+    // Check if we are in a seated/sitting step
+    if (stepName.contains('sit') || stepName.contains('seated') || instruction.contains('sit down') || instruction.contains('seated posture')) {
+      return 'assets/images/lotus_pose.png';
+    }
+    
+    return widget.pose.imageUrl;
+  }
+
+  List<Widget> _buildFocusHighlights(LanguageProvider langProvider) {
+    if (_steps.isEmpty || _currentStepIndex >= _steps.length) return [];
+    
+    final currentStep = _steps[_currentStepIndex];
+    final rules = currentStep['rules'] as List<dynamic>? ?? [];
+    if (rules.isEmpty) return [];
+    
+    List<Widget> highlights = [];
+    
+    for (var rule in rules) {
+      final joint = rule['joint']?.toString().toLowerCase() ?? '';
+      Alignment align = Alignment.center;
+      String label = "";
+      
+      if (joint.contains('arm') || joint.contains('elbow') || joint.contains('shoulder') || joint.contains('wrist')) {
+        align = const Alignment(0.0, -0.4); // Upper chest/arms area
+        label = langProvider.currentLanguage == 'hi' ? "हाथों की स्थिति" : langProvider.currentLanguage == 'te' ? "చేతులపై దృష్టి" : "Focus: Arms";
+      } else if (joint.contains('knee') || joint.contains('hip') || joint.contains('leg')) {
+        align = const Alignment(0.0, 0.4); // Lower body / legs area
+        label = langProvider.currentLanguage == 'hi' ? "पैरों की स्थिति" : langProvider.currentLanguage == 'te' ? "కాళ్లపై దృష్టి" : "Focus: Legs";
+      } else if (joint.contains('ankle') || joint.contains('foot') || joint.contains('feet')) {
+        align = const Alignment(0.0, 0.7); // Foot area
+        label = langProvider.currentLanguage == 'hi' ? "पैरों पर ध्यान दें" : langProvider.currentLanguage == 'te' ? "పాదాల స్థానం" : "Focus: Feet";
+      } else if (joint.contains('spine') || joint.contains('back') || joint.contains('chest')) {
+        align = const Alignment(0.0, 0.0); // Spine / Core
+        label = langProvider.currentLanguage == 'hi' ? "कमर सीधी रखें" : langProvider.currentLanguage == 'te' ? "వెన్నుముక నిటారుగా" : "Focus: Posture";
+      } else {
+        continue;
+      }
+      
+      highlights.add(
+        PulsingFocusHighlight(
+          key: ValueKey("${_currentStepIndex}_${joint}"),
+          alignment: align,
+          label: label,
+        ),
+      );
+    }
+    
+    return highlights;
   }
 
   Future<void> _loadPoseRules() async {
@@ -619,7 +691,26 @@ class _CameraScreenState extends State<CameraScreen> {
                     fit: StackFit.expand,
                     children: [
                       CameraPreview(_controller!),
+                      if (_showBackgroundGuide)
+                        CustomPaint(
+                          painter: TargetSkeletonPainter(
+                            stepIndex: _currentStepIndex,
+                            steps: _steps,
+                            poseName: _targetPoseName,
+                          ),
+                          child: Container(),
+                        ),
+                      if (_showBackgroundGuide)
+                        Opacity(
+                          opacity: 0.14, // Extremely subtle ghost watermark guide, keeping user's live feed fully dominant and clear
+                          child: Image.asset(
+                            _getStepGuideImage(), // Dynamically switches based on the active step!
+                            fit: BoxFit.contain,
+                          ),
+                        ),
                       ...landmarkWidgets,
+                      if (_showBackgroundGuide)
+                        ..._buildFocusHighlights(langProvider),
                     ],
                   );
                 },
@@ -684,16 +775,47 @@ class _CameraScreenState extends State<CameraScreen> {
             ),
           ),
 
-          // --- GUIDE IMAGE OVERLAY ---
+
+          // --- GUIDE IMAGE OVERLAY (Mini Card & Toggle Target) ---
           Positioned(
             top: 160, right: 20,
-            child: Container(
-              width: 100, height: 100,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.white54, width: 2),
-                boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 10)],
-                image: DecorationImage(image: AssetImage(widget.pose.imageUrl), fit: BoxFit.cover),
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  _showBackgroundGuide = !_showBackgroundGuide;
+                });
+              },
+              child: Container(
+                width: 100, height: 100,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: _showBackgroundGuide ? const Color(0xFF00FF88) : Colors.white24, 
+                    width: 2
+                  ),
+                  boxShadow: [BoxShadow(color: Colors.black45, blurRadius: 8)],
+                  image: DecorationImage(image: AssetImage(_getStepGuideImage()), fit: BoxFit.cover),
+                ),
+                child: Stack(
+                  children: [
+                    // Eye / Visibility status icon hint
+                    Positioned(
+                      bottom: 6, right: 6,
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: const BoxDecoration(
+                          color: Colors.black54,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          _showBackgroundGuide ? Icons.visibility : Icons.visibility_off, 
+                          color: _showBackgroundGuide ? const Color(0xFF00FF88) : Colors.white54, 
+                          size: 16
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -716,7 +838,7 @@ class _CameraScreenState extends State<CameraScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Header row: step label + timer + close
+                  // Header row: step label + timer + guide toggle + close
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -734,11 +856,32 @@ class _CameraScreenState extends State<CameraScreen> {
                       ),
                       Text(_formatTime(_secondsRemaining), 
                         style: GoogleFonts.outfit(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20)),
-                      IconButton(
-                        icon: const Icon(Icons.close, color: Colors.white54, size: 22), 
-                        onPressed: () => Navigator.pop(context),
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: Icon(
+                              _showBackgroundGuide ? Icons.accessibility_new : Icons.accessibility_new_outlined, 
+                              color: _showBackgroundGuide ? const Color(0xFF00FF88) : Colors.white54, 
+                              size: 22
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _showBackgroundGuide = !_showBackgroundGuide;
+                              });
+                            },
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                            tooltip: "Toggle background guide",
+                          ),
+                          const SizedBox(width: 14),
+                          IconButton(
+                            icon: const Icon(Icons.close, color: Colors.white54, size: 22), 
+                            onPressed: () => Navigator.pop(context),
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -821,4 +964,254 @@ class _LinePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_LinePainter old) => old.p1 != p1 || old.p2 != p2 || old.color != color;
+}
+
+// Glowing pulsing visual highlight widget for active step joints
+class PulsingFocusHighlight extends StatefulWidget {
+  final Alignment alignment;
+  final String label;
+  const PulsingFocusHighlight({super.key, required this.alignment, required this.label});
+
+  @override
+  State<PulsingFocusHighlight> createState() => _PulsingFocusHighlightState();
+}
+
+class _PulsingFocusHighlightState extends State<PulsingFocusHighlight> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    )..repeat();
+    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: widget.alignment,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          AnimatedBuilder(
+            animation: _animation,
+            builder: (context, child) {
+              return Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    width: 30 + (40 * _animation.value),
+                    height: 30 + (40 * _animation.value),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: const Color(0xFF00FF88).withOpacity(1.0 - _animation.value),
+                        width: 3,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF00FF88).withOpacity(0.3 * (1.0 - _animation.value)),
+                          blurRadius: 8,
+                        )
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: 14, height: 14,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF00FF88),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+          const SizedBox(height: 10),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: Colors.black87,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: const Color(0xFF00FF88).withOpacity(0.5), width: 1.5),
+            ),
+            child: Text(
+              widget.label,
+              style: GoogleFonts.outfit(
+                color: const Color(0xFF00FF88),
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Custom Painter to draw dynamic, glowing, step-wise target posture skeleton shadow
+class TargetSkeletonPainter extends CustomPainter {
+  final int stepIndex;
+  final List<dynamic> steps;
+  final String poseName;
+  TargetSkeletonPainter({required this.stepIndex, required this.steps, required this.poseName});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final double w = size.width;
+    final double h = size.height;
+    
+    // Define joint points based on active step index
+    // We position them relative to the center of the screen
+    final center = Offset(w / 2, h * 0.45);
+    final double scale = h * 0.45; // Scale size based on height
+    
+    final paint = Paint()
+      ..color = const Color(0xFF00FF88).withOpacity(0.2)
+      ..strokeWidth = 6.0
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.stroke;
+      
+    final jointPaint = Paint()
+      ..color = const Color(0xFF00FF88).withOpacity(0.3)
+      ..style = PaintingStyle.fill;
+
+    // Default standing straight coordinates (Mountain Pose)
+    Offset head = center + Offset(0, -scale * 0.4);
+    Offset neck = center + Offset(0, -scale * 0.3);
+    Offset leftShoulder = center + Offset(-scale * 0.15, -scale * 0.25);
+    Offset rightShoulder = center + Offset(scale * 0.15, -scale * 0.25);
+    Offset leftElbow = center + Offset(-scale * 0.2, -scale * 0.05);
+    Offset rightElbow = center + Offset(scale * 0.2, -scale * 0.05);
+    Offset leftWrist = center + Offset(-scale * 0.2, scale * 0.15);
+    Offset rightWrist = center + Offset(scale * 0.2, scale * 0.15);
+    
+    Offset leftHip = center + Offset(-scale * 0.08, scale * 0.15);
+    Offset rightHip = center + Offset(scale * 0.08, scale * 0.15);
+    Offset leftKnee = center + Offset(-scale * 0.08, scale * 0.5);
+    Offset rightKnee = center + Offset(scale * 0.08, scale * 0.5);
+    Offset leftAnkle = center + Offset(-scale * 0.08, scale * 0.85);
+    Offset rightAnkle = center + Offset(scale * 0.08, scale * 0.85);
+
+    // Let's modify the pose dynamically based on the step index!
+    if (poseName.toLowerCase().contains('tree')) {
+      // Tree Pose step-wise adjustments:
+      if (stepIndex >= 2) {
+        // Step 3+: Lift Foot. The right foot is placed on the left inner thigh.
+        rightKnee = center + Offset(scale * 0.18, scale * 0.5);
+        rightAnkle = center + Offset(scale * 0.05, scale * 0.5); // Resting on left thigh/knee
+      }
+      
+      if (stepIndex == 3) {
+        // Step 4: Hands together at chest
+        leftElbow = center + Offset(-scale * 0.18, -scale * 0.12);
+        rightElbow = center + Offset(scale * 0.18, -scale * 0.12);
+        leftWrist = center + Offset(-scale * 0.02, -scale * 0.15);
+        rightWrist = center + Offset(scale * 0.02, -scale * 0.15);
+      } else if (stepIndex >= 4) {
+        // Step 5+: Raise arms overhead
+        leftElbow = center + Offset(-scale * 0.15, -scale * 0.55);
+        rightElbow = center + Offset(scale * 0.15, -scale * 0.55);
+        leftWrist = center + Offset(-scale * 0.08, -scale * 0.8);
+        rightWrist = center + Offset(scale * 0.08, -scale * 0.8);
+      }
+    } 
+    else if (poseName.toLowerCase().contains('warrior')) {
+      // Warrior Pose step-wise adjustments:
+      if (stepIndex >= 1) {
+        // Step 2+: Wide stance / step forward
+        rightHip = center + Offset(scale * 0.2, scale * 0.15);
+        rightKnee = center + Offset(scale * 0.35, scale * 0.45);
+        rightAnkle = center + Offset(scale * 0.35, scale * 0.75);
+        
+        leftHip = center + Offset(-scale * 0.15, scale * 0.15);
+        leftKnee = center + Offset(-scale * 0.25, scale * 0.55);
+        leftAnkle = center + Offset(-scale * 0.35, scale * 0.85);
+      }
+      if (stepIndex >= 3) {
+        // Step 4+: Raise arms
+        leftElbow = center + Offset(-scale * 0.25, -scale * 0.45);
+        rightElbow = center + Offset(scale * 0.25, -scale * 0.45);
+        leftWrist = center + Offset(-scale * 0.3, -scale * 0.7);
+        rightWrist = center + Offset(scale * 0.3, -scale * 0.7);
+      }
+    }
+    else if (poseName.toLowerCase().contains('cobra')) {
+      // Cobra Pose step-wise adjustments (lying down):
+      head = center + Offset(-scale * 0.45, -scale * 0.1);
+      neck = center + Offset(-scale * 0.35, 0);
+      leftShoulder = center + Offset(-scale * 0.25, -scale * 0.05);
+      rightShoulder = center + Offset(-scale * 0.25, scale * 0.05);
+      leftElbow = center + Offset(-scale * 0.2, -scale * 0.1);
+      rightElbow = center + Offset(-scale * 0.2, scale * 0.1);
+      leftWrist = center + Offset(-scale * 0.15, -scale * 0.1);
+      rightWrist = center + Offset(-scale * 0.15, scale * 0.1);
+      
+      leftHip = center + Offset(scale * 0.1, -scale * 0.05);
+      rightHip = center + Offset(scale * 0.1, scale * 0.05);
+      leftKnee = center + Offset(scale * 0.35, -scale * 0.05);
+      rightKnee = center + Offset(scale * 0.35, scale * 0.05);
+      leftAnkle = center + Offset(scale * 0.65, -scale * 0.05);
+      rightAnkle = center + Offset(scale * 0.65, scale * 0.05);
+
+      if (stepIndex >= 2) {
+        // Lift chest (arched head and shoulders up)
+        head = center + Offset(-scale * 0.5, -scale * 0.3);
+        neck = center + Offset(-scale * 0.4, -scale * 0.15);
+      }
+    }
+
+    // --- DRAW SKELETON BONES ---
+    // Head circle
+    canvas.drawCircle(head, scale * 0.08, paint);
+    canvas.drawCircle(head, scale * 0.08, jointPaint);
+    
+    // Neck to Spine/Hips
+    canvas.drawLine(neck, (leftHip + rightHip) / 2, paint);
+    
+    // Shoulders
+    canvas.drawLine(leftShoulder, rightShoulder, paint);
+    canvas.drawLine(neck, leftShoulder, paint);
+    canvas.drawLine(neck, rightShoulder, paint);
+    
+    // Arms
+    canvas.drawLine(leftShoulder, leftElbow, paint);
+    canvas.drawLine(leftElbow, leftWrist, paint);
+    canvas.drawLine(rightShoulder, rightElbow, paint);
+    canvas.drawLine(rightElbow, rightWrist, paint);
+    
+    // Hips
+    canvas.drawLine(leftHip, rightHip, paint);
+    
+    // Legs
+    canvas.drawLine(leftHip, leftKnee, paint);
+    canvas.drawLine(leftKnee, leftAnkle, paint);
+    canvas.drawLine(rightHip, rightKnee, paint);
+    canvas.drawLine(rightKnee, rightAnkle, paint);
+
+    // --- DRAW JOINTS AS GLOWING DOTS ---
+    final List<Offset> joints = [
+      head, neck, leftShoulder, rightShoulder, leftElbow, rightElbow,
+      leftWrist, rightWrist, leftHip, rightHip, leftKnee, rightKnee,
+      leftAnkle, rightAnkle
+    ];
+    for (var joint in joints) {
+      canvas.drawCircle(joint, 5.0, Paint()..color = const Color(0xFF00FF88));
+    }
+  }
+
+  @override
+  bool shouldRepaint(TargetSkeletonPainter old) => 
+      old.stepIndex != stepIndex || old.poseName != poseName || old.steps != steps;
 }
