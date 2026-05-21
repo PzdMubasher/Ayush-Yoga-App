@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../providers/language_provider.dart';
 import 'category_screen.dart';
+import '../features/auth/model/auth_repository.dart';
+import '../features/auth/view/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -83,18 +85,23 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     }
   }
 
-  void _navigateToHome() {
-    if (mounted) {
-      Navigator.of(context).pushReplacement(
-        PageRouteBuilder(
-          transitionDuration: const Duration(milliseconds: 1000),
-          pageBuilder: (context, animation, secondaryAnimation) => const CategoryScreen(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(opacity: animation, child: child);
-          },
-        ),
-      );
-    }
+  Future<void> _navigateToHome() async {
+    if (!mounted) return;
+    
+    final isLoggedIn = await AuthRepository().isLoggedIn();
+    if (!mounted) return;
+
+    final Widget nextScreen = isLoggedIn ? const CategoryScreen() : const LoginScreen();
+
+    Navigator.of(context).pushReplacement(
+      PageRouteBuilder(
+        transitionDuration: const Duration(milliseconds: 1000),
+        pageBuilder: (context, animation, secondaryAnimation) => nextScreen,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+      ),
+    );
   }
 
   @override

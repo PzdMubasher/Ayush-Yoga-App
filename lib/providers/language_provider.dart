@@ -63,6 +63,11 @@ class LanguageProvider extends ChangeNotifier {
       'yogi_name': 'User',
       'total_minutes': 'Total Yoga Minutes',
       'change_language': 'Change Language / भाषा बदलें',
+      'logout': 'Logout',
+      'logout_confirm': 'Confirm Logout',
+      'logout_confirm_desc': 'Are you sure you want to logout?',
+      'cancel': 'Cancel',
+      'yes': 'Yes',
     },
     'hi': {
       'inhale_quote': '"शांति ग्रहण करें, तनाव बाहर निकालें"',
@@ -97,6 +102,11 @@ class LanguageProvider extends ChangeNotifier {
       'yogi_name': 'User',
       'total_minutes': 'कुल योग मिनट',
       'change_language': 'भाषा बदलें / Change Language',
+      'logout': 'लॉग आउट',
+      'logout_confirm': 'लॉग आउट की पुष्टि करें',
+      'logout_confirm_desc': 'क्या आप सचमुच लॉग आउट करना चाहते हैं?',
+      'cancel': 'रद्द करें',
+      'yes': 'हाँ',
     },
     'te': {
       'inhale_quote': '"శాంతిని పీల్చుకోండి, ఒత్తిడిని వదులుకోండి"',
@@ -131,6 +141,11 @@ class LanguageProvider extends ChangeNotifier {
       'yogi_name': 'వినియోగదారు',
       'total_minutes': 'మొత్తం యోగా నిమిషాలు',
       'change_language': 'భాష మార్చు / Change Language',
+      'logout': 'లాగ్ అవుట్',
+      'logout_confirm': 'లాగ్ అవుట్ నిర్ధారించండి',
+      'logout_confirm_desc': 'మీరు ఖచ్చితంగా లాగ్ అవుట్ చేయాలనుకుంటున్నారా?',
+      'cancel': 'రద్దు చేయి',
+      'yes': 'అవును',
     }
   };
 
@@ -908,6 +923,9 @@ class LanguageProvider extends ChangeNotifier {
     'twist more to the right': 'दाईं ओर और मुड़ें',
     'twist torso to the right, hold chair back': 'धड़ को दाईं ओर घुमाएं, कुर्सी के पीछे पकड़ें',
     'use other hand to pull fingers back gently': 'उंगलियों को धीरे से पीछे खींचने के लिए दूसरे हाथ का उपयोग करें',
+    'Chair Pose': 'उत्कटासन (Chair Pose)',
+    "Don't bend knee too much past ankle": 'घुटने को टखने से आगे ज्यादा न मोड़ें',
+    "Don't drop your chest too low": 'अपनी छाती को बहुत नीचे न गिराएं',
   };
 
   static const Map<String, String> _teDynamicTranslations = {
@@ -1635,7 +1653,16 @@ class LanguageProvider extends ChangeNotifier {
     'twist more to the right': 'కుడివైపుకి మరింత ట్విస్ట్ చేయండి',
     'twist torso to the right, hold chair back': 'మొండెం కుడివైపుకు తిప్పండి, కుర్చీని వెనక్కి పట్టుకోండి',
     'use other hand to pull fingers back gently': 'వేళ్లను సున్నితంగా వెనక్కి లాగేందుకు మరో చేతిని ఉపయోగించండి',
+    'Chair Pose': 'ఉత్కటాసనం (Chair Pose)',
+    "Don't bend knee too much past ankle": 'మోకాలిని చీలమండ దాటి ఎక్కువగా వంచకండి',
+    "Don't drop your chest too low": 'మీ ఛాతీని చాలా క్రిందికి దించకండి',
   };
+
+  static final Map<String, String> _hiDynamicTranslationsLower =
+      _hiDynamicTranslations.map((k, v) => MapEntry(k.toLowerCase().trim().replaceAll(RegExp(r'\s+'), ' '), v));
+
+  static final Map<String, String> _teDynamicTranslationsLower =
+      _teDynamicTranslations.map((k, v) => MapEntry(k.toLowerCase().trim().replaceAll(RegExp(r'\s+'), ' '), v));
 
   String t(String key) {
     return _localizedValues[_currentLanguage]?[key] ?? key;
@@ -1649,8 +1676,8 @@ class LanguageProvider extends ChangeNotifier {
     
     // Choose the right dynamic map based on language
     final Map<String, String> dynamicMap = _currentLanguage == 'te'
-        ? _teDynamicTranslations
-        : _hiDynamicTranslations;
+        ? _teDynamicTranslationsLower
+        : _hiDynamicTranslationsLower;
     
     // 1. Exact dynamic map lookup
     if (dynamicMap.containsKey(normalized)) {

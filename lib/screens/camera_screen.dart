@@ -9,8 +9,6 @@ import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'dart:typed_data';
-import '../utils/pose_painter.dart';
 import '../models/yoga_pose.dart';
 import '../providers/language_provider.dart';
 
@@ -24,8 +22,10 @@ class CameraScreen extends StatefulWidget {
   State<CameraScreen> createState() => _CameraScreenState();
 }
 
-class _CameraScreenState extends State<CameraScreen> {
+class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver {
   CameraController? _controller;
+  Future<void> _cameraOperationChain = Future.value();
+  bool _isInitializingCamera = false;
   bool _isProcessing = false;
   List<Pose> _poses = [];
   String _currentStatus = "Getting ready...";
@@ -41,13 +41,11 @@ class _CameraScreenState extends State<CameraScreen> {
   bool _isPrepping = false;
   bool _showBackgroundGuide = true;
   bool _showOnboardingGuide = true;
-  DateTime? _lastProcessedTime;
   InputImageRotation? _currentRotation;
   Size? _imageSize;
   
   List<dynamic> _steps = [];
   int _currentStepIndex = 0;
-  bool _stepCompleted = false;
   DateTime? _stepStartTime;
   int _errorFrameCount = 0;
   String? _lastSpokenMessage;
@@ -55,11 +53,27 @@ class _CameraScreenState extends State<CameraScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _targetPoseName = widget.pose.name;
     _secondsRemaining = widget.durationMins * 60;
     _initializePoseDetector();
     _initializeCamera();
     _setupScreen();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive || state == AppLifecycleState.paused) {
+      _sessionTimer?.cancel();
+      _ttsTimer?.cancel();
+      _tts.stop();
+      _disposeCamera();
+    } else if (state == AppLifecycleState.resumed) {
+      _initializeCamera();
+      if (_secondsRemaining > 0 && !_isPrepping && !_showOnboardingGuide) {
+        _startSessionTimer();
+      }
+    }
   }
 
   Future<void> _setupScreen() async {
@@ -139,57 +153,7 @@ class _CameraScreenState extends State<CameraScreen> {
   // This gives a step-by-step visual journey matching exactly what user should do.
   String _getStepGuideImage() {
     final String pn = widget.pose.name.toLowerCase();
-    final int totalSteps = _steps.length;
     final int step = _currentStepIndex;
-
-    // The "transition point" — after halfway, show the final pose
-    final bool isEarlyStep = totalSteps == 0 || step < (totalSteps / 2).ceil();
-
-    // ── Map of pose-name keyword → final pose image asset ──────────────────
-    final Map<String, String> finalImages = {
-      'tree':              'assets/images/tree_pose.png',
-      'warrior i':         'assets/images/warrior_pose_1.png',
-      'warrior ii':        'assets/images/warrior_pose.png',
-      'warrior iii':       'assets/images/warrior3_pose.png',
-      'warrior':           'assets/images/warrior_pose.png',
-      'triangle':          'assets/images/triangle_pose.png',
-      'chair':             'assets/images/chair_pose.png',
-      'plank':             'assets/images/plank_pose.png',
-      'side plank':        'assets/images/side_plank.png',
-      'cobra':             'assets/images/cobra_pose.png',
-      'child':             'assets/images/child_pose.png',
-      'cat':               'assets/images/cat_cow.png',
-      'cow':               'assets/images/cat_cow.png',
-      'lotus':             'assets/images/lotus_pose.png',
-      'surya':             'assets/images/category_surya.png',
-      'savasana':          'assets/images/savasana.png',
-      'goddess':           'assets/images/goddess_pose.png',
-      'camel':             'assets/images/camel_pose.png',
-      'crow':              'assets/images/crow_pose.png',
-      'chaturanga':        'assets/images/chaturanga.png',
-      'bow':               'assets/images/bow_pose.png',
-      'dolphin':           'assets/images/dolphin_pose.png',
-      'boat':              'assets/images/boat_pose.png',
-      'butterfly':         'assets/images/butterfly_pose.png',
-      'downward':          'assets/images/downward_dog.png',
-      'bridge':            'assets/images/bridge_pose.png',
-      'extended side':     'assets/images/extended_side_angle.png',
-      'half moon':         'assets/images/half_moon.png',
-      'pigeon':            'assets/images/pigeon_pose.png',
-      'garland':           'assets/images/garland_pose.png',
-      'eagle':             'assets/images/eagle_pose.png',
-      'fish':              'assets/images/fish_pose.png',
-      'frog':              'assets/images/frog_pose.png',
-      'anulom':            'assets/images/lotus_pose.png',
-      'kapalbhati':        'assets/images/lotus_pose.png',
-      'bhramari':          'assets/images/lotus_pose.png',
-      'deep breath':       'assets/images/lotus_pose.png',
-      'lion':              'assets/images/lotus_pose.png',
-      'neck':              'assets/images/lotus_pose.png',
-      'shoulder roll':     'assets/images/lotus_pose.png',
-      'wrist':             'assets/images/lotus_pose.png',
-      'chair twist':       'assets/images/lotus_pose.png',
-    };
 
     // ── Determine the starting position image for early steps ──────────────
     String floorPrep = 'assets/images/lotus_pose.png';
@@ -197,17 +161,24 @@ class _CameraScreenState extends State<CameraScreen> {
     String standingPrep = 'assets/images/mountain_step1.png';
     String tablePrep = 'assets/images/plank_step1.png';
     
-    // ── Find the matching final image ──────────────────────────────────────
-    String finalImage = widget.pose.imageUrl;
-    for (final entry in finalImages.entries) {
-      if (pn.contains(entry.key)) {
-        finalImage = entry.value;
-        break;
-      }
+    if (pn.contains('neck')) {
+      return step == 0 ? floorPrep : 'assets/images/neck_stretch.png';
     }
-    
+    if (pn.contains('shoulder')) {
+      return step == 0 ? standingPrep : 'assets/images/shoulder_rolls.png';
+    }
+    if (pn.contains('twist')) {
+      return step == 0 ? floorPrep : 'assets/images/chair_twist.png';
+    }
+    if (pn.contains('wrist')) {
+      return step == 0 ? floorPrep : 'assets/images/wrist_stretch.png';
+    }
+    if (pn.contains('lion')) {
+      return step <= 1 ? 'assets/images/child_step1.png' : 'assets/images/lion_breath.png';
+    }
+
     // Breathing & Sitting Stretches
-    if (pn.contains('breathing') || pn.contains('anulom') || pn.contains('kapalbhati') || pn.contains('neck') || pn.contains('shoulder') || pn.contains('wrist') || pn.contains('lion') || pn.contains('twist')) {
+    if (pn.contains('breathing') || pn.contains('anulom') || pn.contains('kapalbhati')) {
       return floorPrep;
     }
 
@@ -223,67 +194,80 @@ class _CameraScreenState extends State<CameraScreen> {
       if (step == 3) return 'assets/images/tree_step2.png';
       return 'assets/images/tree_step3.png';
     }
+    
+    // Warrior III has 'warrior ii' as a substring, so we must check it before Warrior II!
+    if (pn.contains('warrior iii')) {
+      return step == 0 ? standingPrep : 'assets/images/warrior3_pose.png';
+    }
     if (pn.contains('warrior i') && !pn.contains('ii')) {
       return step <= 1 ? 'assets/images/warrior1_step1.png' : 'assets/images/warrior1_step2.png';
     }
     if (pn.contains('warrior ii')) {
-      return step == 0 ? standingPrep : (step <= 2 ? 'assets/images/warrior1_step1.png' : 'assets/images/warrior_pose.png');
-    }
-    if (pn.contains('warrior iii')) {
-      return step == 0 ? standingPrep : 'assets/images/warrior3_pose.png';
+      return step <= 1 ? 'assets/images/warrior1_step1.png' : 'assets/images/warrior_pose.png';
     }
     if (pn.contains('triangle') || pn.contains('extended side') || pn.contains('half moon') || pn.contains('goddess')) {
+      // Extended Side Angle and Half Moon Pose have only 3 steps total (0, 1, 2)
+      if (pn.contains('extended') || pn.contains('half')) {
+        if (step == 0) {
+          return pn.contains('extended') ? 'assets/images/warrior1_step1.png' : 'assets/images/triangle_pose.png';
+        }
+        return pn.contains('extended') ? 'assets/images/extended_side_angle.png' : 'assets/images/half_moon.png';
+      }
+      
+      // Goddess Pose: Step 0 is wide stance, steps 1+ are squatting
+      if (pn.contains('goddess')) {
+        return step == 0 ? 'assets/images/warrior1_step1.png' : 'assets/images/goddess_pose.png';
+      }
+
+      // Triangle Pose (6 steps)
       if (step == 0) return standingPrep;
       if (step <= 2) return 'assets/images/warrior1_step1.png';
-      if (pn.contains('triangle')) return 'assets/images/triangle_pose.png';
-      if (pn.contains('extended')) return 'assets/images/extended_side_angle.png';
-      if (pn.contains('half')) return 'assets/images/half_moon.png';
-      if (pn.contains('goddess')) return 'assets/images/goddess_pose.png';
+      return 'assets/images/triangle_pose.png';
     }
     if (pn.contains('chair')) {
-      return step == 0 ? standingPrep : (step <= 2 ? 'assets/images/mountain_step2.png' : 'assets/images/chair_pose.png');
+      return step == 0 ? standingPrep : (step == 1 ? 'assets/images/mountain_step2.png' : 'assets/images/chair_pose.png');
     }
     if (pn.contains('plank') && !pn.contains('side')) {
-      return step == 0 ? tablePrep : 'assets/images/plank_step2.png';
+      return step == 0 ? tablePrep : (step == 1 ? 'assets/images/plank_step2.png' : 'assets/images/plank_pose.png');
     }
     if (pn.contains('side plank')) {
-      return step == 0 ? tablePrep : (step == 1 ? 'assets/images/plank_step2.png' : 'assets/images/side_plank.png');
+      return step == 0 ? 'assets/images/plank_pose.png' : 'assets/images/side_plank.png';
     }
     if (pn.contains('chaturanga')) {
-      return step == 0 ? tablePrep : (step == 1 ? 'assets/images/plank_step2.png' : 'assets/images/chaturanga.png');
+      return step == 0 ? 'assets/images/plank_pose.png' : 'assets/images/chaturanga.png';
     }
     if (pn.contains('cobra')) {
-      return step <= 1 ? lyingPrep : (step == 2 ? 'assets/images/cobra_step1.png' : 'assets/images/cobra_pose.png');
+      return step <= 1 ? 'assets/images/cobra_step1.png' : 'assets/images/cobra_pose.png';
     }
     if (pn.contains('bow')) {
-      return step <= 1 ? lyingPrep : (step == 2 ? 'assets/images/bow_step1.png' : 'assets/images/bow_pose.png');
+      return step <= 2 ? 'assets/images/bow_step1.png' : 'assets/images/bow_pose.png';
     }
     if (pn.contains('bridge')) {
-      return step <= 1 ? lyingPrep : (step == 2 ? 'assets/images/bridge_step1.png' : 'assets/images/bridge_pose.png');
+      return step <= 2 ? 'assets/images/bridge_step1.png' : 'assets/images/bridge_pose.png';
     }
     if (pn.contains('fish')) {
-      return step <= 1 ? lyingPrep : (step == 2 ? 'assets/images/bridge_step1.png' : 'assets/images/fish_pose.png');
+      return step == 0 ? lyingPrep : 'assets/images/fish_pose.png';
     }
     if (pn.contains('child')) {
-      return step <= 1 ? floorPrep : (step == 2 ? 'assets/images/child_step1.png' : 'assets/images/child_pose.png');
+      return step == 0 ? 'assets/images/child_step1.png' : 'assets/images/child_pose.png';
     }
     if (pn.contains('camel')) {
-      return step <= 1 ? floorPrep : (step == 2 ? 'assets/images/child_step1.png' : 'assets/images/camel_pose.png');
+      return step <= 1 ? 'assets/images/child_step1.png' : 'assets/images/camel_pose.png';
     }
     if (pn.contains('downward')) {
       return step == 0 ? tablePrep : (step == 1 ? 'assets/images/downward_step1.png' : 'assets/images/downward_dog.png');
     }
     if (pn.contains('dolphin')) {
-      return step == 0 ? tablePrep : (step <= 2 ? 'assets/images/downward_step1.png' : 'assets/images/dolphin_pose.png');
+      return step == 0 ? tablePrep : 'assets/images/dolphin_pose.png';
     }
     if (pn.contains('pigeon')) {
-      return step == 0 ? tablePrep : (step <= 2 ? 'assets/images/downward_step1.png' : 'assets/images/pigeon_pose.png');
+      return step == 0 ? tablePrep : 'assets/images/pigeon_pose.png';
     }
     if (pn.contains('cat') || pn.contains('cow')) {
       return step == 0 ? tablePrep : 'assets/images/cat_cow.png';
     }
     if (pn.contains('frog')) {
-      return step == 0 ? tablePrep : 'assets/images/garland_pose.png';
+      return step == 0 ? 'assets/images/child_step1.png' : 'assets/images/frog_pose.png';
     }
     if (pn.contains('crow')) {
       return step == 0 ? tablePrep : 'assets/images/crow_pose.png';
@@ -291,19 +275,25 @@ class _CameraScreenState extends State<CameraScreen> {
     if (pn.contains('surya')) {
       if (step == 0) return standingPrep;
       if (step == 1) return 'assets/images/mountain_step2.png';
-      if (step == 2) return 'assets/images/warrior1_step1.png';
-      if (step == 3) return 'assets/images/plank_step2.png';
-      if (step == 4) return 'assets/images/cobra_step1.png';
+      if (step == 2) return 'assets/images/forward_bend.png';
+      if (step == 3) return 'assets/images/warrior1_step1.png';
+      if (step == 4) return 'assets/images/plank_pose.png';
+      if (step == 5) return 'assets/images/chaturanga.png';
+      if (step == 6) return 'assets/images/cobra_pose.png';
+      if (step == 7) return 'assets/images/downward_dog.png';
+      if (step == 8) return 'assets/images/warrior1_step1.png';
+      if (step == 9) return 'assets/images/forward_bend.png';
+      if (step == 10) return 'assets/images/mountain_step2.png';
       return standingPrep;
     }
     if (pn.contains('eagle')) {
       return step <= 1 ? standingPrep : 'assets/images/eagle_pose.png';
     }
     if (pn.contains('garland')) {
-      return step <= 1 ? standingPrep : 'assets/images/garland_pose.png';
+      return 'assets/images/garland_pose.png';
     }
     if (pn.contains('boat')) {
-      return step <= 1 ? lyingPrep : 'assets/images/boat_pose.png';
+      return step <= 1 ? floorPrep : 'assets/images/boat_pose.png';
     }
     if (pn.contains('butterfly')) {
       return step <= 1 ? floorPrep : 'assets/images/butterfly_pose.png';
@@ -386,65 +376,168 @@ class _CameraScreenState extends State<CameraScreen> {
 
   Future<void> _initializeTTS() async {
     final langProvider = Provider.of<LanguageProvider>(context, listen: false);
-    if (langProvider.currentLanguage == 'hi') {
+    await _applyTTSLanguage(langProvider.currentLanguage);
+    await _tts.setSpeechRate(0.45);
+    await _tts.setVolume(1.0);
+    await _tts.setPitch(1.0);
+  }
+
+  /// Always re-apply language before speaking to prevent TTS engine resets
+  Future<void> _applyTTSLanguage(String lang) async {
+    if (lang == 'hi') {
       await _tts.setLanguage("hi-IN");
-    } else if (langProvider.currentLanguage == 'te') {
+    } else if (lang == 'te') {
       await _tts.setLanguage("te-IN");
     } else {
       await _tts.setLanguage("en-US");
     }
-    await _tts.setSpeechRate(0.45);
-    await _tts.setVolume(1.0);
   }
 
-  Future<void> _initializeCamera() async {
-    final cameras = await availableCameras();
-    final front = cameras.firstWhere((c) => c.lensDirection == CameraLensDirection.front, orElse: () => cameras.first);
-    _controller = CameraController(
-      front, 
-      ResolutionPreset.low,  // LOW resolution (320x240) drastically reduces GC pressure and BufferQueue timeouts
-      enableAudio: false, 
-      imageFormatGroup: Platform.isAndroid ? ImageFormatGroup.nv21 : ImageFormatGroup.bgra8888
-    );
+  Future<void> _initializeCamera() {
+    _cameraOperationChain = _cameraOperationChain.then((_) async {
+      if (_isInitializingCamera) return;
+      _isInitializingCamera = true;
+      try {
+        final cameras = await availableCameras();
+        if (cameras.isEmpty) {
+          debugPrint("No cameras available");
+          return;
+        }
+        final front = cameras.firstWhere((c) => c.lensDirection == CameraLensDirection.front, orElse: () => cameras.first);
+        final controller = CameraController(
+          front,
+          ResolutionPreset.low,
+          enableAudio: false,
+          imageFormatGroup: Platform.isAndroid ? ImageFormatGroup.nv21 : ImageFormatGroup.bgra8888,
+        );
+        _controller = controller;
+        await controller.initialize();
+        if (!mounted) {
+          _controller = null;
+          await controller.dispose();
+          return;
+        }
+        setState(() {});
+        // Let the camera driver fully stabilise before capturing any frame.
+        await Future.delayed(const Duration(milliseconds: 800));
+        if (!mounted) {
+          _controller = null;
+          await controller.dispose();
+          return;
+        }
+        if (_controller == controller) {
+          await controller.startImageStream(_processCameraImage);
+        }
+      } catch (e) {
+        debugPrint("Camera Error: $e");
+      } finally {
+        _isInitializingCamera = false;
+      }
+    });
+    return _cameraOperationChain;
+  }
+
+  Future<void> _disposeCamera() {
+    _cameraOperationChain = _cameraOperationChain.then((_) async {
+      final CameraController? cameraController = _controller;
+      _controller = null;
+      if (cameraController != null) {
+        try {
+          if (cameraController.value.isStreamingImages) {
+            await cameraController.stopImageStream();
+          }
+        } catch (e) {
+          debugPrint("Error stopping image stream: $e");
+        }
+        try {
+          await cameraController.dispose();
+        } catch (e) {
+          debugPrint("Error disposing camera controller: $e");
+        }
+      }
+    });
+    return _cameraOperationChain;
+  }
+
+  DateTime? _lastProcessedTime;
+
+  void _processCameraImage(CameraImage image) {
+    if (!mounted) return;
+    if (_isProcessing || _steps.isEmpty || _isPrepping || _showOnboardingGuide) {
+      return;
+    }
+
+    final now = DateTime.now();
+    if (_lastProcessedTime != null && 
+        now.difference(_lastProcessedTime!).inMilliseconds < 1500) {
+      return;
+    }
+
+    if (image.planes.isEmpty) return;
+
+    _lastProcessedTime = now;
+    _isProcessing = true;
+
     try {
-      await _controller!.initialize();
-      if (!mounted) return;
-      setState(() {});
-      _controller!.startImageStream(_processCameraImage);
-    } catch (e) { debugPrint("Camera Error: $e"); }
+      final int width = image.width;
+      final int height = image.height;
+      final int sensorOrientation = _controller?.description.sensorOrientation ?? 0;
+      final Uint8List bytes;
+      if (Platform.isAndroid) {
+        final int totalLength = image.planes.fold(0, (sum, plane) => sum + plane.bytes.length);
+        bytes = Uint8List(totalLength);
+        int offset = 0;
+        for (final plane in image.planes) {
+          bytes.setRange(offset, offset + plane.bytes.length, plane.bytes);
+          offset += plane.bytes.length;
+        }
+      } else {
+        bytes = Uint8List.fromList(image.planes[0].bytes);
+      }
+      final int bytesPerRow = image.planes[0].bytesPerRow;
+      final InputImageFormat format = Platform.isAndroid ? InputImageFormat.nv21 : InputImageFormat.bgra8888;
+
+      Future.delayed(Duration.zero, () {
+        if (!mounted) {
+          _isProcessing = false;
+          return;
+        }
+        final InputImageRotation rotation =
+            InputImageRotationValue.fromRawValue(sensorOrientation) ??
+            InputImageRotation.rotation90deg;
+
+        final InputImage inputImage = InputImage.fromBytes(
+          bytes: bytes,
+          metadata: InputImageMetadata(
+            size: Size(width.toDouble(), height.toDouble()),
+            rotation: rotation,
+            format: format,
+            bytesPerRow: bytesPerRow,
+          ),
+        );
+        _runMlKitDetection(inputImage);
+      });
+    } catch (e) {
+      debugPrint('Error copying camera image: $e');
+      _isProcessing = false;
+    }
   }
 
   @override
   void dispose() { 
+    WidgetsBinding.instance.removeObserver(this);
     _ttsTimer?.cancel(); 
     _sessionTimer?.cancel();
-    _controller?.dispose(); 
+    _isProcessing = false;
+    _disposeCamera(); 
     _poseDetector.close(); 
     super.dispose(); 
   }
 
-  Future<void> _processCameraImage(CameraImage image) async {
-    if (_isProcessing || _steps.isEmpty || _isPrepping || _showOnboardingGuide) return;
-
-    // THROTTLE: 1500ms between frames — gives Android GC time to breathe
-    final now = DateTime.now();
-    if (_lastProcessedTime != null && now.difference(_lastProcessedTime!).inMilliseconds < 1500) {
-      return;
-    }
-    _lastProcessedTime = now;
-    _isProcessing = true;
-
-    // ── Extract bytes SYNCHRONOUSLY before the camera reclaims the buffer ──
-    // This MUST happen here, in the camera stream callback, before we go async.
-    final InputImage? inputImage = _buildInputImage(image);
-    if (inputImage == null) {
-      _isProcessing = false;
-      return;
-    }
-
-    // ── Run ML Kit off the main thread ─────────────────────────────────────
+  Future<void> _runMlKitDetection(InputImage inputImage) async {
+    if (!mounted) { _isProcessing = false; return; }
     try {
-      final poses = await Future(() => _poseDetector.processImage(inputImage)).then((f) => f);
+      final poses = await _poseDetector.processImage(inputImage);
 
       if (!mounted) return;
       final langProvider = Provider.of<LanguageProvider>(context, listen: false);
@@ -476,55 +569,7 @@ class _CameraScreenState extends State<CameraScreen> {
     }
   }
 
-  /// Build InputImage synchronously from CameraImage.
-  /// For Android NV21: image has a SINGLE plane — use bytes directly.
-  /// For iOS BGRA8888: concatenate all planes.
-  InputImage? _buildInputImage(CameraImage image) {
-    if (_controller == null) return null;
-    final camera = _controller!.description;
-    final sensorOrientation = camera.sensorOrientation;
-
-    InputImageRotation? rotation;
-    if (Platform.isIOS) {
-      rotation = InputImageRotationValue.fromRawValue(sensorOrientation);
-    } else {
-      // Android front camera: rotation = sensorOrientation
-      rotation = InputImageRotationValue.fromRawValue(sensorOrientation);
-    }
-    if (rotation == null) rotation = InputImageRotation.rotation90deg;
-
-    if (image.planes.isEmpty) return null;
-
-    if (Platform.isAndroid) {
-      // NV21 from Android camera is always a single-plane packed buffer.
-      // DO NOT concatenate planes — that gives wrong data and causes
-      // "ImageFormat is not supported" from ML Kit.
-      return InputImage.fromBytes(
-        bytes: image.planes[0].bytes,
-        metadata: InputImageMetadata(
-          size: Size(image.width.toDouble(), image.height.toDouble()),
-          rotation: rotation,
-          format: InputImageFormat.nv21,
-          bytesPerRow: image.planes[0].bytesPerRow,
-        ),
-      );
-    } else {
-      // iOS — BGRA8888, concatenate all planes
-      final WriteBuffer allBytes = WriteBuffer();
-      for (final Plane plane in image.planes) {
-        allBytes.putUint8List(plane.bytes);
-      }
-      return InputImage.fromBytes(
-        bytes: allBytes.done().buffer.asUint8List(),
-        metadata: InputImageMetadata(
-          size: Size(image.width.toDouble(), image.height.toDouble()),
-          rotation: rotation,
-          format: InputImageFormat.bgra8888,
-          bytesPerRow: image.planes[0].bytesPerRow,
-        ),
-      );
-    }
-  }
+  // Obsolete helper _buildInputImageFromSnapshot removed as frames are processed from a single plane directly.
 
   void _updateStepProgress(Pose pose) {
     if (_currentStepIndex >= _steps.length) return;
@@ -761,7 +806,9 @@ class _CameraScreenState extends State<CameraScreen> {
 
   void _speakInstruction(String msg) {
     final langProvider = Provider.of<LanguageProvider>(context, listen: false);
-    _tts.speak(langProvider.translateDynamic(msg));
+    _applyTTSLanguage(langProvider.currentLanguage).then((_) {
+      _tts.speak(langProvider.translateDynamic(msg));
+    });
   }
 
   void _provideVoiceFeedback(String message) {
@@ -776,12 +823,14 @@ class _CameraScreenState extends State<CameraScreen> {
     _lastSpokenMessage = message;
     
     final langProvider = Provider.of<LanguageProvider>(context, listen: false);
-    _tts.speak(langProvider.translateDynamic(message));
+    _applyTTSLanguage(langProvider.currentLanguage).then((_) {
+      _tts.speak(langProvider.translateDynamic(message));
+    });
   }
 
   // Convert a landmark to screen coordinates
   Offset _landmarkToScreen(PoseLandmark lm, Size screenSize) {
-    final imgSize = _imageSize ?? _controller!.value.previewSize!;
+    final imgSize = _imageSize ?? _controller?.value.previewSize ?? const Size(720, 480);
     final rot = _currentRotation ?? InputImageRotation.rotation270deg;
     double x, y;
     
@@ -975,16 +1024,26 @@ class _CameraScreenState extends State<CameraScreen> {
               child: Container(
                 width: 120, height: 120,
                 decoration: BoxDecoration(
+                  color: Colors.black54, // Sleek semi-transparent dark background for transparent pose contrast
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
                     color: _showBackgroundGuide ? const Color(0xFF00FF88) : Colors.white24, 
                     width: 2
                   ),
                   boxShadow: [BoxShadow(color: Colors.black45, blurRadius: 8)],
-                  image: DecorationImage(image: AssetImage(_getStepGuideImage()), fit: BoxFit.cover),
                 ),
                 child: Stack(
                   children: [
+                    // The pose guide image with padding to fit perfectly inside the card
+                    Positioned.fill(
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Image.asset(
+                          _getStepGuideImage(),
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
                     // Eye / Visibility status icon hint
                     Positioned(
                       bottom: 6, right: 6,
@@ -1038,7 +1097,9 @@ class _CameraScreenState extends State<CameraScreen> {
                         child: Text(
                           langProvider.currentLanguage == 'hi' 
                               ? "चरण ${_currentStepIndex + 1}/${_steps.length}" 
-                              : "STEP ${_currentStepIndex + 1}/${_steps.length}", 
+                              : langProvider.currentLanguage == 'te'
+                                  ? "దశ ${_currentStepIndex + 1}/${_steps.length}"
+                                  : "STEP ${_currentStepIndex + 1}/${_steps.length}", 
                           style: GoogleFonts.outfit(color: const Color(0xFF00FF88), fontWeight: FontWeight.bold, fontSize: 13)),
                       ),
                       Text(_formatTime(_secondsRemaining), 
@@ -1072,38 +1133,163 @@ class _CameraScreenState extends State<CameraScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
-                  // Step dots indicator
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(_steps.length, (i) => Container(
-                      width: i == _currentStepIndex ? 24 : 8,
-                      height: 8,
-                      margin: const EdgeInsets.symmetric(horizontal: 3),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4),
-                        color: i < _currentStepIndex 
-                          ? const Color(0xFF00FF88) 
-                          : i == _currentStepIndex 
-                            ? Colors.white 
-                            : Colors.white24,
-                      ),
-                    )),
-                  ),
                   const SizedBox(height: 10),
-                  // Step name
-                  if (_steps.isNotEmpty && _currentStepIndex < _steps.length)
-                    Text(
-                      langProvider.translateDynamic(_steps[_currentStepIndex]['stepName'] ?? '').toString().toUpperCase(),
-                      style: GoogleFonts.outfit(color: Colors.white38, fontSize: 11, fontWeight: FontWeight.bold, letterSpacing: 2),
+
+                  // ── STEPS ROADMAP (horizontal scrollable mini pills) ─────────
+                  if (_steps.isNotEmpty)
+                    SizedBox(
+                      height: 28,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: _steps.length,
+                        itemBuilder: (ctx, i) {
+                          final isDone = i < _currentStepIndex;
+                          final isCurrent = i == _currentStepIndex;
+                          return Container(
+                            margin: const EdgeInsets.only(right: 6),
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: isDone
+                                ? const Color(0xFF00FF88).withOpacity(0.2)
+                                : isCurrent
+                                  ? Colors.white.withOpacity(0.15)
+                                  : Colors.white.withOpacity(0.05),
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: isDone
+                                  ? const Color(0xFF00FF88).withOpacity(0.6)
+                                  : isCurrent ? Colors.white38 : Colors.white12,
+                                width: 1,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                if (isDone) ...[
+                                  const Icon(Icons.check, color: Color(0xFF00FF88), size: 12),
+                                  const SizedBox(width: 4),
+                                ],
+                                if (isCurrent)
+                                  Container(
+                                    width: 6, height: 6,
+                                    margin: const EdgeInsets.only(right: 4),
+                                    decoration: const BoxDecoration(
+                                      color: Colors.white,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                Text(
+                                  langProvider.translateDynamic(
+                                    _steps[i]['stepName']?.toString() ?? 'Step ${i+1}'
+                                  ),
+                                  style: GoogleFonts.outfit(
+                                    color: isDone
+                                      ? const Color(0xFF00FF88)
+                                      : isCurrent ? Colors.white : Colors.white30,
+                                    fontSize: 11,
+                                    fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                  const SizedBox(height: 6),
-                  // Main instruction / feedback
-                  Text(
-                    langProvider.translateDynamic(_currentStatus),
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.outfit(color: statusColor, fontSize: 20, fontWeight: FontWeight.bold, height: 1.3),
-                  ),
+
+                  const SizedBox(height: 12),
+
+                  // ── CURRENT STEP CARD — prominent coaching box ──────────────
+                  if (_steps.isNotEmpty && _currentStepIndex < _steps.length)
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: _accuracy >= 1.0
+                          ? const Color(0xFF00FF88).withOpacity(0.12)
+                          : Colors.white.withOpacity(0.07),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: _accuracy >= 1.0
+                            ? const Color(0xFF00FF88).withOpacity(0.5)
+                            : Colors.white12,
+                          width: 1.5,
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF00FF88).withOpacity(0.18),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(Icons.radio_button_checked, color: Color(0xFF00FF88), size: 10),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      langProvider.translateDynamic(
+                                        _steps[_currentStepIndex]['stepName']?.toString() ?? ''
+                                      ).toUpperCase(),
+                                      style: GoogleFonts.outfit(
+                                        color: const Color(0xFF00FF88),
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 1.2,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const Spacer(),
+                              if (_accuracy >= 1.0)
+                                const Icon(Icons.check_circle, color: Color(0xFF00FF88), size: 18),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            langProvider.translateDynamic(_currentStatus),
+                            textAlign: TextAlign.left,
+                            style: GoogleFonts.outfit(color: statusColor, fontSize: 19, fontWeight: FontWeight.bold, height: 1.3),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                  // ── NEXT STEP PREVIEW ────────────────────────────────────────
+                  if (_steps.isNotEmpty && _currentStepIndex < _steps.length - 1)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.arrow_forward, color: Colors.white30, size: 14),
+                          const SizedBox(width: 6),
+                          Text(
+                            langProvider.currentLanguage == 'hi'
+                              ? 'अगला: '
+                              : langProvider.currentLanguage == 'te'
+                                  ? 'తదుపరి: '
+                                  : 'Next: ',
+                            style: GoogleFonts.outfit(color: Colors.white38, fontSize: 12, fontWeight: FontWeight.bold),
+                          ),
+                          Expanded(
+                            child: Text(
+                              langProvider.translateDynamic(
+                                _steps[_currentStepIndex + 1]['stepName']?.toString() ?? ''
+                              ),
+                              style: GoogleFonts.outfit(color: Colors.white38, fontSize: 12),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -1421,8 +1607,6 @@ class TargetSkeletonPainter extends CustomPainter {
     final double h = size.height;
     
     // Define joint points based on active step index
-    // We position them relative to the center of the screen
-    final center = Offset(w / 2, h * 0.45);
     final double scale = h * 0.45; // Scale size based on height
     
     final glowPaint = Paint()
@@ -1676,3 +1860,5 @@ class TargetSkeletonPainter extends CustomPainter {
   bool shouldRepaint(TargetSkeletonPainter old) => 
       old.stepIndex != stepIndex || old.poseName != poseName || old.steps != steps;
 }
+
+
