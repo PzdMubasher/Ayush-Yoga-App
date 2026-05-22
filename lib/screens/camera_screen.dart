@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math' as math;
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:camera/camera.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
@@ -31,6 +32,13 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
   String _currentStatus = "Getting ready...";
   late String _targetPoseName;
   double _accuracy = 0.0;
+
+  static const Map<DeviceOrientation, int> _orientations = {
+    DeviceOrientation.portraitUp: 0,
+    DeviceOrientation.landscapeLeft: 90,
+    DeviceOrientation.portraitDown: 180,
+    DeviceOrientation.landscapeRight: 270,
+  };
   
   late PoseDetector _poseDetector;
   final FlutterTts _tts = FlutterTts();
@@ -40,6 +48,7 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
   int _prepCountdown = 3;
   bool _isPrepping = false;
   bool _showBackgroundGuide = true;
+  bool _isCoachingCollapsed = false;
   bool _showOnboardingGuide = true;
   InputImageRotation? _currentRotation;
   Size? _imageSize;
@@ -66,7 +75,11 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
     if (state == AppLifecycleState.inactive || state == AppLifecycleState.paused) {
       _sessionTimer?.cancel();
       _ttsTimer?.cancel();
-      _tts.stop();
+      try {
+        _tts.stop();
+      } catch (e) {
+        debugPrint("Error stopping TTS on pause: $e");
+      }
       _disposeCamera();
     } else if (state == AppLifecycleState.resumed) {
       _initializeCamera();
@@ -111,7 +124,7 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
         if (_steps.isNotEmpty && _steps[0]['instruction'] != null) {
           initialMsg += langProvider.translateDynamic(_steps[0]['instruction'].toString());
         }
-        _tts.speak(initialMsg);
+        _speakInstruction(initialMsg);
       }
     });
   }
@@ -338,7 +351,7 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
       
       highlights.add(
         PulsingFocusHighlight(
-          key: ValueKey("${_currentStepIndex}_${joint}"),
+          key: ValueKey("${_currentStepIndex}_$joint"),
           alignment: align,
           label: label,
         ),
@@ -406,9 +419,9 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
         final front = cameras.firstWhere((c) => c.lensDirection == CameraLensDirection.front, orElse: () => cameras.first);
         final controller = CameraController(
           front,
-          ResolutionPreset.low,
+          ResolutionPreset.medium,
           enableAudio: false,
-          imageFormatGroup: Platform.isAndroid ? ImageFormatGroup.nv21 : ImageFormatGroup.bgra8888,
+          imageFormatGroup: Platform.isAndroid ? ImageFormatGroup.yuv420 : ImageFormatGroup.bgra8888,
         );
         _controller = controller;
         await controller.initialize();
@@ -469,7 +482,7 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
 
     final now = DateTime.now();
     if (_lastProcessedTime != null && 
-        now.difference(_lastProcessedTime!).inMilliseconds < 1500) {
+        now.difference(_lastProcessedTime!).inMilliseconds < 150) {
       return;
     }
 
@@ -482,41 +495,105 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
       final int width = image.width;
       final int height = image.height;
       final int sensorOrientation = _controller?.description.sensorOrientation ?? 0;
+      
       final Uint8List bytes;
       if (Platform.isAndroid) {
-        final int totalLength = image.planes.fold(0, (sum, plane) => sum + plane.bytes.length);
-        bytes = Uint8List(totalLength);
-        int offset = 0;
-        for (final plane in image.planes) {
-          bytes.setRange(offset, offset + plane.bytes.length, plane.bytes);
-          offset += plane.bytes.length;
+        if (image.planes.length == 1) {
+          bytes = image.planes[0].bytes;
+        } else {
+          // Android YUV_420_888 -> NV21 conversion (3 planes)
+          final yPlane = image.planes[0];
+          final uPlane = image.planes[1];
+          final vPlane = image.planes[2];
+          final uvPixelStride = uPlane.bytesPerPixel ?? 1;
+          final uvRowStride = uPlane.bytesPerRow;
+
+          final nv21 = Uint8List(width * height * 3 ~/ 2);
+
+          // Copy Y plane (respecting row stride — bytesPerRow may be > width due to alignment padding)
+          if (yPlane.bytesPerRow == width) {
+            nv21.setRange(0, width * height, yPlane.bytes);
+          } else {
+            for (int row = 0; row < height; row++) {
+              final srcOffset = row * yPlane.bytesPerRow;
+              final dstOffset = row * width;
+              nv21.setRange(dstOffset, dstOffset + width, yPlane.bytes.sublist(srcOffset, srcOffset + width));
+            }
+          }
+
+          // Copy UV planes (also respecting row stride!)
+          int uvIndex = width * height;
+          final uvHeight = height ~/ 2;
+
+          if (uvPixelStride == 2) {
+            // UV already interleaved — but must strip row padding
+            if (uvRowStride == width) {
+              // No padding — bulk copy
+              final uvSize = math.min(vPlane.bytes.length, width * uvHeight);
+              nv21.setRange(uvIndex, uvIndex + uvSize, vPlane.bytes);
+            } else {
+              // Has padding — copy row by row
+              for (int row = 0; row < uvHeight; row++) {
+                final srcOffset = row * uvRowStride;
+                final dstOffset = uvIndex + row * width;
+                final rowSize = math.min(vPlane.bytes.length - srcOffset, width);
+                nv21.setRange(dstOffset, dstOffset + rowSize, vPlane.bytes.sublist(srcOffset, srcOffset + rowSize));
+              }
+            }
+          } else {
+            // Manual interleave (rare devices)
+            final uvWidth = width ~/ 2;
+            for (int row = 0; row < uvHeight; row++) {
+              for (int col = 0; col < uvWidth; col++) {
+                final uvOffset = row * uvRowStride + col * uvPixelStride;
+                final nvOffset = uvIndex + row * width + col * 2;
+                if (nvOffset < nv21.length && uvOffset < vPlane.bytes.length) {
+                  nv21[nvOffset] = vPlane.bytes[uvOffset];
+                }
+                if (nvOffset + 1 < nv21.length && uvOffset < uPlane.bytes.length) {
+                  nv21[nvOffset + 1] = uPlane.bytes[uvOffset];
+                }
+              }
+            }
+          }
+          bytes = nv21;
         }
       } else {
-        bytes = Uint8List.fromList(image.planes[0].bytes);
+        bytes = image.planes[0].bytes;
       }
-      final int bytesPerRow = image.planes[0].bytesPerRow;
+      final int bytesPerRow;
+      if (Platform.isAndroid) {
+        if (image.planes.length == 1) {
+          bytesPerRow = image.planes[0].bytesPerRow;
+        } else {
+          bytesPerRow = width; // Converted NV21 buffer has no padding
+        }
+      } else {
+        bytesPerRow = image.planes[0].bytesPerRow;
+      }
+
+      final DeviceOrientation deviceOrientation = _controller?.value.deviceOrientation ?? DeviceOrientation.portraitUp;
+      final int deviceRotationDegrees = _orientations[deviceOrientation] ?? 0;
+      int rotationDegrees = sensorOrientation;
+      if (_controller?.description.lensDirection == CameraLensDirection.front) {
+        rotationDegrees = (sensorOrientation + deviceRotationDegrees) % 360;
+      } else {
+        rotationDegrees = (sensorOrientation - deviceRotationDegrees + 360) % 360;
+      }
+      
+      final InputImageRotation rotation = InputImageRotationValue.fromRawValue(rotationDegrees) ?? InputImageRotation.rotation90deg;
       final InputImageFormat format = Platform.isAndroid ? InputImageFormat.nv21 : InputImageFormat.bgra8888;
 
-      Future.delayed(Duration.zero, () {
-        if (!mounted) {
-          _isProcessing = false;
-          return;
-        }
-        final InputImageRotation rotation =
-            InputImageRotationValue.fromRawValue(sensorOrientation) ??
-            InputImageRotation.rotation90deg;
-
-        final InputImage inputImage = InputImage.fromBytes(
-          bytes: bytes,
-          metadata: InputImageMetadata(
-            size: Size(width.toDouble(), height.toDouble()),
-            rotation: rotation,
-            format: format,
-            bytesPerRow: bytesPerRow,
-          ),
-        );
-        _runMlKitDetection(inputImage);
-      });
+      final InputImage inputImage = InputImage.fromBytes(
+        bytes: bytes,
+        metadata: InputImageMetadata(
+          size: Size(width.toDouble(), height.toDouble()),
+          rotation: rotation,
+          format: format,
+          bytesPerRow: bytesPerRow,
+        ),
+      );
+      _runMlKitDetection(inputImage);
     } catch (e) {
       debugPrint('Error copying camera image: $e');
       _isProcessing = false;
@@ -531,6 +608,11 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
     _isProcessing = false;
     _disposeCamera(); 
     _poseDetector.close(); 
+    try {
+      _tts.stop();
+    } catch (e) {
+      debugPrint("Error stopping TTS on dispose: $e");
+    }
     super.dispose(); 
   }
 
@@ -674,7 +756,7 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
       final duration = DateTime.now().difference(_stepStartTime!).inSeconds;
 
       // Required hold time: must maintain CORRECT posture for this long before advancing
-      int requiredHold = 5;  // Beginner: 5 seconds
+      int requiredHold = 3;  // Beginner: 5 seconds
       if (widget.level == "Intermediate") requiredHold = 8;
       if (widget.level == "Advanced") requiredHold = 12;
 
@@ -701,7 +783,7 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
       
       // Filter out temporary landmark dropouts or momentary wobbles (glitch smoothing)
       _errorFrameCount++;
-      if (_errorFrameCount >= 12) { // Must be wrong posture for at least ~0.5s before generating voice alert
+      if (_errorFrameCount >= 5) { // Must be wrong posture for at least ~0.5s before generating voice alert
         _provideVoiceFeedback(feedback);
       }
     }
@@ -722,7 +804,16 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
               ? 'అద్భుతంగా ఉంది! '
               : 'Perfect! ';
       final instruction = langProvider.translateDynamic(_steps[_currentStepIndex]['instruction'].toString());
-      _tts.speak('$perfectWord$instruction');
+      _applyTTSLanguage(langProvider.currentLanguage).then((_) async {
+        try {
+          await _tts.stop();
+          await _tts.speak('$perfectWord$instruction');
+        } catch (e) {
+          debugPrint("Error speaking step advance: $e");
+        }
+      }).catchError((e) {
+        debugPrint("Error in step advance speech chain: $e");
+      });
     }
   }
 
@@ -806,8 +897,15 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
 
   void _speakInstruction(String msg) {
     final langProvider = Provider.of<LanguageProvider>(context, listen: false);
-    _applyTTSLanguage(langProvider.currentLanguage).then((_) {
-      _tts.speak(langProvider.translateDynamic(msg));
+    _applyTTSLanguage(langProvider.currentLanguage).then((_) async {
+      try {
+        await _tts.stop();
+        await _tts.speak(langProvider.translateDynamic(msg));
+      } catch (e) {
+        debugPrint("Error in _speakInstruction: $e");
+      }
+    }).catchError((e) {
+      debugPrint("Error in _speakInstruction chain: $e");
     });
   }
 
@@ -823,8 +921,15 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
     _lastSpokenMessage = message;
     
     final langProvider = Provider.of<LanguageProvider>(context, listen: false);
-    _applyTTSLanguage(langProvider.currentLanguage).then((_) {
-      _tts.speak(langProvider.translateDynamic(message));
+    _applyTTSLanguage(langProvider.currentLanguage).then((_) async {
+      try {
+        await _tts.stop();
+        await _tts.speak(langProvider.translateDynamic(message));
+      } catch (e) {
+        debugPrint("Error in _provideVoiceFeedback: $e");
+      }
+    }).catchError((e) {
+      debugPrint("Error in _provideVoiceFeedback chain: $e");
     });
   }
 
@@ -876,64 +981,6 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
                 builder: (context, constraints) {
                   final widgetSize = Size(constraints.maxWidth, constraints.maxHeight);
                   
-                  // Build landmark dots as direct widgets
-                  List<Widget> landmarkWidgets = [];
-                  if (_poses.isNotEmpty) {
-                    final pose = _poses.first;
-                    
-                    // Draw lines between landmarks
-                    final connections = [
-                      [PoseLandmarkType.leftShoulder, PoseLandmarkType.rightShoulder],
-                      [PoseLandmarkType.leftShoulder, PoseLandmarkType.leftElbow],
-                      [PoseLandmarkType.leftElbow, PoseLandmarkType.leftWrist],
-                      [PoseLandmarkType.rightShoulder, PoseLandmarkType.rightElbow],
-                      [PoseLandmarkType.rightElbow, PoseLandmarkType.rightWrist],
-                      [PoseLandmarkType.leftShoulder, PoseLandmarkType.leftHip],
-                      [PoseLandmarkType.rightShoulder, PoseLandmarkType.rightHip],
-                      [PoseLandmarkType.leftHip, PoseLandmarkType.rightHip],
-                      [PoseLandmarkType.leftHip, PoseLandmarkType.leftKnee],
-                      [PoseLandmarkType.leftKnee, PoseLandmarkType.leftAnkle],
-                      [PoseLandmarkType.rightHip, PoseLandmarkType.rightKnee],
-                      [PoseLandmarkType.rightKnee, PoseLandmarkType.rightAnkle],
-                    ];
-                    
-                    for (final conn in connections) {
-                      final lm1 = pose.landmarks[conn[0]];
-                      final lm2 = pose.landmarks[conn[1]];
-                      if (lm1 != null && lm2 != null) {
-                        final p1 = _landmarkToScreen(lm1, widgetSize);
-                        final p2 = _landmarkToScreen(lm2, widgetSize);
-                        landmarkWidgets.add(
-                          Positioned.fill(
-                            child: CustomPaint(
-                              painter: _LinePainter(p1, p2, poseColor),
-                            ),
-                          ),
-                        );
-                      }
-                    }
-
-                    // Draw dots for each landmark
-                    for (final entry in pose.landmarks.entries) {
-                      final offset = _landmarkToScreen(entry.value, widgetSize);
-                      landmarkWidgets.add(
-                        Positioned(
-                          left: offset.dx - 6,
-                          top: offset.dy - 6,
-                          child: Container(
-                            width: 12, height: 12,
-                            decoration: BoxDecoration(
-                              color: poseColor,
-                              shape: BoxShape.circle,
-                              border: Border.all(color: Colors.white, width: 2),
-                              boxShadow: [BoxShadow(color: poseColor.withOpacity(0.5), blurRadius: 8)],
-                            ),
-                          ),
-                        ),
-                      );
-                    }
-                  }
-                  
                   return Stack(
                     fit: StackFit.expand,
                     children: [
@@ -942,7 +989,17 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
                       // The green target skeleton and background ghost have been removed based on user feedback to ensure the user is perfectly visible.
 
                       // ── USER'S LIVE SKELETON (detected joints from camera) ─────────
-                      ...landmarkWidgets,
+                      if (_poses.isNotEmpty)
+                        Positioned.fill(
+                          child: CustomPaint(
+                            painter: _SkeletonPainter(
+                              pose: _poses.first,
+                              widgetSize: widgetSize,
+                              landmarkToScreen: _landmarkToScreen,
+                              color: poseColor,
+                            ),
+                          ),
+                        ),
 
                       // ── FOCUS HIGHLIGHT RINGS ─────────────────────────────────────
                       if (_showBackgroundGuide)
@@ -1068,12 +1125,12 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
           
           // --- BOTTOM COACHING BOX ---
           Positioned(
-            bottom: 30, left: 16, right: 16,
+            bottom: 20, left: 16, right: 16,
             child: Container(
-              padding: const EdgeInsets.fromLTRB(20, 16, 12, 20),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               decoration: BoxDecoration(
                 color: Colors.black.withOpacity(0.88),
-                borderRadius: BorderRadius.circular(24),
+                borderRadius: BorderRadius.circular(20),
                 border: Border.all(
                   color: _accuracy >= 1.0 
                     ? const Color(0xFF00FF88).withOpacity(0.6) 
@@ -1084,15 +1141,15 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Header row: step label + timer + guide toggle + close
+                  // Header row: step label + timer + guide toggle + collapse + close
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                         decoration: BoxDecoration(
                           color: const Color(0xFF00FF88).withOpacity(0.15),
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
                           langProvider.currentLanguage == 'hi' 
@@ -1100,10 +1157,10 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
                               : langProvider.currentLanguage == 'te'
                                   ? "దశ ${_currentStepIndex + 1}/${_steps.length}"
                                   : "STEP ${_currentStepIndex + 1}/${_steps.length}", 
-                          style: GoogleFonts.outfit(color: const Color(0xFF00FF88), fontWeight: FontWeight.bold, fontSize: 13)),
+                          style: GoogleFonts.outfit(color: const Color(0xFF00FF88), fontWeight: FontWeight.bold, fontSize: 12)),
                       ),
                       Text(_formatTime(_secondsRemaining), 
-                        style: GoogleFonts.outfit(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20)),
+                        style: GoogleFonts.outfit(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -1111,7 +1168,7 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
                             icon: Icon(
                               _showBackgroundGuide ? Icons.accessibility_new : Icons.accessibility_new_outlined, 
                               color: _showBackgroundGuide ? const Color(0xFF00FF88) : Colors.white54, 
-                              size: 22
+                              size: 20
                             ),
                             onPressed: () {
                               setState(() {
@@ -1122,9 +1179,25 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
                             constraints: const BoxConstraints(),
                             tooltip: "Toggle background guide",
                           ),
-                          const SizedBox(width: 14),
+                          const SizedBox(width: 12),
                           IconButton(
-                            icon: const Icon(Icons.close, color: Colors.white54, size: 22), 
+                            icon: Icon(
+                              _isCoachingCollapsed ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, 
+                              color: Colors.white54, 
+                              size: 22
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _isCoachingCollapsed = !_isCoachingCollapsed;
+                              });
+                            },
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                            tooltip: _isCoachingCollapsed ? "Expand coaching guide" : "Collapse coaching guide",
+                          ),
+                          const SizedBox(width: 12),
+                          IconButton(
+                            icon: const Icon(Icons.close, color: Colors.white54, size: 20), 
                             onPressed: () => Navigator.pop(context),
                             padding: EdgeInsets.zero,
                             constraints: const BoxConstraints(),
@@ -1133,163 +1206,182 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
 
-                  // ── STEPS ROADMAP (horizontal scrollable mini pills) ─────────
-                  if (_steps.isNotEmpty)
-                    SizedBox(
-                      height: 28,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: _steps.length,
-                        itemBuilder: (ctx, i) {
-                          final isDone = i < _currentStepIndex;
-                          final isCurrent = i == _currentStepIndex;
-                          return Container(
-                            margin: const EdgeInsets.only(right: 6),
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: isDone
-                                ? const Color(0xFF00FF88).withOpacity(0.2)
-                                : isCurrent
-                                  ? Colors.white.withOpacity(0.15)
-                                  : Colors.white.withOpacity(0.05),
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(
-                                color: isDone
-                                  ? const Color(0xFF00FF88).withOpacity(0.6)
-                                  : isCurrent ? Colors.white38 : Colors.white12,
-                                width: 1,
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                if (isDone) ...[
-                                  const Icon(Icons.check, color: Color(0xFF00FF88), size: 12),
-                                  const SizedBox(width: 4),
-                                ],
-                                if (isCurrent)
-                                  Container(
-                                    width: 6, height: 6,
-                                    margin: const EdgeInsets.only(right: 4),
-                                    decoration: const BoxDecoration(
-                                      color: Colors.white,
-                                      shape: BoxShape.circle,
-                                    ),
-                                  ),
-                                Text(
-                                  langProvider.translateDynamic(
-                                    _steps[i]['stepName']?.toString() ?? 'Step ${i+1}'
-                                  ),
-                                  style: GoogleFonts.outfit(
-                                    color: isDone
-                                      ? const Color(0xFF00FF88)
-                                      : isCurrent ? Colors.white : Colors.white30,
-                                    fontSize: 11,
-                                    fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-
-                  const SizedBox(height: 12),
-
-                  // ── CURRENT STEP CARD — prominent coaching box ──────────────
-                  if (_steps.isNotEmpty && _currentStepIndex < _steps.length)
+                  if (_isCoachingCollapsed) ...[
+                    const SizedBox(height: 6),
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      decoration: BoxDecoration(
-                        color: _accuracy >= 1.0
-                          ? const Color(0xFF00FF88).withOpacity(0.12)
-                          : Colors.white.withOpacity(0.07),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: _accuracy >= 1.0
-                            ? const Color(0xFF00FF88).withOpacity(0.5)
-                            : Colors.white12,
-                          width: 1.5,
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        langProvider.translateDynamic(_currentStatus),
+                        style: GoogleFonts.outfit(
+                          color: statusColor, 
+                          fontSize: 14, 
+                          fontWeight: FontWeight.bold,
                         ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFF00FF88).withOpacity(0.18),
-                                  borderRadius: BorderRadius.circular(6),
+                    ),
+                  ] else ...[
+                    const SizedBox(height: 8),
+
+                    // ── STEPS ROADMAP (horizontal scrollable mini pills) ─────────
+                    if (_steps.isNotEmpty)
+                      SizedBox(
+                        height: 24,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: _steps.length,
+                          itemBuilder: (ctx, i) {
+                            final isDone = i < _currentStepIndex;
+                            final isCurrent = i == _currentStepIndex;
+                            return Container(
+                              margin: const EdgeInsets.only(right: 6),
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                              decoration: BoxDecoration(
+                                color: isDone
+                                  ? const Color(0xFF00FF88).withOpacity(0.2)
+                                  : isCurrent
+                                    ? Colors.white.withOpacity(0.15)
+                                    : Colors.white.withOpacity(0.05),
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                  color: isDone
+                                    ? const Color(0xFF00FF88).withOpacity(0.6)
+                                    : isCurrent ? Colors.white38 : Colors.white12,
+                                  width: 1,
                                 ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Icon(Icons.radio_button_checked, color: Color(0xFF00FF88), size: 10),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  if (isDone) ...[
+                                    const Icon(Icons.check, color: Color(0xFF00FF88), size: 10),
                                     const SizedBox(width: 4),
-                                    Text(
-                                      langProvider.translateDynamic(
-                                        _steps[_currentStepIndex]['stepName']?.toString() ?? ''
-                                      ).toUpperCase(),
-                                      style: GoogleFonts.outfit(
-                                        color: const Color(0xFF00FF88),
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.bold,
-                                        letterSpacing: 1.2,
+                                  ],
+                                  if (isCurrent)
+                                    Container(
+                                      width: 5, height: 5,
+                                      margin: const EdgeInsets.only(right: 4),
+                                      decoration: const BoxDecoration(
+                                        color: Colors.white,
+                                        shape: BoxShape.circle,
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  Text(
+                                    langProvider.translateDynamic(
+                                      _steps[i]['stepName']?.toString() ?? 'Step ${i+1}'
+                                    ),
+                                    style: GoogleFonts.outfit(
+                                      color: isDone
+                                        ? const Color(0xFF00FF88)
+                                        : isCurrent ? Colors.white : Colors.white30,
+                                      fontSize: 10,
+                                      fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              const Spacer(),
-                              if (_accuracy >= 1.0)
-                                const Icon(Icons.check_circle, color: Color(0xFF00FF88), size: 18),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            langProvider.translateDynamic(_currentStatus),
-                            textAlign: TextAlign.left,
-                            style: GoogleFonts.outfit(color: statusColor, fontSize: 19, fontWeight: FontWeight.bold, height: 1.3),
-                          ),
-                        ],
+                            );
+                          },
+                        ),
                       ),
-                    ),
 
-                  // ── NEXT STEP PREVIEW ────────────────────────────────────────
-                  if (_steps.isNotEmpty && _currentStepIndex < _steps.length - 1)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.arrow_forward, color: Colors.white30, size: 14),
-                          const SizedBox(width: 6),
-                          Text(
-                            langProvider.currentLanguage == 'hi'
-                              ? 'अगला: '
-                              : langProvider.currentLanguage == 'te'
-                                  ? 'తదుపరి: '
-                                  : 'Next: ',
-                            style: GoogleFonts.outfit(color: Colors.white38, fontSize: 12, fontWeight: FontWeight.bold),
+                    const SizedBox(height: 8),
+
+                    // ── CURRENT STEP CARD — prominent coaching box ──────────────
+                    if (_steps.isNotEmpty && _currentStepIndex < _steps.length)
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: _accuracy >= 1.0
+                            ? const Color(0xFF00FF88).withOpacity(0.12)
+                            : Colors.white.withOpacity(0.07),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: _accuracy >= 1.0
+                              ? const Color(0xFF00FF88).withOpacity(0.5)
+                              : Colors.white12,
+                            width: 1.5,
                           ),
-                          Expanded(
-                            child: Text(
-                              langProvider.translateDynamic(
-                                _steps[_currentStepIndex + 1]['stepName']?.toString() ?? ''
-                              ),
-                              style: GoogleFonts.outfit(color: Colors.white38, fontSize: 12),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFF00FF88).withOpacity(0.18),
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Icon(Icons.radio_button_checked, color: Color(0xFF00FF88), size: 8),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        langProvider.translateDynamic(
+                                          _steps[_currentStepIndex]['stepName']?.toString() ?? ''
+                                        ).toUpperCase(),
+                                        style: GoogleFonts.outfit(
+                                          color: const Color(0xFF00FF88),
+                                          fontSize: 9,
+                                          fontWeight: FontWeight.bold,
+                                          letterSpacing: 1.0,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const Spacer(),
+                                if (_accuracy >= 1.0)
+                                  const Icon(Icons.check_circle, color: Color(0xFF00FF88), size: 16),
+                              ],
                             ),
-                          ),
-                        ],
+                            const SizedBox(height: 6),
+                            Text(
+                              langProvider.translateDynamic(_currentStatus),
+                              textAlign: TextAlign.left,
+                              style: GoogleFonts.outfit(color: statusColor, fontSize: 16, fontWeight: FontWeight.bold, height: 1.2),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
+
+                    // ── NEXT STEP PREVIEW ────────────────────────────────────────
+                    if (_steps.isNotEmpty && _currentStepIndex < _steps.length - 1)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 6),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.arrow_forward, color: Colors.white30, size: 12),
+                            const SizedBox(width: 4),
+                            Text(
+                              langProvider.currentLanguage == 'hi'
+                                ? 'अगला: '
+                                : langProvider.currentLanguage == 'te'
+                                    ? 'తదుపరి: '
+                                    : 'Next: ',
+                              style: GoogleFonts.outfit(color: Colors.white38, fontSize: 11, fontWeight: FontWeight.bold),
+                            ),
+                            Expanded(
+                              child: Text(
+                                langProvider.translateDynamic(
+                                  _steps[_currentStepIndex + 1]['stepName']?.toString() ?? ''
+                                ),
+                                style: GoogleFonts.outfit(color: Colors.white38, fontSize: 11),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
                 ],
               ),
             ),
@@ -1475,24 +1567,88 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
   }
 }
 
-// Simple line painter for skeleton bones
-class _LinePainter extends CustomPainter {
-  final Offset p1;
-  final Offset p2;
+// Highly optimized CustomPainter for rendering the entire user skeleton in a single pass
+class _SkeletonPainter extends CustomPainter {
+  final Pose pose;
+  final Size widgetSize;
+  final Offset Function(PoseLandmark lm, Size screenSize) landmarkToScreen;
   final Color color;
-  _LinePainter(this.p1, this.p2, this.color);
+
+  _SkeletonPainter({
+    required this.pose,
+    required this.widgetSize,
+    required this.landmarkToScreen,
+    required this.color,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
+    final connections = [
+      [PoseLandmarkType.leftShoulder, PoseLandmarkType.rightShoulder],
+      [PoseLandmarkType.leftShoulder, PoseLandmarkType.leftElbow],
+      [PoseLandmarkType.leftElbow, PoseLandmarkType.leftWrist],
+      [PoseLandmarkType.rightShoulder, PoseLandmarkType.rightElbow],
+      [PoseLandmarkType.rightElbow, PoseLandmarkType.rightWrist],
+      [PoseLandmarkType.leftShoulder, PoseLandmarkType.leftHip],
+      [PoseLandmarkType.rightShoulder, PoseLandmarkType.rightHip],
+      [PoseLandmarkType.leftHip, PoseLandmarkType.rightHip],
+      [PoseLandmarkType.leftHip, PoseLandmarkType.leftKnee],
+      [PoseLandmarkType.leftKnee, PoseLandmarkType.leftAnkle],
+      [PoseLandmarkType.rightHip, PoseLandmarkType.rightKnee],
+      [PoseLandmarkType.rightKnee, PoseLandmarkType.rightAnkle],
+    ];
+
+    final linePaint = Paint()
       ..color = color
       ..strokeWidth = 4.0
       ..strokeCap = StrokeCap.round;
-    canvas.drawLine(p1, p2, paint);
+
+    // Draw connection lines
+    for (final conn in connections) {
+      final lm1 = pose.landmarks[conn[0]];
+      final lm2 = pose.landmarks[conn[1]];
+      if (lm1 != null && lm2 != null) {
+        final p1 = landmarkToScreen(lm1, widgetSize);
+        final p2 = landmarkToScreen(lm2, widgetSize);
+        canvas.drawLine(p1, p2, linePaint);
+      }
+    }
+
+    // Paint for white border of the joint dots
+    final borderPaint = Paint()
+      ..color = Colors.white
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.0;
+
+    // Paint for the joint dots
+    final dotPaint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill;
+
+    // Paint for the glow effect
+    final glowPaint = Paint()
+      ..color = color.withOpacity(0.5)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
+
+    // Draw dots for each landmark
+    for (final entry in pose.landmarks.entries) {
+      final offset = landmarkToScreen(entry.value, widgetSize);
+      
+      // Draw glow shadow
+      canvas.drawCircle(offset, 6.0, glowPaint);
+      // Draw main dot
+      canvas.drawCircle(offset, 6.0, dotPaint);
+      // Draw border
+      canvas.drawCircle(offset, 6.0, borderPaint);
+    }
   }
 
   @override
-  bool shouldRepaint(_LinePainter old) => old.p1 != p1 || old.p2 != p2 || old.color != color;
+  bool shouldRepaint(covariant _SkeletonPainter oldDelegate) {
+    return oldDelegate.pose != pose ||
+        oldDelegate.widgetSize != widgetSize ||
+        oldDelegate.color != color;
+  }
 }
 
 // Glowing pulsing visual highlight widget for active step joints
