@@ -8,6 +8,7 @@ class TTSService {
 
   final FlutterTts _flutterTts = FlutterTts();
   String _currentLanguage = 'en';
+  String? _lastAppliedLanguage;
 
   Future<void> init() async {
     // Load persisted language preference
@@ -25,12 +26,18 @@ class TTSService {
   }
 
   Future<void> _applyLanguage() async {
+    String targetCode;
     if (_currentLanguage == 'hi') {
-      await _flutterTts.setLanguage('hi-IN');
+      targetCode = 'hi-IN';
     } else if (_currentLanguage == 'te') {
-      await _flutterTts.setLanguage('te-IN');
+      targetCode = 'te-IN';
     } else {
-      await _flutterTts.setLanguage('en-US');
+      targetCode = 'en-US';
+    }
+
+    if (_lastAppliedLanguage != targetCode) {
+      await _flutterTts.setLanguage(targetCode);
+      _lastAppliedLanguage = targetCode;
     }
   }
 

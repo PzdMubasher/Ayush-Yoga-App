@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math' as math;
 import 'dart:convert';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -40,8 +41,9 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
     DeviceOrientation.landscapeRight: 270,
   };
   
-  late PoseDetector _poseDetector;
+   late PoseDetector _poseDetector;
   final FlutterTts _tts = FlutterTts();
+  String? _lastTTSLanguage;
   Timer? _ttsTimer;
   Timer? _sessionTimer;
   int _secondsRemaining = 0;
@@ -95,20 +97,12 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
     
     if (!mounted) return;
     final langProvider = Provider.of<LanguageProvider>(context, listen: false);
-    _speakInstruction(langProvider.currentLanguage == 'hi'
-        ? "आसन शुरू करने से पहले, अपना फोन लगभग 6 फीट दूर रखें और अपना पूरा शरीर कैमरा में दिखाएं।"
-        : langProvider.currentLanguage == 'te'
-            ? "ఆసనం ప్రారంభించే ముందు, మీ ఫోన్‌ను సుమారు 6 అడుగుల దూరంలో ఉంచండి మరియు మీ పూర్తి శరీరాన్ని కెమెరాలో చూపించండి."
-            : "Before beginning, please place your phone 6 feet away and make sure your entire body is visible.");
+    _speakInstruction(langProvider.t('setup_instructions'));
   }
 
   void _startPrepCountdown() {
     final langProvider = Provider.of<LanguageProvider>(context, listen: false);
-    _speakInstruction(langProvider.currentLanguage == 'hi' 
-        ? "तैयार हो जाइए! 3, 2, 1 में शुरू हो रहा है" 
-        : langProvider.currentLanguage == 'te'
-            ? "సిద్ధంగా ఉండండి! మూడు, రెండు, ఒకటి లో ప్రారంభమవుతుంది"
-            : "Get ready! Starting in 3, 2, 1");
+    _speakInstruction(langProvider.t('get_ready_countdown'));
     Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_prepCountdown > 1) {
         setState(() => _prepCountdown--);
@@ -116,11 +110,7 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
         timer.cancel();
         setState(() => _isPrepping = false);
         _startSessionTimer();
-        String initialMsg = langProvider.currentLanguage == 'hi' 
-            ? "शुरू करें! " 
-            : langProvider.currentLanguage == 'te'
-                ? "ప్రారంభించండి! "
-                : "Go! ";
+        String initialMsg = langProvider.t('go_msg');
         if (_steps.isNotEmpty && _steps[0]['instruction'] != null) {
           initialMsg += langProvider.translateDynamic(_steps[0]['instruction'].toString());
         }
@@ -141,17 +131,13 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
 
   void _completeSession() {
     _sessionTimer?.cancel();
+    final langProvider = Provider.of<LanguageProvider>(context, listen: false);
     setState(() { 
-      _currentStatus = "⏱️ Time's Up! Workout Complete. Namaste."; 
+      _currentStatus = langProvider.t('times_up_status'); 
       _accuracy = 1.0; 
       _currentStepIndex = _steps.length; // Stop processing steps
     });
-    final langProvider = Provider.of<LanguageProvider>(context, listen: false);
-    _speakInstruction(langProvider.currentLanguage == 'hi'
-        ? "समय समाप्त। वर्कआउट पूरा हुआ। बहुत बढ़िया। नमस्ते।"
-        : langProvider.currentLanguage == 'te'
-            ? "సమయం ముగిసింది. వ్యాయామం పూర్తయింది. బాగా చేసారు. నమస్తే."
-            : "Time is up. Workout complete. Well done. Namaste.");
+    _speakInstruction(langProvider.t('session_complete_speech'));
   }
 
   String _formatTime(int seconds) {
@@ -335,16 +321,16 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
       
       if (joint.contains('arm') || joint.contains('elbow') || joint.contains('shoulder') || joint.contains('wrist')) {
         align = const Alignment(0.0, -0.4); // Upper chest/arms area
-        label = langProvider.currentLanguage == 'hi' ? "हाथों की स्थिति" : langProvider.currentLanguage == 'te' ? "చేతులపై దృష్టి" : "Focus: Arms";
+        label = langProvider.t('focus_arms');
       } else if (joint.contains('knee') || joint.contains('hip') || joint.contains('leg')) {
         align = const Alignment(0.0, 0.4); // Lower body / legs area
-        label = langProvider.currentLanguage == 'hi' ? "पैरों की स्थिति" : langProvider.currentLanguage == 'te' ? "కాళ్లపై దృష్టి" : "Focus: Legs";
+        label = langProvider.t('focus_legs');
       } else if (joint.contains('ankle') || joint.contains('foot') || joint.contains('feet')) {
         align = const Alignment(0.0, 0.7); // Foot area
-        label = langProvider.currentLanguage == 'hi' ? "पैरों पर ध्यान दें" : langProvider.currentLanguage == 'te' ? "పాదాల స్థానం" : "Focus: Feet";
+        label = langProvider.t('focus_feet');
       } else if (joint.contains('spine') || joint.contains('back') || joint.contains('chest')) {
         align = const Alignment(0.0, 0.0); // Spine / Core
-        label = langProvider.currentLanguage == 'hi' ? "कमर सीधी रखें" : langProvider.currentLanguage == 'te' ? "వెన్నుముక నిటారుగా" : "Focus: Posture";
+        label = langProvider.t('focus_posture');
       } else {
         continue;
       }
@@ -397,6 +383,7 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
 
   /// Always re-apply language before speaking to prevent TTS engine resets
   Future<void> _applyTTSLanguage(String lang) async {
+    if (_lastTTSLanguage == lang) return;
     if (lang == 'hi') {
       await _tts.setLanguage("hi-IN");
     } else if (lang == 'te') {
@@ -404,6 +391,7 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
     } else {
       await _tts.setLanguage("en-US");
     }
+    _lastTTSLanguage = lang;
   }
 
   Future<void> _initializeCamera() {
@@ -419,7 +407,7 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
         final front = cameras.firstWhere((c) => c.lensDirection == CameraLensDirection.front, orElse: () => cameras.first);
         final controller = CameraController(
           front,
-          ResolutionPreset.medium,
+          ResolutionPreset.high,
           enableAudio: false,
           imageFormatGroup: Platform.isAndroid ? ImageFormatGroup.yuv420 : ImageFormatGroup.bgra8888,
         );
@@ -474,6 +462,68 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
 
   DateTime? _lastProcessedTime;
 
+  Uint8List _convertYUV420ToNV21(CameraImage image) {
+    final int width = image.width;
+    final int height = image.height;
+    final int ySize = width * height;
+    final int uvSize = (width * height / 2).toInt();
+    final Uint8List nv21 = Uint8List(ySize + uvSize);
+
+    final Plane yPlane = image.planes[0];
+    final Plane uPlane = image.planes[1];
+    final Plane vPlane = image.planes[2];
+
+    final Uint8List yBytes = yPlane.bytes;
+    final Uint8List uBytes = uPlane.bytes;
+    final Uint8List vBytes = vPlane.bytes;
+
+    // 1. Copy Y Plane (Luminance) row by row to strip padding
+    final int yRowStride = yPlane.bytesPerRow;
+    if (yRowStride == width) {
+      nv21.setRange(0, ySize, yBytes);
+    } else {
+      for (int r = 0; r < height; r++) {
+        nv21.setRange(r * width, (r + 1) * width, yBytes, r * yRowStride);
+      }
+    }
+
+    // 2. Interleave U and V planes into VUVUVU...
+    final int vRowStride = vPlane.bytesPerRow;
+    final int uRowStride = uPlane.bytesPerRow;
+    final int vPixelStride = vPlane.bytesPerPixel ?? 1;
+
+    if (vPixelStride == 2) {
+      // On many Android devices, the U and V planes are already interleaved,
+      // where vPlane.bytes contains V and U interleaved (e.g. V U V U ...).
+      // We can copy row-by-row directly from vPlane.bytes.
+      for (int r = 0; r < height ~/ 2; r++) {
+        final int srcOffset = r * vRowStride;
+        final int destOffset = ySize + r * width;
+        if (srcOffset + width <= vBytes.length) {
+          nv21.setRange(destOffset, destOffset + width, vBytes, srcOffset);
+        } else {
+          final int available = vBytes.length - srcOffset;
+          if (available > 0) {
+            nv21.setRange(destOffset, destOffset + available, vBytes, srcOffset);
+          }
+        }
+      }
+    } else {
+      // Fallback: If pixelStride is 1 (fully planar YUV), manually interleave U and V
+      int outIndex = ySize;
+      for (int r = 0; r < height ~/ 2; r++) {
+        final int vRowStart = r * vRowStride;
+        final int uRowStart = r * uRowStride;
+        for (int c = 0; c < width ~/ 2; c++) {
+          nv21[outIndex++] = vBytes[vRowStart + c];
+          nv21[outIndex++] = uBytes[uRowStart + c];
+        }
+      }
+    }
+
+    return nv21;
+  }
+
   void _processCameraImage(CameraImage image) {
     if (!mounted) return;
     if (_isProcessing || _steps.isEmpty || _isPrepping || _showOnboardingGuide) {
@@ -498,78 +548,9 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
       
       final Uint8List bytes;
       if (Platform.isAndroid) {
-        if (image.planes.length == 1) {
-          bytes = image.planes[0].bytes;
-        } else {
-          // Android YUV_420_888 -> NV21 conversion (3 planes)
-          final yPlane = image.planes[0];
-          final uPlane = image.planes[1];
-          final vPlane = image.planes[2];
-          final uvPixelStride = uPlane.bytesPerPixel ?? 1;
-          final uvRowStride = uPlane.bytesPerRow;
-
-          final nv21 = Uint8List(width * height * 3 ~/ 2);
-
-          // Copy Y plane (respecting row stride — bytesPerRow may be > width due to alignment padding)
-          if (yPlane.bytesPerRow == width) {
-            nv21.setRange(0, width * height, yPlane.bytes);
-          } else {
-            for (int row = 0; row < height; row++) {
-              final srcOffset = row * yPlane.bytesPerRow;
-              final dstOffset = row * width;
-              nv21.setRange(dstOffset, dstOffset + width, yPlane.bytes.sublist(srcOffset, srcOffset + width));
-            }
-          }
-
-          // Copy UV planes (also respecting row stride!)
-          int uvIndex = width * height;
-          final uvHeight = height ~/ 2;
-
-          if (uvPixelStride == 2) {
-            // UV already interleaved — but must strip row padding
-            if (uvRowStride == width) {
-              // No padding — bulk copy
-              final uvSize = math.min(vPlane.bytes.length, width * uvHeight);
-              nv21.setRange(uvIndex, uvIndex + uvSize, vPlane.bytes);
-            } else {
-              // Has padding — copy row by row
-              for (int row = 0; row < uvHeight; row++) {
-                final srcOffset = row * uvRowStride;
-                final dstOffset = uvIndex + row * width;
-                final rowSize = math.min(vPlane.bytes.length - srcOffset, width);
-                nv21.setRange(dstOffset, dstOffset + rowSize, vPlane.bytes.sublist(srcOffset, srcOffset + rowSize));
-              }
-            }
-          } else {
-            // Manual interleave (rare devices)
-            final uvWidth = width ~/ 2;
-            for (int row = 0; row < uvHeight; row++) {
-              for (int col = 0; col < uvWidth; col++) {
-                final uvOffset = row * uvRowStride + col * uvPixelStride;
-                final nvOffset = uvIndex + row * width + col * 2;
-                if (nvOffset < nv21.length && uvOffset < vPlane.bytes.length) {
-                  nv21[nvOffset] = vPlane.bytes[uvOffset];
-                }
-                if (nvOffset + 1 < nv21.length && uvOffset < uPlane.bytes.length) {
-                  nv21[nvOffset + 1] = uPlane.bytes[uvOffset];
-                }
-              }
-            }
-          }
-          bytes = nv21;
-        }
+        bytes = _convertYUV420ToNV21(image);
       } else {
         bytes = image.planes[0].bytes;
-      }
-      final int bytesPerRow;
-      if (Platform.isAndroid) {
-        if (image.planes.length == 1) {
-          bytesPerRow = image.planes[0].bytesPerRow;
-        } else {
-          bytesPerRow = width; // Converted NV21 buffer has no padding
-        }
-      } else {
-        bytesPerRow = image.planes[0].bytesPerRow;
       }
 
       final DeviceOrientation deviceOrientation = _controller?.value.deviceOrientation ?? DeviceOrientation.portraitUp;
@@ -590,7 +571,7 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
           size: Size(width.toDouble(), height.toDouble()),
           rotation: rotation,
           format: format,
-          bytesPerRow: bytesPerRow,
+          bytesPerRow: Platform.isAndroid ? width : image.planes[0].bytesPerRow,
         ),
       );
       _runMlKitDetection(inputImage);
@@ -630,16 +611,14 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
       });
 
       if (poses.isNotEmpty) {
-        _updateStepProgress(poses.first);
+        if (!_showOnboardingGuide && !_isPrepping) {
+          _updateStepProgress(poses.first);
+        }
       } else {
         if (!_isPrepping && !_showOnboardingGuide && _currentStepIndex < _steps.length) {
           _stepStartTime = null;
           setState(() {
-            _currentStatus = langProvider.currentLanguage == 'hi'
-                ? 'कोई शरीर नहीं मिला। कृपया कैमरा के सामने आएं।'
-                : langProvider.currentLanguage == 'te'
-                    ? 'శరీరం కనుగొనబడలేదు. దయచేసి ఫ్రేమ్‌లోకి వెళ్ళండి.'
-                    : 'No body detected. Please step into frame.';
+            _currentStatus = langProvider.t('no_person_detected');
             _accuracy = 0.0;
           });
         }
@@ -653,12 +632,38 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
 
   // Obsolete helper _buildInputImageFromSnapshot removed as frames are processed from a single plane directly.
 
+  String _getUnifiedJointKey(String joint) {
+    final j = joint.toLowerCase();
+    if (j.contains('leg') || j.contains('knee') || j.contains('bent')) {
+      return j.startsWith('left') ? 'left_leg' : 'right_leg';
+    }
+    if (j.contains('arm') || j.contains('elbow')) {
+      return j.startsWith('left') ? 'left_arm' : 'right_arm';
+    }
+    if (j.contains('shoulder')) {
+      return j.startsWith('left') ? 'left_shoulder' : 'right_shoulder';
+    }
+    if (j == 'spine' || j == 'body_line') {
+      return 'spine';
+    }
+    return j;
+  }
+
+  String? _getOppositeJointKey(String joint) {
+    if (joint.startsWith("left_")) {
+      return joint.replaceFirst("left_", "right_");
+    } else if (joint.startsWith("right_")) {
+      return joint.replaceFirst("right_", "left_");
+    }
+    return null;
+  }
+
   void _updateStepProgress(Pose pose) {
     if (_currentStepIndex >= _steps.length) return;
 
     final currentStep = _steps[_currentStepIndex];
     final langProvider = Provider.of<LanguageProvider>(context, listen: false);
-    final lang = langProvider.currentLanguage;
+
 
     // ── TIMED ADVANCEMENT: Only for poses where camera TRULY cannot detect ──
     // (fine finger gestures, breath rhythm, nostril switching, eye closure, etc.)
@@ -680,27 +685,187 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
       final String stepInstruction = langProvider.translateDynamic(currentStep['instruction'].toString());
       if (_currentStepIndex == _steps.length - 1) {
         setState(() {
-          _accuracy = 0.90;
+          _accuracy = 1.0;
           _currentStatus = "🧘 $stepInstruction... ${_formatTime(_secondsRemaining)}";
         });
       } else if (elapsed >= holdSecs) {
         _moveToNextStep();
       } else {
         setState(() {
-          _accuracy = 0.85;
+          _accuracy = 1.0;
           _currentStatus = "🧘 $stepInstruction — ${remaining}s";
         });
       }
       return;
     }
 
-    // ── CAMERA-VERIFIED POSE DETECTION: All other poses ─────────────────────
+    final lowercasePose = _targetPoseName.toLowerCase();
+    final bool isSittingOrGroundPose = 
+        lowercasePose.contains("cobra") ||
+        lowercasePose.contains("child") ||
+        lowercasePose.contains("lotus") ||
+        lowercasePose.contains("bridge") ||
+        lowercasePose.contains("plank") ||
+        lowercasePose.contains("savasana") ||
+        lowercasePose.contains("boat") ||
+        lowercasePose.contains("butterfly") ||
+        lowercasePose.contains("camel") ||
+        lowercasePose.contains("crow") ||
+        lowercasePose.contains("chaturanga") ||
+        lowercasePose.contains("bow") ||
+        lowercasePose.contains("pigeon") ||
+        lowercasePose.contains("fish") ||
+        lowercasePose.contains("frog") ||
+        lowercasePose.contains("cat-cow") ||
+        lowercasePose.contains("garland") ||
+        lowercasePose.contains("breathing") ||
+        lowercasePose.contains("anulom") ||
+        lowercasePose.contains("kapalbhati") ||
+        lowercasePose.contains("bhramari") ||
+        lowercasePose.contains("lion");
+
     // Accumulate rules from Step 0 → _currentStepIndex (later rules override earlier for same joint)
     final Map<String, Map<String, dynamic>> activeRulesMap = {};
     for (int i = 0; i <= _currentStepIndex; i++) {
       final stepRules = (_steps[i]['rules'] as List<dynamic>);
       for (var rule in stepRules) {
-        activeRulesMap[rule['joint'] as String] = Map<String, dynamic>.from(rule);
+        final rawJoint = rule['joint'] as String;
+        final unifiedKey = _getUnifiedJointKey(rawJoint);
+        final ruleCopy = Map<String, dynamic>.from(rule);
+        // Tag if this rule belongs to the current step
+        ruleCopy['isCurrentStepRule'] = (i == _currentStepIndex);
+        // Save raw joint name for computation
+        ruleCopy['rawJoint'] = rawJoint;
+
+        if (isSittingOrGroundPose) {
+          // Dynamically adjust rules that expect straight limbs/spine in a bent/sitting pose
+          final double currentMin = (ruleCopy['idealMin'] as num?)?.toDouble() ?? 0.0;
+          if (rawJoint.contains("knee") || rawJoint.contains("leg") || rawJoint.contains("ankle")) {
+            if (currentMin >= 140.0) {
+              // For sitting/ground poses, knees/legs should be bent
+              ruleCopy['idealMin'] = 20.0;
+              ruleCopy['idealMax'] = 120.0;
+              ruleCopy['messageLow'] = 'Bend your knees';
+              ruleCopy['messageHigh'] = 'Bend your knees';
+            }
+          } else if (rawJoint == "spine") {
+            if (currentMin >= 150.0) {
+              if (lowercasePose.contains("child") ||
+                  lowercasePose.contains("cat-cow") ||
+                  lowercasePose.contains("crow") ||
+                  lowercasePose.contains("pigeon") ||
+                  lowercasePose.contains("butterfly") ||
+                  lowercasePose.contains("cobra") ||
+                  lowercasePose.contains("camel") ||
+                  lowercasePose.contains("bow") ||
+                  lowercasePose.contains("fish") ||
+                  lowercasePose.contains("bridge")) {
+                ruleCopy['idealMin'] = 80.0;
+                ruleCopy['idealMax'] = 155.0; // allow dynamic arching/curving
+                ruleCopy['messageLow'] = 'Arch or curve your back';
+                ruleCopy['messageHigh'] = 'Align your back';
+              }
+            }
+          } else if (rawJoint.contains("arm") || rawJoint.contains("elbow")) {
+            if (currentMin >= 140.0) {
+              if (lowercasePose.contains("child") ||
+                  lowercasePose.contains("butterfly") ||
+                  lowercasePose.contains("cobra") ||
+                  lowercasePose.contains("crow") ||
+                  lowercasePose.contains("bow") ||
+                  lowercasePose.contains("pigeon")) {
+                ruleCopy['idealMin'] = 20.0;
+                ruleCopy['idealMax'] = 140.0;
+                ruleCopy['messageLow'] = 'Bend your elbows';
+                ruleCopy['messageHigh'] = 'Bend your elbows';
+              }
+            }
+          }
+        }
+
+        activeRulesMap[unifiedKey] = ruleCopy;
+      }
+    }
+
+    // Dynamically filter out impossible or noisy rules for sitting/asymmetrical poses
+    if (lowercasePose.contains("lotus")) {
+      // Exclude leg/knee/ankle checks once legs are crossed (Step index >= 1)
+      if (_currentStepIndex >= 1) {
+        activeRulesMap.removeWhere((key, rule) {
+          final String joint = rule['rawJoint'].toString().toLowerCase();
+          return joint.contains("knee") || joint.contains("leg") || joint.contains("ankle");
+        });
+      }
+      // Exclude arm/elbow checks since hands rest on knees
+      activeRulesMap.removeWhere((key, rule) {
+        final String joint = rule['rawJoint'].toString().toLowerCase();
+        return joint.contains("arm") || joint.contains("elbow");
+      });
+    } else if (lowercasePose.contains("deep breath") || lowercasePose.contains("breathing")) {
+      // Exclude leg/knee/ankle checks (since cross-legged) and arm/elbow checks (since hands rest on knees)
+      activeRulesMap.removeWhere((key, rule) {
+        final String joint = rule['rawJoint'].toString().toLowerCase();
+        return joint.contains("knee") || joint.contains("leg") || joint.contains("ankle") ||
+               joint.contains("arm") || joint.contains("elbow");
+      });
+    } else if (lowercasePose.contains("lion")) {
+      // Exclude leg/knee/ankle/arm/elbow checks since kneeling with palms on knees
+      activeRulesMap.removeWhere((key, rule) {
+        final String joint = rule['rawJoint'].toString().toLowerCase();
+        return joint.contains("knee") || joint.contains("leg") || joint.contains("ankle") ||
+               joint.contains("arm") || joint.contains("elbow");
+      });
+    } else if (lowercasePose.contains("butterfly")) {
+      // Exclude arm/elbow checks (holding feet) and leg/knee checks (soles together)
+      activeRulesMap.removeWhere((key, rule) {
+        final String joint = rule['rawJoint'].toString().toLowerCase();
+        return joint.contains("knee") || joint.contains("leg") || joint.contains("ankle") ||
+               joint.contains("arm") || joint.contains("elbow");
+      });
+    } else if (lowercasePose.contains("garland")) {
+      // Exclude arm/elbow checks in Step 2 (which is index 1, "Prayer Palms")
+      if (_currentStepIndex == 1) {
+        activeRulesMap.removeWhere((key, rule) {
+          final String joint = rule['rawJoint'].toString().toLowerCase();
+          return joint.contains("arm") || joint.contains("elbow");
+        });
+      }
+    } else if (lowercasePose.contains("eagle")) {
+      // Exclude leg checks in Step 1 (index 0, "Wrap Legs")
+      if (_currentStepIndex == 0) {
+        activeRulesMap.removeWhere((key, rule) {
+          final String joint = rule['rawJoint'].toString().toLowerCase();
+          return joint.contains("knee") || joint.contains("leg") || joint.contains("ankle");
+        });
+      }
+      // Exclude arm checks in Step 2 (index 1, "Wrap Arms")
+      else if (_currentStepIndex == 1) {
+        activeRulesMap.removeWhere((key, rule) {
+          final String joint = rule['rawJoint'].toString().toLowerCase();
+          return joint.contains("arm") || joint.contains("elbow");
+        });
+      }
+    } else if (lowercasePose.contains("frog")) {
+      // Exclude leg and arm checks (wide knees and elbows on floor)
+      activeRulesMap.removeWhere((key, rule) {
+        final String joint = rule['rawJoint'].toString().toLowerCase();
+        return joint.contains("knee") || joint.contains("leg") || joint.contains("ankle") ||
+               joint.contains("arm") || joint.contains("elbow");
+      });
+    } else if (lowercasePose.contains("wrist")) {
+      // Compare left and right arm angles and dynamically remove the bent arm's check, keeping only the straight, extended arm's check
+      final double? leftArmAngle = _calculateAngle(pose, "left_arm");
+      final double? rightArmAngle = _calculateAngle(pose, "right_arm");
+      if (leftArmAngle != null && rightArmAngle != null) {
+        if (leftArmAngle > rightArmAngle) {
+          activeRulesMap.removeWhere((key, rule) => rule['rawJoint'] == "right_arm");
+        } else {
+          activeRulesMap.removeWhere((key, rule) => rule['rawJoint'] == "left_arm");
+        }
+      } else if (leftArmAngle != null) {
+        activeRulesMap.removeWhere((key, rule) => rule['rawJoint'] == "right_arm");
+      } else if (rightArmAngle != null) {
+        activeRulesMap.removeWhere((key, rule) => rule['rawJoint'] == "left_arm");
       }
     }
 
@@ -710,44 +875,89 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
       final elapsed = DateTime.now().difference(_stepStartTime!).inSeconds;
       final int holdSecs = 6;
       final String stepInstruction = langProvider.translateDynamic(currentStep['instruction'].toString());
-      final String holdMsg = lang == 'hi' ? 'मुद्रा बनाए रखें' : lang == 'te' ? 'పోజ్ పట్టుకోండి' : 'Hold the pose';
+      final String holdMsg = langProvider.t('hold_pose');
       if (_currentStepIndex == _steps.length - 1) {
-        setState(() { _accuracy = 0.8; _currentStatus = "$holdMsg... ${_formatTime(_secondsRemaining)}"; });
+        setState(() { _accuracy = 1.0; _currentStatus = "$holdMsg... ${_formatTime(_secondsRemaining)}"; });
       } else if (elapsed >= holdSecs) {
         _moveToNextStep();
       } else {
-        setState(() { _accuracy = 0.8; _currentStatus = "$stepInstruction — ${holdSecs - elapsed}s"; });
+        setState(() { _accuracy = 1.0; _currentStatus = "$stepInstruction — ${holdSecs - elapsed}s"; });
       }
       return;
     }
 
     // Evaluate all accumulated rules against current camera landmarks
     bool allRulesPassed = true;
+    int validRulesChecked = 0; // count rules where angle was actually measurable
     String feedback = langProvider.translateDynamic(currentStep['instruction'].toString());
 
+    final String positionMsg = langProvider.t('position_clearly');
+
     for (var rule in activeRulesMap.values) {
-      double? angle = _calculateAngle(pose, rule['joint']);
+      final String rawJoint = rule['rawJoint'] as String;
+      final String unifiedKey = _getUnifiedJointKey(rawJoint);
+      double? angle = _calculateAngle(pose, rawJoint);
 
       // Level tolerance: Beginner gets ±12°, Intermediate ±6°, Advanced ±0°
       double tolerance = 0;
       if (widget.level == "Beginner") tolerance = 12;
       if (widget.level == "Intermediate") tolerance = 6;
 
-      final String positionMsg = lang == 'hi'
-          ? 'खुद को कैमरे में स्पष्ट रूप से दिखाएं'
-          : lang == 'te'
-              ? 'కెమెరా వీక్షణంలో మిమ్మల్ని స్పష్టంగా ఉంచుకోండి'
-              : 'Position yourself clearly in the camera view';
+      final double minVal = (rule['idealMin'] as num).toDouble() - tolerance;
+      final double maxVal = (rule['idealMax'] as num).toDouble() + tolerance;
+
+      // Dynamic side-agnostic check:
+      // If the joint is asymmetrical (e.g. only left is checked, but not right),
+      // and the current side fails or is null, check if the opposite side passes.
+      if (unifiedKey.startsWith("left_") || unifiedKey.startsWith("right_")) {
+        final oppositeKey = _getOppositeJointKey(unifiedKey);
+        if (oppositeKey != null) {
+          // Symmetrical check: if both sides are active in the rules, don't swap.
+          final bool isSymmetrical = activeRulesMap.containsKey(oppositeKey);
+          if (!isSymmetrical) {
+            bool currentPasses = angle != null && angle >= minVal && angle <= maxVal;
+            if (!currentPasses) {
+              final oppositeRawJoint = rawJoint.startsWith("left")
+                  ? rawJoint.replaceFirst("left", "right")
+                  : rawJoint.replaceFirst("right", "left");
+              double? oppAngle = _calculateAngle(pose, oppositeRawJoint);
+              if (oppAngle != null && oppAngle >= minVal && oppAngle <= maxVal) {
+                angle = oppAngle; // Swap to the passing opposite side!
+              }
+            }
+          }
+        }
+      }
+
+      final bool isCurrentStepRule = rule['isCurrentStepRule'] as bool? ?? false;
 
       if (angle == null) {
+        // Enforce current step rules: if a rule from the current step is missing, we fail the progress.
+        // Otherwise (for older steps), we continue gracefully.
+        // For sitting or ground poses, we bypass failing if the joint is occluded/missing.
+        if (isCurrentStepRule && !isSittingOrGroundPose) {
+          allRulesPassed = false;
+        }
+        continue;
+      }
+
+      validRulesChecked++;
+
+      if (angle < minVal || angle > maxVal) {
         allRulesPassed = false;
-        feedback = positionMsg;
-        break;
-      } else if (angle < (rule['idealMin'] - tolerance) || angle > (rule['idealMax'] + tolerance)) {
-        allRulesPassed = false;
-        feedback = langProvider.translateDynamic(rule['messageLow'] ?? rule['messageHigh'] ?? currentStep['instruction']);
+        final String feedbackMsg = angle < minVal
+            ? (rule['messageLow'] ?? rule['messageHigh'] ?? currentStep['instruction'])
+            : (rule['messageHigh'] ?? rule['messageLow'] ?? currentStep['instruction']);
+        feedback = langProvider.translateDynamic(feedbackMsg);
         break;
       }
+    }
+
+    // If ZERO rules produced a measurable angle, the body is not visible at all —
+    // show 'position yourself' instead of silently passing the step.
+    if (validRulesChecked == 0 && activeRulesMap.isNotEmpty) {
+      allRulesPassed = false;
+      feedback = positionMsg;
     }
 
     if (allRulesPassed) {
@@ -756,17 +966,17 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
       final duration = DateTime.now().difference(_stepStartTime!).inSeconds;
 
       // Required hold time: must maintain CORRECT posture for this long before advancing
-      int requiredHold = 3;  // Beginner: 5 seconds
+      int requiredHold = 3;  // Beginner: 3 seconds
       if (widget.level == "Intermediate") requiredHold = 8;
       if (widget.level == "Advanced") requiredHold = 12;
 
-      final String perfectMsg = lang == 'hi' ? '✅ बहुत अच्छे!' : lang == 'te' ? '✅ చాలా బాగుంది!' : '✅ Perfect!';
-      final String holdMsg = lang == 'hi' ? 'थोड़ी देर रुकें' : lang == 'te' ? 'కొంచెం సేపు ఆగండి' : 'Hold for';
+      final String perfectMsg = langProvider.t('perfect_msg');
+      final String holdMsg = langProvider.t('hold_for');
 
       if (_currentStepIndex == _steps.length - 1) {
         setState(() {
           _accuracy = 1.0;
-          _currentStatus = "$perfectMsg ${lang == 'hi' ? 'रखें...' : lang == 'te' ? 'ఉంచండి...' : 'Keep holding...'} ${_formatTime(_secondsRemaining)}";
+          _currentStatus = "$perfectMsg ${langProvider.t('keep_holding')} ${_formatTime(_secondsRemaining)}";
         });
       } else if (duration >= requiredHold) {
         _moveToNextStep();
@@ -798,11 +1008,7 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
       });
       final langProvider = Provider.of<LanguageProvider>(context, listen: false);
       // Speak "Perfect" + next instruction in the selected language
-      final perfectWord = langProvider.currentLanguage == 'hi'
-          ? 'शाबाश! '
-          : langProvider.currentLanguage == 'te'
-              ? 'అద్భుతంగా ఉంది! '
-              : 'Perfect! ';
+      final perfectWord = langProvider.t('perfect_word');
       final instruction = langProvider.translateDynamic(_steps[_currentStepIndex]['instruction'].toString());
       _applyTTSLanguage(langProvider.currentLanguage).then((_) async {
         try {
@@ -823,17 +1029,39 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
     double? getValidAngle(PoseLandmark? p1, PoseLandmark? p2, PoseLandmark? p3, {bool requireUpright = false}) {
       if (p1 == null || p2 == null || p3 == null) return null;
       
-      // Strict check: limbs must be clearly visible (likelihood > 0.45) to prevent guessing when sitting/lying down
-      if (p1.likelihood < 0.45 || p2.likelihood < 0.45 || p3.likelihood < 0.45) return null;
+      // Using 0.20 threshold allows detection under cover fit and distant users.
+      if (p1.likelihood < 0.20 || p2.likelihood < 0.20 || p3.likelihood < 0.20) return null;
       
       // If we require the person to be standing/upright (e.g. spine checks),
       // the shoulder (p1) must be physically above the hip (p2). In ML Kit Y=0 is the top.
-      if (requireUpright && p1.y > p2.y - 30) return null;
+      if (requireUpright && p1.y > p2.y) return null;
 
       return _getAngle(p1, p2, p3);
     }
 
-    if (joint.contains("arm")) {
+    if (joint.contains("shoulder")) {
+      final h = joint.startsWith("left") ? landmarks[PoseLandmarkType.leftHip] : landmarks[PoseLandmarkType.rightHip];
+      final s = joint.startsWith("left") ? landmarks[PoseLandmarkType.leftShoulder] : landmarks[PoseLandmarkType.rightShoulder];
+      final e = joint.startsWith("left") ? landmarks[PoseLandmarkType.leftElbow] : landmarks[PoseLandmarkType.rightElbow];
+      
+      if (s != null && e != null) {
+        final instruction = _currentStepIndex < _steps.length 
+            ? (_steps[_currentStepIndex]['instruction']?.toString().toLowerCase() ?? '') 
+            : '';
+        final isRaisingArms = instruction.contains("overhead") || 
+                              instruction.contains("upward") || 
+                              instruction.contains("upward salute") ||
+                              instruction.contains("raise both arms") ||
+                              instruction.contains("raise arms overhead") ||
+                              instruction.contains("lift both arms") ||
+                              (instruction.contains("raise") && instruction.contains("arms") && !instruction.contains("shoulder level"));
+        
+        if (isRaisingArms && e.y >= s.y) {
+          return 0.0; // Fail the check
+        }
+      }
+      return getValidAngle(h, s, e);
+    } else if (joint.contains("arm")) {
       final s = joint.startsWith("left") ? landmarks[PoseLandmarkType.leftShoulder] : landmarks[PoseLandmarkType.rightShoulder];
       final e = joint.startsWith("left") ? landmarks[PoseLandmarkType.leftElbow] : landmarks[PoseLandmarkType.rightElbow];
       final w = joint.startsWith("left") ? landmarks[PoseLandmarkType.leftWrist] : landmarks[PoseLandmarkType.rightWrist];
@@ -848,27 +1076,20 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
       final h = landmarks[PoseLandmarkType.leftHip];
       final k = landmarks[PoseLandmarkType.leftKnee];
       
-      // Enforce strict upright check only for standing vertical poses.
-      // Dynamic, inverted, horizontal, or bending poses (like Surya Namaskar, Triangle Pose, Camel, Crow, etc.) should bypass this.
       final uprightStandingPoses = [
         "Mountain Pose", "Tree Pose", "Warrior I", "Warrior II", 
         "Chair Pose", "Goddess Pose"
       ];
       bool requireUpright = uprightStandingPoses.contains(_targetPoseName);
       
-      // Special case for sitting upright poses:
-      // When sitting cross-legged (Lotus, Deep Breathing, etc.), the knee is horizontal to the hip.
-      // So shoulder-hip-knee angle is ~90 deg, but the rules expect 155-180 (straight back).
-      // We substitute the knee with an imaginary point directly below the hip to measure torso verticality!
       final sittingUprightPoses = [
         "Lotus Pose", "Deep Breathing", "Anulom Vilom", "Kapalbhati",
         "Bhramari", "Neck Stretch", "Butterfly Pose", "Chair Twist", "Lion Breath", "Boat Pose"
       ];
       
       if (sittingUprightPoses.contains(_targetPoseName)) {
-        // Enforce basic visibility and upright checks manually before substituting points
         if (s == null || h == null) return null;
-        if (s.likelihood < 0.45 || h.likelihood < 0.45) return null;
+        if (s.likelihood < 0.20 || h.likelihood < 0.20) return null;
         if (requireUpright && s.y > h.y - 30) return null;
         
         return _getAngleFromPoints(s.x, s.y, h.x, h.y, h.x, h.y + 100);
@@ -936,24 +1157,46 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
   // Convert a landmark to screen coordinates
   Offset _landmarkToScreen(PoseLandmark lm, Size screenSize) {
     final imgSize = _imageSize ?? _controller?.value.previewSize ?? const Size(720, 480);
+    final previewSize = _controller?.value.previewSize ?? const Size(1280, 720);
     final rot = _currentRotation ?? InputImageRotation.rotation270deg;
-    double x, y;
-    
-    switch (rot) {
-      case InputImageRotation.rotation90deg:
-        x = lm.x * screenSize.width / imgSize.height;
-        y = lm.y * screenSize.height / imgSize.width;
-        break;
-      case InputImageRotation.rotation270deg:
-        x = screenSize.width - lm.x * screenSize.width / imgSize.height;
-        y = lm.y * screenSize.height / imgSize.width;
-        break;
-      default:
-        x = lm.x * screenSize.width / imgSize.width;
-        y = lm.y * screenSize.height / imgSize.height;
+    final bool isFrontCamera = _controller?.description.lensDirection == CameraLensDirection.front;
+
+    // Dimensions of the raw image frame processed by ML Kit
+    final double rawImgW = (rot == InputImageRotation.rotation90deg || rot == InputImageRotation.rotation270deg)
+        ? imgSize.height
+        : imgSize.width;
+    final double rawImgH = (rot == InputImageRotation.rotation90deg || rot == InputImageRotation.rotation270deg)
+        ? imgSize.width
+        : imgSize.height;
+
+    // Dimensions of the camera preview (the container aspect ratio)
+    final double previewW = (rot == InputImageRotation.rotation90deg || rot == InputImageRotation.rotation270deg)
+        ? previewSize.height
+        : previewSize.width;
+    final double previewH = (rot == InputImageRotation.rotation90deg || rot == InputImageRotation.rotation270deg)
+        ? previewSize.width
+        : previewSize.height;
+
+    // Normalized coordinates of the landmark in the raw image frame [0, 1]
+    final double normX = lm.x / rawImgW;
+    final double normY = lm.y / rawImgH;
+
+    // Scale preview to cover screen (same as we do for the CameraPreview container)
+    final double scale = math.max(screenSize.width / previewW, screenSize.height / previewH);
+    final double scaledPreviewW = previewW * scale;
+    final double scaledPreviewH = previewH * scale;
+
+    final double dx = (screenSize.width - scaledPreviewW) / 2;
+    final double dy = (screenSize.height - scaledPreviewH) / 2;
+
+    // Map normalized coordinates to the scaled preview container
+    double x = normX * scaledPreviewW + dx;
+    double y = normY * scaledPreviewH + dy;
+
+    if (isFrontCamera) {
+      x = screenSize.width - x;
     }
-    // Mirror for front camera
-    x = screenSize.width - x;
+
     return Offset(x.clamp(0, screenSize.width), y.clamp(0, screenSize.height));
   }
 
@@ -973,42 +1216,51 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // CENTERED & ASPECT RATIO BOX for Camera and Landmarks (prevents stretching)
-          Center(
-            child: AspectRatio(
-              aspectRatio: 1 / _controller!.value.aspectRatio,
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final widgetSize = Size(constraints.maxWidth, constraints.maxHeight);
-                  
-                  return Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      CameraPreview(_controller!),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final widgetSize = Size(constraints.maxWidth, constraints.maxHeight);
+              final previewSize = _controller?.value.previewSize ?? const Size(1280, 720);
+              final rot = _currentRotation ?? InputImageRotation.rotation270deg;
+              final isPortrait = rot == InputImageRotation.rotation90deg || rot == InputImageRotation.rotation270deg;
+              
+              final double previewW = isPortrait ? previewSize.height : previewSize.width;
+              final double previewH = isPortrait ? previewSize.width : previewSize.height;
+              
+              return ClipRect(
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    FittedBox(
+                      fit: BoxFit.cover,
+                      child: SizedBox(
+                        width: previewW,
+                        height: previewH,
+                        child: CameraPreview(_controller!),
+                      ),
+                    ),
 
-                      // The green target skeleton and background ghost have been removed based on user feedback to ensure the user is perfectly visible.
+                    // The green target skeleton and background ghost have been removed based on user feedback to ensure the user is perfectly visible.
 
-                      // ── USER'S LIVE SKELETON (detected joints from camera) ─────────
-                      if (_poses.isNotEmpty)
-                        Positioned.fill(
-                          child: CustomPaint(
-                            painter: _SkeletonPainter(
-                              pose: _poses.first,
-                              widgetSize: widgetSize,
-                              landmarkToScreen: _landmarkToScreen,
-                              color: poseColor,
-                            ),
+                    // ── USER'S LIVE SKELETON (detected joints from camera) ─────────
+                    if (_poses.isNotEmpty)
+                      Positioned.fill(
+                        child: CustomPaint(
+                          painter: _SkeletonPainter(
+                            pose: _poses.first,
+                            widgetSize: widgetSize,
+                            landmarkToScreen: _landmarkToScreen,
+                            color: poseColor,
                           ),
                         ),
+                      ),
 
-                      // ── FOCUS HIGHLIGHT RINGS ─────────────────────────────────────
-                      if (_showBackgroundGuide)
-                        ..._buildFocusHighlights(langProvider),
-                    ],
-                  );
-                },
-              ),
-            ),
+                    // ── FOCUS HIGHLIGHT RINGS ─────────────────────────────────────
+                    if (_showBackgroundGuide)
+                      ..._buildFocusHighlights(langProvider),
+                  ],
+                ),
+              );
+            },
           ),
           
           // --- TOP STATUS BAR ---
@@ -1125,20 +1377,24 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
           
           // --- BOTTOM COACHING BOX ---
           Positioned(
-            bottom: 20, left: 16, right: 16,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.88),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: _accuracy >= 1.0 
-                    ? const Color(0xFF00FF88).withOpacity(0.6) 
-                    : Colors.white.withOpacity(0.1), 
-                  width: 2
-                ),
-              ),
-              child: Column(
+            bottom: 16 + MediaQuery.of(context).padding.bottom, left: 16, right: 16,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.55),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: _accuracy >= 1.0 
+                        ? const Color(0xFF00FF88).withOpacity(0.6) 
+                        : Colors.white.withOpacity(0.15), 
+                      width: 1.5
+                    ),
+                  ),
+                  child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   // Header row: step label + timer + guide toggle + collapse + close
@@ -1152,11 +1408,7 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
-                          langProvider.currentLanguage == 'hi' 
-                              ? "चरण ${_currentStepIndex + 1}/${_steps.length}" 
-                              : langProvider.currentLanguage == 'te'
-                                  ? "దశ ${_currentStepIndex + 1}/${_steps.length}"
-                                  : "STEP ${_currentStepIndex + 1}/${_steps.length}", 
+                          "${langProvider.t('step')} ${_currentStepIndex + 1}/${_steps.length}", 
                           style: GoogleFonts.outfit(color: const Color(0xFF00FF88), fontWeight: FontWeight.bold, fontSize: 12)),
                       ),
                       Text(_formatTime(_secondsRemaining), 
@@ -1361,11 +1613,7 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
                             const Icon(Icons.arrow_forward, color: Colors.white30, size: 12),
                             const SizedBox(width: 4),
                             Text(
-                              langProvider.currentLanguage == 'hi'
-                                ? 'अगला: '
-                                : langProvider.currentLanguage == 'te'
-                                    ? 'తదుపరి: '
-                                    : 'Next: ',
+                              langProvider.t('next'),
                               style: GoogleFonts.outfit(color: Colors.white38, fontSize: 11, fontWeight: FontWeight.bold),
                             ),
                             Expanded(
@@ -1386,6 +1634,8 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
               ),
             ),
           ),
+        ),
+      ),
           
           // --- GET READY OVERLAY ---
           if (_isPrepping)
@@ -1396,7 +1646,7 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      langProvider.currentLanguage == 'hi' ? "तैयार हो जाएं" : "GET READY", 
+                      langProvider.t('get_ready'), 
                       style: GoogleFonts.outfit(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 20),
@@ -1428,7 +1678,7 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
                       ),
                       const SizedBox(height: 20),
                       Text(
-                        langProvider.currentLanguage == 'hi' ? "आसन की तैयारी" : langProvider.currentLanguage == 'te' ? "ఆసన సాధన తయారీ" : "POSE PREPARATION",
+                        langProvider.t('pose_prep'),
                         style: GoogleFonts.outfit(
                           color: const Color(0xFF00FF88),
                           fontSize: 14,
@@ -1451,30 +1701,18 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
                       // Checklist items of what to do first:
                       _buildOnboardingStep(
                         icon: Icons.phone_android,
-                        title: langProvider.currentLanguage == 'hi' ? "फोन को दूर रखें" : langProvider.currentLanguage == 'te' ? "ఫోన్‌ను దూరంగా ఉంచండి" : "Place Phone 6-8 Feet Away",
-                        description: langProvider.currentLanguage == 'hi' 
-                          ? "फोन को आंखों के स्तर पर सीधे रखें ताकि पूरा शरीर दिखाई दे।" 
-                          : langProvider.currentLanguage == 'te' 
-                              ? "పూర్తి శరీరం కెమెరాలో కనిపించేలా ఫోన్‌ను కంటి దూరంలో ఉంచండి." 
-                              : "Place your phone upright at eye level on a stable surface.",
+                        title: langProvider.t('place_phone'),
+                        description: langProvider.t('place_phone_desc'),
                       ),
                       _buildOnboardingStep(
                         icon: Icons.lightbulb_outline,
-                        title: langProvider.currentLanguage == 'hi' ? "अच्छा प्रकाश सुनिश्चित करें" : langProvider.currentLanguage == 'te' ? "మంచి వెలుతురును చూసుకోండి" : "Ensure Good Lighting",
-                        description: langProvider.currentLanguage == 'hi' 
-                          ? "कमरे में रोशनी अच्छी होनी चाहिए ताकि कैमरे को सटीक ट्रैक मिले।" 
-                          : langProvider.currentLanguage == 'te' 
-                              ? "కెమెరా సరిగ్గా గుర్తించడానికి గదిలో తగినంత వెలుతురు ఉండేలా చూసుకోండి." 
-                              : "Ensure the room is well-lit for precise skeletal tracking.",
+                        title: langProvider.t('ensure_lighting'),
+                        description: langProvider.t('ensure_lighting_desc'),
                       ),
                       _buildOnboardingStep(
                         icon: Icons.center_focus_strong,
-                        title: langProvider.currentLanguage == 'hi' ? "गाइड चित्र से संरेखित करें" : langProvider.currentLanguage == 'te' ? "గైడ్ ఇమేజ్‌తో కలవండి" : "Align with the Guide Image",
-                        description: langProvider.currentLanguage == 'hi' 
-                          ? "कैमरा शुरू होने पर सीधे खड़े होकर गाइड चित्र के साथ खुद को संरेखित करें।" 
-                          : langProvider.currentLanguage == 'te' 
-                              ? "లైవ్ కెమెరాలో కనిపించే గైడ్ ఇమేజ్‌తో మీ శరీరాన్ని కలపండి." 
-                              : "Align your body reflection inside the guide image.",
+                        title: langProvider.t('align_image'),
+                        description: langProvider.t('align_image_desc'),
                       ),
                       
                       const Spacer(),
@@ -1508,7 +1746,7 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
                           ),
                           child: Center(
                             child: Text(
-                              langProvider.currentLanguage == 'hi' ? "शुरू करें" : langProvider.currentLanguage == 'te' ? "ప్రారంభించండి" : "LET'S START",
+                              langProvider.t('lets_start'),
                               style: GoogleFonts.outfit(
                                 color: Colors.black,
                                 fontSize: 16,
@@ -1607,7 +1845,7 @@ class _SkeletonPainter extends CustomPainter {
     for (final conn in connections) {
       final lm1 = pose.landmarks[conn[0]];
       final lm2 = pose.landmarks[conn[1]];
-      if (lm1 != null && lm2 != null) {
+      if (lm1 != null && lm2 != null && lm1.likelihood >= 0.20 && lm2.likelihood >= 0.20) {
         final p1 = landmarkToScreen(lm1, widgetSize);
         final p2 = landmarkToScreen(lm2, widgetSize);
         canvas.drawLine(p1, p2, linePaint);
@@ -1632,7 +1870,9 @@ class _SkeletonPainter extends CustomPainter {
 
     // Draw dots for each landmark
     for (final entry in pose.landmarks.entries) {
-      final offset = landmarkToScreen(entry.value, widgetSize);
+      final lm = entry.value;
+      if (lm.likelihood < 0.20) continue;
+      final offset = landmarkToScreen(lm, widgetSize);
       
       // Draw glow shadow
       canvas.drawCircle(offset, 6.0, glowPaint);

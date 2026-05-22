@@ -1,2895 +1,2947 @@
 [
-  {
-    "poseName": "Mountain Pose",
-    "steps": [
-      {
-        "stepName": "Stand Tall",
-        "instruction": "Stand straight with feet together and arms relaxed at your sides",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Ground Feet",
-        "instruction": "Press both feet firmly into the floor and balance evenly",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      },
-      {
-        "stepName": "Raise Arms",
-        "instruction": "Slowly raise both arms overhead with palms facing each other",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Open Chest",
-        "instruction": "Lift your chest, relax shoulders, and lengthen your spine",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Hold",
-        "instruction": "Look forward and take slow deep breaths",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Tree Pose",
-    "steps": [
-      {
-        "stepName": "Stand Straight",
-        "instruction": "Stand tall with feet together and spine straight",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Shift Weight",
-        "instruction": "Shift your body weight onto one leg",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Lift Foot",
-        "instruction": "Place one foot on the inner calf or thigh of the opposite leg",
-        "rules": [
-          {
-            "joint": "left_bent_knee",
-            "idealMin": 30,
-            "idealMax": 110,
-            "messageHigh": "Bend knee more to place foot on inner thigh"
-          }
-        ]
-      },
-      {
-        "stepName": "Hands Together",
-        "instruction": "Bring palms together in front of your chest",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Raise Arms",
-        "instruction": "Lift your joined hands overhead while balancing",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Hold",
-        "instruction": "Focus on one point and breathe steadily",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Warrior I",
-    "steps": [
-      {
-        "stepName": "Step Forward",
-        "instruction": "Step one foot forward into a long lunge",
-        "rules": [
-          {
-            "joint": "left_bent_knee",
-            "idealMin": 75,
-            "idealMax": 125,
-            "messageLow": "Bend knee lower for a deeper stretch",
-            "messageHigh": "Don't bend knee too much past ankle"
-          }
-        ]
-      },
-      {
-        "stepName": "Bend Front Knee",
-        "instruction": "Bend your front knee while keeping the back leg straight",
-        "rules": [
-          {
-            "joint": "left_bent_knee",
-            "idealMin": 75,
-            "idealMax": 125,
-            "messageLow": "Bend knee lower for a deeper stretch",
-            "messageHigh": "Don't bend knee too much past ankle"
-          }
-        ]
-      },
-      {
-        "stepName": "Square Hips",
-        "instruction": "Turn hips forward and keep torso facing front",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Raise Arms",
-        "instruction": "Lift both arms overhead with palms facing inward",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Lift Chest",
-        "instruction": "Keep chest lifted and shoulders relaxed",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Hold",
-        "instruction": "Stay strong and breathe deeply",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Warrior II",
-    "steps": [
-      {
-        "stepName": "Wide Stance",
-        "instruction": "Step your feet wide apart and extend arms sideways",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 150,
-            "idealMax": 180,
-            "messageLow": "Keep left arm straight at shoulder level"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 150,
-            "idealMax": 180,
-            "messageLow": "Keep right arm straight at shoulder level"
-          }
-        ]
-      },
-      {
-        "stepName": "Turn Front Foot",
-        "instruction": "Turn your front foot outward and back foot slightly inward",
-        "rules": [
-          {
-            "joint": "left_bent_knee",
-            "idealMin": 75,
-            "idealMax": 125,
-            "messageLow": "Bend knee lower for a deeper stretch",
-            "messageHigh": "Don't bend knee too much past ankle"
-          }
-        ]
-      },
-      {
-        "stepName": "Bend Front Knee",
-        "instruction": "Bend your front knee directly above the ankle",
-        "rules": [
-          {
-            "joint": "left_bent_knee",
-            "idealMin": 75,
-            "idealMax": 125,
-            "messageLow": "Bend knee lower for a deeper stretch",
-            "messageHigh": "Don't bend knee too much past ankle"
-          }
-        ]
-      },
-      {
-        "stepName": "Stretch Arms",
-        "instruction": "Keep both arms straight at shoulder height",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 150,
-            "idealMax": 180,
-            "messageLow": "Keep left arm straight at shoulder level"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 150,
-            "idealMax": 180,
-            "messageLow": "Keep right arm straight at shoulder level"
-          }
-        ]
-      },
-      {
-        "stepName": "Look Forward",
-        "instruction": "Gaze over your front hand while keeping torso upright",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 150,
-            "idealMax": 180,
-            "messageLow": "Keep left arm straight at shoulder level"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 150,
-            "idealMax": 180,
-            "messageLow": "Keep right arm straight at shoulder level"
-          }
-        ]
-      },
-      {
-        "stepName": "Hold",
-        "instruction": "Keep legs strong and breathe steadily",
-        "rules": [
-          {
-            "joint": "left_bent_knee",
-            "idealMin": 75,
-            "idealMax": 125,
-            "messageLow": "Bend knee lower for a deeper stretch",
-            "messageHigh": "Don't bend knee too much past ankle"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Triangle Pose",
-    "steps": [
-      {
-        "stepName": "Wide Stance",
-        "instruction": "Stand with feet wide apart and stretch arms sideways",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 150,
-            "idealMax": 180,
-            "messageLow": "Keep left arm straight at shoulder level"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 150,
-            "idealMax": 180,
-            "messageLow": "Keep right arm straight at shoulder level"
-          }
-        ]
-      },
-      {
-        "stepName": "Turn Foot",
-        "instruction": "Turn your front foot outward and slightly turn the back foot inward",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Reach Forward",
-        "instruction": "Reach your front arm forward while keeping both legs straight",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 150,
-            "idealMax": 180,
-            "messageLow": "Keep left arm straight at shoulder level"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 150,
-            "idealMax": 180,
-            "messageLow": "Keep right arm straight at shoulder level"
-          }
-        ]
-      },
-      {
-        "stepName": "Lower Hand",
-        "instruction": "Lower your front hand toward shin or ankle and raise the other arm upward",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 150,
-            "idealMax": 180,
-            "messageLow": "Keep left arm straight at shoulder level"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 150,
-            "idealMax": 180,
-            "messageLow": "Keep right arm straight at shoulder level"
-          }
-        ]
-      },
-      {
-        "stepName": "Open Chest",
-        "instruction": "Keep chest open and shoulders aligned",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Look Up",
-        "instruction": "Turn your head and look toward your top hand",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 150,
-            "idealMax": 180,
-            "messageLow": "Keep left arm straight at shoulder level"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 150,
-            "idealMax": 180,
-            "messageLow": "Keep right arm straight at shoulder level"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Chair Pose",
-    "steps": [
-      {
-        "stepName": "Stand Straight",
-        "instruction": "Stand tall with feet together",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Raise Arms",
-        "instruction": "Lift both arms overhead with palms facing inward",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Bend Knees",
-        "instruction": "Lower hips backward like sitting on a chair",
-        "rules": [
-          {
-            "joint": "left_bent_knee",
-            "idealMin": 75,
-            "idealMax": 125,
-            "messageLow": "Bend knee lower for a deeper stretch",
-            "messageHigh": "Don't bend knee too much past ankle"
-          }
-        ]
-      },
-      {
-        "stepName": "Keep Chest Up",
-        "instruction": "Lift chest and keep spine long",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Shift Weight",
-        "instruction": "Keep weight balanced on your heels",
-        "rules": [
-          {
-            "joint": "left_bent_knee",
-            "idealMin": 75,
-            "idealMax": 125,
-            "messageLow": "Bend knee lower for a deeper stretch",
-            "messageHigh": "Don't bend knee too much past ankle"
-          }
-        ]
-      },
-      {
-        "stepName": "Hold",
-        "instruction": "Keep arms strong and breathe steadily",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Plank Pose",
-    "steps": [
-      {
-        "stepName": "Hands Down",
-        "instruction": "Place palms directly under shoulders",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Step Back",
-        "instruction": "Extend both legs straight behind you",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Straighten Body",
-        "instruction": "Keep your body aligned from head to heels",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Engage Core",
-        "instruction": "Tighten stomach muscles and avoid dropping hips",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Push Floor",
-        "instruction": "Press strongly through your palms",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Hold",
-        "instruction": "Breathe steadily while maintaining balance",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Side Plank",
-    "steps": [
-      {
-        "stepName": "Start Plank",
-        "instruction": "Begin in a strong plank position",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Rotate Body",
-        "instruction": "Turn your body sideways and stack your feet",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Lift Top Arm",
-        "instruction": "Raise your top arm straight upward",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 150,
-            "idealMax": 180,
-            "messageLow": "Keep left arm straight at shoulder level"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 150,
-            "idealMax": 180,
-            "messageLow": "Keep right arm straight at shoulder level"
-          }
-        ]
-      },
-      {
-        "stepName": "Lift Hips",
-        "instruction": "Keep hips lifted and body aligned",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Look Up",
-        "instruction": "Turn your gaze toward the raised hand",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 150,
-            "idealMax": 180,
-            "messageLow": "Keep left arm straight at shoulder level"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 150,
-            "idealMax": 180,
-            "messageLow": "Keep right arm straight at shoulder level"
-          }
-        ]
-      },
-      {
-        "stepName": "Hold",
-        "instruction": "Balance steadily and breathe deeply",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Cobra Pose",
-    "steps": [
-      {
-        "stepName": "Lie Down",
-        "instruction": "Lie on your stomach with legs extended behind you",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Place Hands",
-        "instruction": "Place palms under shoulders with elbows close to body",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Lift Chest",
-        "instruction": "Press hands into the floor and slowly lift your chest",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Roll Shoulders Back",
-        "instruction": "Open your chest and keep shoulders away from ears",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 90,
-            "idealMax": 145,
-            "messageLow": "Arch your back and lift chest higher"
-          }
-        ]
-      },
-      {
-        "stepName": "Look Up",
-        "instruction": "Lift your gaze slightly upward while keeping hips grounded",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 90,
-            "idealMax": 145,
-            "messageLow": "Arch your back and lift chest higher"
-          }
-        ]
-      },
-      {
-        "stepName": "Hold",
-        "instruction": "Breathe deeply and keep chest open",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 90,
-            "idealMax": 145,
-            "messageLow": "Arch your back and lift chest higher"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Child Pose",
-    "steps": [
-      {
-        "stepName": "Kneel Down",
-        "instruction": "Sit back on your heels with knees bent",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Fold Forward",
-        "instruction": "Stretch arms forward and lower chest toward floor",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Rest Forehead",
-        "instruction": "Place your forehead gently on the mat",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      },
-      {
-        "stepName": "Relax Shoulders",
-        "instruction": "Allow shoulders and arms to relax comfortably",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Deep Breathing",
-        "instruction": "Take slow deep breaths and relax your whole body",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Cat-Cow Pose",
-    "steps": [
-      {
-        "stepName": "Table Top",
-        "instruction": "Come onto hands and knees with wrists under shoulders and knees under hips",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Cow Pose",
-        "instruction": "Drop your belly, lift chest and tailbone upward, and look slightly up",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Cat Pose",
-        "instruction": "Round your spine upward, tuck chin toward chest, and pull belly inward",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Flow Slowly",
-        "instruction": "Move slowly between cow and cat positions with your breath",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Repeat",
-        "instruction": "Continue the movement gently while keeping arms strong",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Lotus Pose",
-    "steps": [
-      {
-        "stepName": "Sit Down",
-        "instruction": "Sit comfortably on the floor with legs extended",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Cross Legs",
-        "instruction": "Place each foot on the opposite thigh carefully",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Straighten Spine",
-        "instruction": "Sit tall with shoulders relaxed and chest open",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Hands on Knees",
-        "instruction": "Rest your hands on knees with palms facing upward",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Meditate",
-        "instruction": "Close your eyes and breathe slowly and deeply",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Surya Namaskar",
-    "steps": [
-      {
-        "stepName": "Prayer Pose",
-        "instruction": "Stand tall and bring palms together at your chest",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Raise Arms",
-        "instruction": "Lift arms overhead and gently arch your back",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Forward Bend",
-        "instruction": "Fold forward and bring hands toward your feet",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Step Back",
-        "instruction": "Step one leg back into a lunge and lift chest",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Plank Position",
-        "instruction": "Step the other leg back and keep body straight",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Lower Down",
-        "instruction": "Lower knees, chest, and chin gently to the floor",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Cobra Pose",
-        "instruction": "Slide forward and lift chest upward",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Downward Dog",
-        "instruction": "Lift hips upward to form an inverted V-shape",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 50,
-            "idealMax": 105,
-            "messageHigh": "Push your hips higher into a V-shape"
-          }
-        ]
-      },
-      {
-        "stepName": "Step Forward",
-        "instruction": "Bring one foot forward between your hands",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Forward Bend Again",
-        "instruction": "Bring both feet together and fold forward",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 25,
-            "idealMax": 85,
-            "messageHigh": "Bend forward more from your hips"
-          }
-        ]
-      },
-      {
-        "stepName": "Rise Up",
-        "instruction": "Lift arms overhead and gently arch back",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Prayer Position",
-        "instruction": "Return palms together at your chest",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Savasana",
-    "steps": [
-      {
-        "stepName": "Lie Flat",
-        "instruction": "Lie comfortably on your back with legs slightly apart",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Relax Arms",
-        "instruction": "Place arms slightly away from body with palms facing upward",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Close Eyes",
-        "instruction": "Relax your face, shoulders, and entire body",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Deep Breathing",
-        "instruction": "Take slow deep breaths and release all tension",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      },
-      {
-        "stepName": "Rest",
-        "instruction": "Stay completely still and relaxed",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Goddess Pose",
-    "steps": [
-      {
-        "stepName": "Wide Stance",
-        "instruction": "Stand with feet wide apart and toes turned outward",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Bend Knees",
-        "instruction": "Lower hips into a wide squat position",
-        "rules": [
-          {
-            "joint": "left_bent_knee",
-            "idealMin": 75,
-            "idealMax": 125,
-            "messageLow": "Bend knee lower for a deeper stretch",
-            "messageHigh": "Don't bend knee too much past ankle"
-          }
-        ]
-      },
-      {
-        "stepName": "Arms Up",
-        "instruction": "Raise arms to shoulder height and bend elbows to 90 degrees",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Open Chest",
-        "instruction": "Keep chest lifted and spine upright",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Hold",
-        "instruction": "Engage legs and breathe deeply",
-        "rules": [
-          {
-            "joint": "left_bent_knee",
-            "idealMin": 75,
-            "idealMax": 125,
-            "messageLow": "Bend knee lower for a deeper stretch",
-            "messageHigh": "Don't bend knee too much past ankle"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Camel Pose",
-    "steps": [
-      {
-        "stepName": "Kneel Down",
-        "instruction": "Kneel with knees hip-width apart",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Hands on Hips",
-        "instruction": "Place hands on lower back for support",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Lean Back",
-        "instruction": "Slowly arch your back and lift chest upward",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 90,
-            "idealMax": 145,
-            "messageLow": "Arch your back and lift chest higher"
-          }
-        ]
-      },
-      {
-        "stepName": "Reach Heels",
-        "instruction": "Reach hands toward your heels if comfortable",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Hold",
-        "instruction": "Push hips forward and keep chest open",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 90,
-            "idealMax": 145,
-            "messageLow": "Arch your back and lift chest higher"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Crow Pose",
-    "steps": [
-      {
-        "stepName": "Squat Down",
-        "instruction": "Squat low with feet close together and hands on floor",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Bend Elbows",
-        "instruction": "Bend elbows slightly and place knees on upper arms",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Lean Forward",
-        "instruction": "Shift body weight forward carefully",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Lift Feet",
-        "instruction": "Slowly lift both feet off the floor",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      },
-      {
-        "stepName": "Balance",
-        "instruction": "Keep core tight and maintain balance",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Chaturanga",
-    "steps": [
-      {
-        "stepName": "Start Plank",
-        "instruction": "Begin in a strong high plank position",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Lean Forward",
-        "instruction": "Shift shoulders slightly forward over wrists",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 70,
-            "idealMax": 125,
-            "messageLow": "Bend elbows more to 90 degrees",
-            "messageHigh": "Don't drop your chest too low"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 70,
-            "idealMax": 125,
-            "messageLow": "Bend elbows more to 90 degrees",
-            "messageHigh": "Don't drop your chest too low"
-          }
-        ]
-      },
-      {
-        "stepName": "Lower Body",
-        "instruction": "Bend elbows close to ribs and lower halfway",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 70,
-            "idealMax": 125,
-            "messageLow": "Bend elbows more to 90 degrees",
-            "messageHigh": "Don't drop your chest too low"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 70,
-            "idealMax": 125,
-            "messageLow": "Bend elbows more to 90 degrees",
-            "messageHigh": "Don't drop your chest too low"
-          }
-        ]
-      },
-      {
-        "stepName": "Keep Body Straight",
-        "instruction": "Maintain a straight line from head to heels",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Hold",
-        "instruction": "Keep core engaged and elbows tucked",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 70,
-            "idealMax": 125,
-            "messageLow": "Bend elbows more to 90 degrees",
-            "messageHigh": "Don't drop your chest too low"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 70,
-            "idealMax": 125,
-            "messageLow": "Bend elbows more to 90 degrees",
-            "messageHigh": "Don't drop your chest too low"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Bow Pose",
-    "steps": [
-      {
-        "stepName": "Lie Down",
-        "instruction": "Lie on your stomach with arms beside body",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Bend Knees",
-        "instruction": "Bend knees and bring heels toward hips",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Grab Ankles",
-        "instruction": "Reach back and hold your ankles",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Lift Chest",
-        "instruction": "Lift chest and thighs upward while pulling ankles",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Hold",
-        "instruction": "Keep chest open and balance on stomach",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 90,
-            "idealMax": 145,
-            "messageLow": "Arch your back and lift chest higher"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Dolphin Pose",
-    "steps": [
-      {
-        "stepName": "Forearms Down",
-        "instruction": "Place forearms on floor shoulder-width apart",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Lift Knees",
-        "instruction": "Lift knees off floor and straighten legs",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Push Hips Up",
-        "instruction": "Push hips upward like an inverted V-shape",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 50,
-            "idealMax": 105,
-            "messageHigh": "Push your hips higher into a V-shape"
-          }
-        ]
-      },
-      {
-        "stepName": "Lengthen Spine",
-        "instruction": "Press chest gently toward thighs",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Hold",
-        "instruction": "Keep shoulders strong and breathe steadily",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Boat Pose",
-    "steps": [
-      {
-        "stepName": "Sit Down",
-        "instruction": "Sit on the floor with knees bent and feet flat",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Lean Back",
-        "instruction": "Lean your upper body slightly backward while keeping spine straight",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Lift Legs",
-        "instruction": "Lift both feet off the floor and balance on sit bones",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Straighten Legs",
-        "instruction": "Extend legs upward to create a V-shape with your body",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Extend Arms",
-        "instruction": "Stretch arms forward parallel to the floor",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Hold",
-        "instruction": "Engage your core and breathe steadily",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Butterfly Pose",
-    "steps": [
-      {
-        "stepName": "Sit Tall",
-        "instruction": "Sit on the floor with spine straight",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Bring Feet Together",
-        "instruction": "Join the soles of your feet together close to your body",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Hold Feet",
-        "instruction": "Hold your feet gently with both hands",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Drop Knees",
-        "instruction": "Allow knees to move down toward the floor",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Flutter Legs",
-        "instruction": "Gently move knees up and down like butterfly wings",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Hold",
-        "instruction": "Keep spine tall and breathe deeply",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Downward Dog",
-    "steps": [
-      {
-        "stepName": "Hands and Knees",
-        "instruction": "Start on hands and knees with palms under shoulders",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Lift Hips",
-        "instruction": "Push hips upward and backward toward the ceiling",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 50,
-            "idealMax": 105,
-            "messageHigh": "Push your hips higher into a V-shape"
-          }
-        ]
-      },
-      {
-        "stepName": "Straighten Legs",
-        "instruction": "Try to straighten both legs while pressing heels down",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Straighten Arms",
-        "instruction": "Keep arms straight and press firmly into the floor",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Lengthen Spine",
-        "instruction": "Stretch your back and keep neck relaxed",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 50,
-            "idealMax": 105,
-            "messageHigh": "Push your hips higher into a V-shape"
-          }
-        ]
-      },
-      {
-        "stepName": "Hold",
-        "instruction": "Breathe steadily in the inverted V-shape",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Bridge Pose",
-    "steps": [
-      {
-        "stepName": "Lie Down",
-        "instruction": "Lie on your back with knees bent and feet flat on floor",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Place Arms",
-        "instruction": "Keep arms beside your body with palms facing down",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Lift Hips",
-        "instruction": "Press feet into the floor and raise your hips upward",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 50,
-            "idealMax": 105,
-            "messageHigh": "Push your hips higher into a V-shape"
-          }
-        ]
-      },
-      {
-        "stepName": "Open Chest",
-        "instruction": "Lift chest and roll shoulders underneath your body",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Keep Knees Parallel",
-        "instruction": "Keep knees aligned and avoid letting them spread outward",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Hold",
-        "instruction": "Breathe deeply while keeping hips lifted",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Warrior III",
-    "steps": [
-      {
-        "stepName": "Stand Straight",
-        "instruction": "Stand tall on both feet first",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Lean Forward",
-        "instruction": "Lean your upper body forward while lifting one leg straight behind you",
-        "rules": [
-          {
-            "joint": "left_bent_knee",
-            "idealMin": 75,
-            "idealMax": 125,
-            "messageLow": "Bend knee lower for a deeper stretch",
-            "messageHigh": "Don't bend knee too much past ankle"
-          }
-        ]
-      },
-      {
-        "stepName": "Extend Arms",
-        "instruction": "Reach both arms straight forward parallel to the floor",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 150,
-            "idealMax": 180,
-            "messageLow": "Keep left arm straight at shoulder level"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 150,
-            "idealMax": 180,
-            "messageLow": "Keep right arm straight at shoulder level"
-          }
-        ]
-      },
-      {
-        "stepName": "Hold Balance",
-        "instruction": "Keep your body horizontal and hold the balance",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Extended Side Angle",
-    "steps": [
-      {
-        "stepName": "Wide Stance",
-        "instruction": "Step feet wide apart and bend front knee to 90 degrees",
-        "rules": [
-          {
-            "joint": "left_bent_knee",
-            "idealMin": 75,
-            "idealMax": 125,
-            "messageLow": "Bend knee lower for a deeper stretch",
-            "messageHigh": "Don't bend knee too much past ankle"
-          }
-        ]
-      },
-      {
-        "stepName": "Lean Side",
-        "instruction": "Place front elbow on knee and extend top arm overhead",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 150,
-            "idealMax": 180,
-            "messageLow": "Keep left arm straight at shoulder level"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 150,
-            "idealMax": 180,
-            "messageLow": "Keep right arm straight at shoulder level"
-          }
-        ]
-      },
-      {
-        "stepName": "Hold",
-        "instruction": "Look upward toward the sky and breathe deeply",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Half Moon Pose",
-    "steps": [
-      {
-        "stepName": "Lean Side",
-        "instruction": "Lean side and place bottom hand on floor or block",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 150,
-            "idealMax": 180,
-            "messageLow": "Keep left arm straight at shoulder level"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 150,
-            "idealMax": 180,
-            "messageLow": "Keep right arm straight at shoulder level"
-          }
-        ]
-      },
-      {
-        "stepName": "Lift Leg",
-        "instruction": "Lift top leg straight behind you parallel to the floor",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Extend Arm",
-        "instruction": "Reach top arm straight upward and hold balance",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 150,
-            "idealMax": 180,
-            "messageLow": "Keep left arm straight at shoulder level"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 150,
-            "idealMax": 180,
-            "messageLow": "Keep right arm straight at shoulder level"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Deep Breathing",
-    "steps": [
-      {
-        "stepName": "Sit Comfortably",
-        "instruction": "Sit cross-legged with spine straight",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Rest Hands",
-        "instruction": "Rest hands on knees, palms facing upward",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Breathe Slow",
-        "instruction": "Take deep, slow breaths through your nose",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Anulom Vilom",
-    "steps": [
-      {
-        "stepName": "Sit Straight",
-        "instruction": "Sit on the floor with spine tall",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Alternate Nostril",
-        "instruction": "Close one nostril, inhale, then close the other and exhale",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      },
-      {
-        "stepName": "Steady Breath",
-        "instruction": "Continue alternate nostril breathing rhythmically",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Kapalbhati",
-    "steps": [
-      {
-        "stepName": "Sit Tall",
-        "instruction": "Sit comfortably with spine straight",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Active Exhales",
-        "instruction": "Exhale forcefully through nose while contracting abdomen",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      },
-      {
-        "stepName": "Breathe",
-        "instruction": "Maintain steady and rhythmic sharp exhales",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Bhramari",
-    "steps": [
-      {
-        "stepName": "Sit Tall",
-        "instruction": "Sit upright and close your eyes",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Close Ears",
-        "instruction": "Close ears with thumbs and place fingers on eyes",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      },
-      {
-        "stepName": "Humming Bee",
-        "instruction": "Inhale deeply, then make a humming bee sound while exhaling",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Pigeon Pose",
-    "steps": [
-      {
-        "stepName": "Slide Leg Forward",
-        "instruction": "Bring one knee forward behind your wrist, extend other leg straight back",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Fold Forward",
-        "instruction": "Gently lower your torso down toward the floor",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      },
-      {
-        "stepName": "Hold Stretch",
-        "instruction": "Breathe deeply and release tension in your hips",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Garland Pose",
-    "steps": [
-      {
-        "stepName": "Wide Squat",
-        "instruction": "Lower hips into a wide, deep squat position",
-        "rules": [
-          {
-            "joint": "left_bent_knee",
-            "idealMin": 75,
-            "idealMax": 125,
-            "messageLow": "Bend knee lower for a deeper stretch",
-            "messageHigh": "Don't bend knee too much past ankle"
-          }
-        ]
-      },
-      {
-        "stepName": "Prayer Palms",
-        "instruction": "Bring palms together at chest, elbows pressing against inner knees",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Lengthen Spine",
-        "instruction": "Lift your chest and lengthen your spine upward",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Eagle Pose",
-    "steps": [
-      {
-        "stepName": "Wrap Legs",
-        "instruction": "Wrap one leg around the other leg carefully",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Wrap Arms",
-        "instruction": "Cross elbows in front, wrapping forearms and joining palms",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Sink Low",
-        "instruction": "Lower your hips slightly and hold the balance",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Fish Pose",
-    "steps": [
-      {
-        "stepName": "Lie on Back",
-        "instruction": "Lie flat on back with legs straight",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Arch Spine",
-        "instruction": "Press elbows into floor and arch chest upward, crown of head on floor",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Breathe Deeply",
-        "instruction": "Keep chest wide open and take slow deep breaths",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Neck Stretch",
-    "steps": [
-      {
-        "stepName": "Sit Straight",
-        "instruction": "Sit or stand with head centered",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Tilt Right",
-        "instruction": "Tilt head to the right, bringing ear toward shoulder",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      },
-      {
-        "stepName": "Tilt Left",
-        "instruction": "Now slowly tilt head to the left side",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Shoulder Rolls",
-    "steps": [
-      {
-        "stepName": "Stand Ready",
-        "instruction": "Stand tall with arms relaxed at your sides",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Roll Forward",
-        "instruction": "Roll shoulders forward in big, slow circles",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      },
-      {
-        "stepName": "Roll Backward",
-        "instruction": "Now roll shoulders backward in big circles",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Chair Twist",
-    "steps": [
-      {
-        "stepName": "Sit Up",
-        "instruction": "Sit tall in a chair or floor, feet flat",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 160,
-            "idealMax": 180,
-            "messageLow": "Straighten spine and stand/sit tall"
-          }
-        ]
-      },
-      {
-        "stepName": "Twist Right",
-        "instruction": "Twist torso slowly to the right side",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      },
-      {
-        "stepName": "Twist Left",
-        "instruction": "Now slowly twist torso to the left side",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Wrist Stretch",
-    "steps": [
-      {
-        "stepName": "Extend Arm",
-        "instruction": "Extend one arm forward at shoulder height, palm up",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Pull Fingers",
-        "instruction": "Use other hand to pull fingers back gently toward body",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Switch Sides",
-        "instruction": "Switch hands and repeat the stretch on the other side",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Frog Pose",
-    "steps": [
-      {
-        "stepName": "Kneel Wide",
-        "instruction": "Kneel on the floor and slide knees as wide apart as comfortable",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      },
-      {
-        "stepName": "Lower Torso",
-        "instruction": "Bring elbows to floor and gently push hips backward",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Hold",
-        "instruction": "Breathe deeply and release tension in inner thighs",
-        "rules": [
-          {
-            "joint": "left_leg",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Straighten your legs"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "poseName": "Lion Breath",
-    "steps": [
-      {
-        "stepName": "Kneel",
-        "instruction": "Kneel or sit with back straight, palms on knees",
-        "rules": [
-          {
-            "joint": "left_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          },
-          {
-            "joint": "right_arm",
-            "idealMin": 145,
-            "idealMax": 180,
-            "messageLow": "Stretch arms higher overhead"
-          }
-        ]
-      },
-      {
-        "stepName": "Inhale Deep",
-        "instruction": "Take a slow deep breath in through your nose",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      },
-      {
-        "stepName": "Roar",
-        "instruction": "Open mouth wide, stick tongue out, and exhale with a loud roar",
-        "rules": [
-          {
-            "joint": "spine",
-            "idealMin": 155,
-            "idealMax": 180,
-            "messageLow": "Keep your posture aligned"
-          }
-        ]
-      }
-    ]
-  }
+    {
+        "poseName": "Mountain Pose",
+        "steps": [
+            {
+                "stepName": "Stand Tall",
+                "instruction": "Stand straight with feet together and arms relaxed at your sides",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Ground Feet",
+                "instruction": "Press both feet firmly into the floor and balance evenly",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            },
+            {
+                "stepName": "Raise Arms",
+                "instruction": "Slowly raise both arms overhead with palms facing each other",
+                "rules": [
+                    {
+                        "joint": "left_shoulder",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_shoulder",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Open Chest",
+                "instruction": "Lift your chest, relax shoulders, and lengthen your spine",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Hold",
+                "instruction": "Look forward and take slow deep breaths",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Tree Pose",
+        "steps": [
+            {
+                "stepName": "Stand Straight",
+                "instruction": "Stand tall with feet together and spine straight",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Shift Weight",
+                "instruction": "Shift your body weight onto one leg",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    }
+                ]
+            },
+            {
+                "stepName": "Lift Foot",
+                "instruction": "Place one foot on the inner calf or thigh of the opposite leg",
+                "rules": [
+                    {
+                        "joint": "left_bent_knee",
+                        "idealMin": 30,
+                        "idealMax": 110,
+                        "messageHigh": "Bend knee more to place foot on inner thigh"
+                    }
+                ]
+            },
+            {
+                "stepName": "Hands Together",
+                "instruction": "Bring palms together in front of your chest",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 60,
+                        "idealMax": 130,
+                        "messageLow": "Bring palms together at chest level"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 60,
+                        "idealMax": 130,
+                        "messageLow": "Bring palms together at chest level"
+                    }
+                ]
+            },
+            {
+                "stepName": "Raise Arms",
+                "instruction": "Lift your joined hands overhead while balancing",
+                "rules": [
+                    {
+                        "joint": "left_shoulder",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_shoulder",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Hold",
+                "instruction": "Focus on one point and breathe steadily",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Warrior I",
+        "steps": [
+            {
+                "stepName": "Step Forward",
+                "instruction": "Step one foot forward into a long lunge",
+                "rules": [
+                    {
+                        "joint": "left_bent_knee",
+                        "idealMin": 75,
+                        "idealMax": 125,
+                        "messageLow": "Bend knee lower for a deeper stretch",
+                        "messageHigh": "Don't bend knee too much past ankle"
+                    }
+                ]
+            },
+            {
+                "stepName": "Bend Front Knee",
+                "instruction": "Bend your front knee while keeping the back leg straight",
+                "rules": [
+                    {
+                        "joint": "left_bent_knee",
+                        "idealMin": 75,
+                        "idealMax": 125,
+                        "messageLow": "Bend knee lower for a deeper stretch",
+                        "messageHigh": "Don't bend knee too much past ankle"
+                    }
+                ]
+            },
+            {
+                "stepName": "Square Hips",
+                "instruction": "Turn hips forward and keep torso facing front",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Raise Arms",
+                "instruction": "Lift both arms overhead with palms facing inward",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Lift Chest",
+                "instruction": "Keep chest lifted and shoulders relaxed",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Hold",
+                "instruction": "Stay strong and breathe deeply",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Warrior II",
+        "steps": [
+            {
+                "stepName": "Wide Stance",
+                "instruction": "Step your feet wide apart and extend arms sideways",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 150,
+                        "idealMax": 180,
+                        "messageLow": "Keep left arm straight at shoulder level"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 150,
+                        "idealMax": 180,
+                        "messageLow": "Keep right arm straight at shoulder level"
+                    },
+                    {
+                        "joint": "left_shoulder",
+                        "idealMin": 75,
+                        "idealMax": 115,
+                        "messageLow": "Raise arms to shoulder level"
+                    },
+                    {
+                        "joint": "right_shoulder",
+                        "idealMin": 75,
+                        "idealMax": 115,
+                        "messageLow": "Raise arms to shoulder level"
+                    }
+                ]
+            },
+            {
+                "stepName": "Turn Front Foot",
+                "instruction": "Turn your front foot outward and back foot slightly inward",
+                "rules": [
+                    {
+                        "joint": "left_bent_knee",
+                        "idealMin": 75,
+                        "idealMax": 125,
+                        "messageLow": "Bend knee lower for a deeper stretch",
+                        "messageHigh": "Don't bend knee too much past ankle"
+                    }
+                ]
+            },
+            {
+                "stepName": "Bend Front Knee",
+                "instruction": "Bend your front knee directly above the ankle",
+                "rules": [
+                    {
+                        "joint": "left_bent_knee",
+                        "idealMin": 75,
+                        "idealMax": 125,
+                        "messageLow": "Bend knee lower for a deeper stretch",
+                        "messageHigh": "Don't bend knee too much past ankle"
+                    }
+                ]
+            },
+            {
+                "stepName": "Stretch Arms",
+                "instruction": "Keep both arms straight at shoulder height",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 150,
+                        "idealMax": 180,
+                        "messageLow": "Keep left arm straight at shoulder level"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 150,
+                        "idealMax": 180,
+                        "messageLow": "Keep right arm straight at shoulder level"
+                    },
+                    {
+                        "joint": "left_shoulder",
+                        "idealMin": 75,
+                        "idealMax": 115,
+                        "messageLow": "Keep arms at shoulder level"
+                    },
+                    {
+                        "joint": "right_shoulder",
+                        "idealMin": 75,
+                        "idealMax": 115,
+                        "messageLow": "Keep arms at shoulder level"
+                    }
+                ]
+            },
+            {
+                "stepName": "Look Forward",
+                "instruction": "Gaze over your front hand while keeping torso upright",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 150,
+                        "idealMax": 180,
+                        "messageLow": "Keep left arm straight at shoulder level"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 150,
+                        "idealMax": 180,
+                        "messageLow": "Keep right arm straight at shoulder level"
+                    },
+                    {
+                        "joint": "left_shoulder",
+                        "idealMin": 75,
+                        "idealMax": 115,
+                        "messageLow": "Keep arms at shoulder level"
+                    },
+                    {
+                        "joint": "right_shoulder",
+                        "idealMin": 75,
+                        "idealMax": 115,
+                        "messageLow": "Keep arms at shoulder level"
+                    }
+                ]
+            },
+            {
+                "stepName": "Hold",
+                "instruction": "Keep legs strong and breathe steadily",
+                "rules": [
+                    {
+                        "joint": "left_bent_knee",
+                        "idealMin": 75,
+                        "idealMax": 125,
+                        "messageLow": "Bend knee lower for a deeper stretch",
+                        "messageHigh": "Don't bend knee too much past ankle"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Triangle Pose",
+        "steps": [
+            {
+                "stepName": "Wide Stance",
+                "instruction": "Stand with feet wide apart and stretch arms sideways",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 150,
+                        "idealMax": 180,
+                        "messageLow": "Keep left arm straight at shoulder level"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 150,
+                        "idealMax": 180,
+                        "messageLow": "Keep right arm straight at shoulder level"
+                    }
+                ]
+            },
+            {
+                "stepName": "Turn Foot",
+                "instruction": "Turn your front foot outward and slightly turn the back foot inward",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    }
+                ]
+            },
+            {
+                "stepName": "Reach Forward",
+                "instruction": "Reach your front arm forward while keeping both legs straight",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 150,
+                        "idealMax": 180,
+                        "messageLow": "Keep left arm straight at shoulder level"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 150,
+                        "idealMax": 180,
+                        "messageLow": "Keep right arm straight at shoulder level"
+                    }
+                ]
+            },
+            {
+                "stepName": "Lower Hand",
+                "instruction": "Lower your front hand toward shin or ankle and raise the other arm upward",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 150,
+                        "idealMax": 180,
+                        "messageLow": "Keep left arm straight at shoulder level"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 150,
+                        "idealMax": 180,
+                        "messageLow": "Keep right arm straight at shoulder level"
+                    }
+                ]
+            },
+            {
+                "stepName": "Open Chest",
+                "instruction": "Keep chest open and shoulders aligned",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Look Up",
+                "instruction": "Turn your head and look toward your top hand",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 150,
+                        "idealMax": 180,
+                        "messageLow": "Keep left arm straight at shoulder level"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 150,
+                        "idealMax": 180,
+                        "messageLow": "Keep right arm straight at shoulder level"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Chair Pose",
+        "steps": [
+            {
+                "stepName": "Stand Straight",
+                "instruction": "Stand tall with feet together",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Raise Arms",
+                "instruction": "Lift both arms overhead with palms facing inward",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Bend Knees",
+                "instruction": "Lower hips backward like sitting on a chair",
+                "rules": [
+                    {
+                        "joint": "left_bent_knee",
+                        "idealMin": 75,
+                        "idealMax": 125,
+                        "messageLow": "Bend knees lower for a deeper squat"
+                    },
+                    {
+                        "joint": "right_bent_knee",
+                        "idealMin": 75,
+                        "idealMax": 125,
+                        "messageLow": "Bend knees lower for a deeper squat"
+                    }
+                ]
+            },
+            {
+                "stepName": "Keep Chest Up",
+                "instruction": "Lift chest and keep spine long",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Shift Weight",
+                "instruction": "Keep weight balanced on your heels",
+                "rules": [
+                    {
+                        "joint": "left_bent_knee",
+                        "idealMin": 75,
+                        "idealMax": 125,
+                        "messageLow": "Bend knees lower for a deeper squat"
+                    },
+                    {
+                        "joint": "right_bent_knee",
+                        "idealMin": 75,
+                        "idealMax": 125,
+                        "messageLow": "Bend knees lower for a deeper squat"
+                    }
+                ]
+            },
+            {
+                "stepName": "Hold",
+                "instruction": "Keep arms strong and breathe steadily",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Plank Pose",
+        "steps": [
+            {
+                "stepName": "Hands Down",
+                "instruction": "Place palms directly under shoulders",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Step Back",
+                "instruction": "Extend both legs straight behind you",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    },
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your body in a straight line, don't sag hips"
+                    }
+                ]
+            },
+            {
+                "stepName": "Straighten Body",
+                "instruction": "Keep your body aligned from head to heels",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    }
+                ]
+            },
+            {
+                "stepName": "Engage Core",
+                "instruction": "Tighten stomach muscles and avoid dropping hips",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Push Floor",
+                "instruction": "Press strongly through your palms",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Hold",
+                "instruction": "Breathe steadily while maintaining balance",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Side Plank",
+        "steps": [
+            {
+                "stepName": "Start Plank",
+                "instruction": "Begin in a strong plank position",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Rotate Body",
+                "instruction": "Turn your body sideways and stack your feet",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Lift Top Arm",
+                "instruction": "Raise your top arm straight upward",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 150,
+                        "idealMax": 180,
+                        "messageLow": "Keep left arm straight at shoulder level"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 150,
+                        "idealMax": 180,
+                        "messageLow": "Keep right arm straight at shoulder level"
+                    }
+                ]
+            },
+            {
+                "stepName": "Lift Hips",
+                "instruction": "Keep hips lifted and body aligned",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Look Up",
+                "instruction": "Turn your gaze toward the raised hand",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 150,
+                        "idealMax": 180,
+                        "messageLow": "Keep left arm straight at shoulder level"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 150,
+                        "idealMax": 180,
+                        "messageLow": "Keep right arm straight at shoulder level"
+                    }
+                ]
+            },
+            {
+                "stepName": "Hold",
+                "instruction": "Balance steadily and breathe deeply",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Cobra Pose",
+        "steps": [
+            {
+                "stepName": "Lie Down",
+                "instruction": "Lie on your stomach with legs extended behind you",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    }
+                ]
+            },
+            {
+                "stepName": "Place Hands",
+                "instruction": "Place palms under shoulders with elbows close to body",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Lift Chest",
+                "instruction": "Push palms into floor and lift your chest off the ground",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 90,
+                        "idealMax": 145,
+                        "messageLow": "Arch your back and lift chest higher"
+                    }
+                ]
+            },
+            {
+                "stepName": "Roll Shoulders Back",
+                "instruction": "Open your chest and keep shoulders away from ears",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 90,
+                        "idealMax": 145,
+                        "messageLow": "Arch your back and lift chest higher"
+                    }
+                ]
+            },
+            {
+                "stepName": "Look Up",
+                "instruction": "Lift your gaze slightly upward while keeping hips grounded",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 90,
+                        "idealMax": 145,
+                        "messageLow": "Arch your back and lift chest higher"
+                    }
+                ]
+            },
+            {
+                "stepName": "Hold",
+                "instruction": "Breathe deeply and keep chest open",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 90,
+                        "idealMax": 145,
+                        "messageLow": "Arch your back and lift chest higher"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Child Pose",
+        "steps": [
+            {
+                "stepName": "Kneel Down",
+                "instruction": "Sit back on your heels with knees bent",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    }
+                ]
+            },
+            {
+                "stepName": "Fold Forward",
+                "instruction": "Stretch arms forward and lower chest toward floor",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Rest Forehead",
+                "instruction": "Place your forehead gently on the mat",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            },
+            {
+                "stepName": "Relax Shoulders",
+                "instruction": "Allow shoulders and arms to relax comfortably",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Deep Breathing",
+                "instruction": "Take slow deep breaths and relax your whole body",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Cat-Cow Pose",
+        "steps": [
+            {
+                "stepName": "Table Top",
+                "instruction": "Come onto hands and knees with wrists under shoulders and knees under hips",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Cow Pose",
+                "instruction": "Drop your belly, lift chest and tailbone upward, and look slightly up",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Cat Pose",
+                "instruction": "Round your spine upward, tuck chin toward chest, and pull belly inward",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Flow Slowly",
+                "instruction": "Move slowly between cow and cat positions with your breath",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Repeat",
+                "instruction": "Continue the movement gently while keeping arms strong",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Lotus Pose",
+        "steps": [
+            {
+                "stepName": "Sit Down",
+                "instruction": "Sit comfortably on the floor with legs extended",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    }
+                ]
+            },
+            {
+                "stepName": "Cross Legs",
+                "instruction": "Place each foot on the opposite thigh carefully",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    }
+                ]
+            },
+            {
+                "stepName": "Straighten Spine",
+                "instruction": "Sit tall with shoulders relaxed and chest open",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Hands on Knees",
+                "instruction": "Rest your hands on knees with palms facing upward",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Meditate",
+                "instruction": "Close your eyes and breathe slowly and deeply",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Surya Namaskar",
+        "steps": [
+            {
+                "stepName": "Prayer Pose",
+                "instruction": "Stand tall and bring palms together at your chest",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Raise Arms",
+                "instruction": "Lift arms overhead and gently arch your back",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Forward Bend",
+                "instruction": "Fold forward and bring hands toward your feet",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Step Back",
+                "instruction": "Step one leg back into a lunge and lift chest",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    }
+                ]
+            },
+            {
+                "stepName": "Plank Position",
+                "instruction": "Step the other leg back and keep body straight",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    }
+                ]
+            },
+            {
+                "stepName": "Lower Down",
+                "instruction": "Lower knees, chest, and chin gently to the floor",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    }
+                ]
+            },
+            {
+                "stepName": "Cobra Pose",
+                "instruction": "Slide forward and lift chest upward",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Downward Dog",
+                "instruction": "Lift hips upward to form an inverted V-shape",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 50,
+                        "idealMax": 105,
+                        "messageHigh": "Push your hips higher into a V-shape"
+                    }
+                ]
+            },
+            {
+                "stepName": "Step Forward",
+                "instruction": "Bring one foot forward between your hands",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Forward Bend Again",
+                "instruction": "Bring both feet together and fold forward",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 25,
+                        "idealMax": 85,
+                        "messageHigh": "Bend forward more from your hips"
+                    }
+                ]
+            },
+            {
+                "stepName": "Rise Up",
+                "instruction": "Lift arms overhead and gently arch back",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Prayer Position",
+                "instruction": "Return palms together at your chest",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Savasana",
+        "steps": [
+            {
+                "stepName": "Lie Flat",
+                "instruction": "Lie comfortably on your back with legs slightly apart",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    }
+                ]
+            },
+            {
+                "stepName": "Relax Arms",
+                "instruction": "Place arms slightly away from body with palms facing upward",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Close Eyes",
+                "instruction": "Relax your face, shoulders, and entire body",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Deep Breathing",
+                "instruction": "Take slow deep breaths and release all tension",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            },
+            {
+                "stepName": "Rest",
+                "instruction": "Stay completely still and relaxed",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Goddess Pose",
+        "steps": [
+            {
+                "stepName": "Wide Stance",
+                "instruction": "Stand with feet wide apart and toes turned outward",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Bend Knees",
+                "instruction": "Lower hips into a wide squat position",
+                "rules": [
+                    {
+                        "joint": "left_bent_knee",
+                        "idealMin": 75,
+                        "idealMax": 125,
+                        "messageLow": "Bend knee lower for a deeper stretch",
+                        "messageHigh": "Don't bend knee too much past ankle"
+                    }
+                ]
+            },
+            {
+                "stepName": "Arms Up",
+                "instruction": "Raise arms to shoulder height and bend elbows to 90 degrees",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Open Chest",
+                "instruction": "Keep chest lifted and spine upright",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Hold",
+                "instruction": "Engage legs and breathe deeply",
+                "rules": [
+                    {
+                        "joint": "left_bent_knee",
+                        "idealMin": 75,
+                        "idealMax": 125,
+                        "messageLow": "Bend knee lower for a deeper stretch",
+                        "messageHigh": "Don't bend knee too much past ankle"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Camel Pose",
+        "steps": [
+            {
+                "stepName": "Kneel Down",
+                "instruction": "Kneel with knees hip-width apart",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    }
+                ]
+            },
+            {
+                "stepName": "Hands on Hips",
+                "instruction": "Place hands on lower back for support",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Lean Back",
+                "instruction": "Slowly arch your back and lift chest upward",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 90,
+                        "idealMax": 145,
+                        "messageLow": "Arch your back and lift chest higher"
+                    }
+                ]
+            },
+            {
+                "stepName": "Reach Heels",
+                "instruction": "Reach hands toward your heels if comfortable",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Hold",
+                "instruction": "Push hips forward and keep chest open",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 90,
+                        "idealMax": 145,
+                        "messageLow": "Arch your back and lift chest higher"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Crow Pose",
+        "steps": [
+            {
+                "stepName": "Squat Down",
+                "instruction": "Squat low with feet close together and hands on floor",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Bend Elbows",
+                "instruction": "Bend elbows slightly and place knees on upper arms",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Lean Forward",
+                "instruction": "Shift body weight forward carefully",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Lift Feet",
+                "instruction": "Slowly lift both feet off the floor",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            },
+            {
+                "stepName": "Balance",
+                "instruction": "Keep core tight and maintain balance",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Chaturanga",
+        "steps": [
+            {
+                "stepName": "Start Plank",
+                "instruction": "Begin in a strong high plank position",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Lean Forward",
+                "instruction": "Shift shoulders slightly forward over wrists",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 70,
+                        "idealMax": 125,
+                        "messageLow": "Bend elbows more to 90 degrees",
+                        "messageHigh": "Don't drop your chest too low"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 70,
+                        "idealMax": 125,
+                        "messageLow": "Bend elbows more to 90 degrees",
+                        "messageHigh": "Don't drop your chest too low"
+                    }
+                ]
+            },
+            {
+                "stepName": "Lower Body",
+                "instruction": "Bend elbows close to ribs and lower halfway",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 70,
+                        "idealMax": 125,
+                        "messageLow": "Bend elbows more to 90 degrees",
+                        "messageHigh": "Don't drop your chest too low"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 70,
+                        "idealMax": 125,
+                        "messageLow": "Bend elbows more to 90 degrees",
+                        "messageHigh": "Don't drop your chest too low"
+                    }
+                ]
+            },
+            {
+                "stepName": "Keep Body Straight",
+                "instruction": "Maintain a straight line from head to heels",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    }
+                ]
+            },
+            {
+                "stepName": "Hold",
+                "instruction": "Keep core engaged and elbows tucked",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 70,
+                        "idealMax": 125,
+                        "messageLow": "Bend elbows more to 90 degrees",
+                        "messageHigh": "Don't drop your chest too low"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 70,
+                        "idealMax": 125,
+                        "messageLow": "Bend elbows more to 90 degrees",
+                        "messageHigh": "Don't drop your chest too low"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Bow Pose",
+        "steps": [
+            {
+                "stepName": "Lie Down",
+                "instruction": "Lie on your stomach with arms beside body",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Bend Knees",
+                "instruction": "Bend knees and bring heels toward hips",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    }
+                ]
+            },
+            {
+                "stepName": "Grab Ankles",
+                "instruction": "Reach back and hold your ankles",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Lift Chest",
+                "instruction": "Lift chest and thighs upward while pulling ankles",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    }
+                ]
+            },
+            {
+                "stepName": "Hold",
+                "instruction": "Keep chest open and balance on stomach",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 90,
+                        "idealMax": 145,
+                        "messageLow": "Arch your back and lift chest higher"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Dolphin Pose",
+        "steps": [
+            {
+                "stepName": "Forearms Down",
+                "instruction": "Place forearms on floor shoulder-width apart",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Lift Knees",
+                "instruction": "Lift knees off floor and straighten legs",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    }
+                ]
+            },
+            {
+                "stepName": "Push Hips Up",
+                "instruction": "Push hips upward like an inverted V-shape",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 50,
+                        "idealMax": 105,
+                        "messageHigh": "Push your hips higher into a V-shape"
+                    }
+                ]
+            },
+            {
+                "stepName": "Lengthen Spine",
+                "instruction": "Press chest gently toward thighs",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    }
+                ]
+            },
+            {
+                "stepName": "Hold",
+                "instruction": "Keep shoulders strong and breathe steadily",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Boat Pose",
+        "steps": [
+            {
+                "stepName": "Sit Down",
+                "instruction": "Sit on the floor with knees bent and feet flat",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    }
+                ]
+            },
+            {
+                "stepName": "Lean Back",
+                "instruction": "Lean your upper body slightly backward while keeping spine straight",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Lift Legs",
+                "instruction": "Lift both feet off the floor and balance on sit bones",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    },
+                    {
+                        "joint": "spine",
+                        "idealMin": 140,
+                        "idealMax": 180,
+                        "messageLow": "Lean back slightly and keep spine tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Straighten Legs",
+                "instruction": "Extend legs upward to create a V-shape with your body",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    }
+                ]
+            },
+            {
+                "stepName": "Extend Arms",
+                "instruction": "Stretch arms forward parallel to the floor",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Hold",
+                "instruction": "Engage your core and breathe steadily",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Butterfly Pose",
+        "steps": [
+            {
+                "stepName": "Sit Tall",
+                "instruction": "Sit on the floor with spine straight",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Bring Feet Together",
+                "instruction": "Join the soles of your feet together close to your body",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Hold Feet",
+                "instruction": "Hold your feet gently with both hands",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Drop Knees",
+                "instruction": "Allow knees to move down toward the floor",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    }
+                ]
+            },
+            {
+                "stepName": "Flutter Legs",
+                "instruction": "Gently move knees up and down like butterfly wings",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    }
+                ]
+            },
+            {
+                "stepName": "Hold",
+                "instruction": "Keep spine tall and breathe deeply",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Downward Dog",
+        "steps": [
+            {
+                "stepName": "Hands and Knees",
+                "instruction": "Start on hands and knees with palms under shoulders",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Lift Hips",
+                "instruction": "Push hips upward and backward toward the ceiling",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 50,
+                        "idealMax": 105,
+                        "messageHigh": "Push your hips higher into a V-shape"
+                    }
+                ]
+            },
+            {
+                "stepName": "Straighten Legs",
+                "instruction": "Try to straighten both legs while pressing heels down",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    }
+                ]
+            },
+            {
+                "stepName": "Straighten Arms",
+                "instruction": "Keep arms straight and press firmly into the floor",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Lengthen Spine",
+                "instruction": "Stretch your back and keep neck relaxed",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 50,
+                        "idealMax": 105,
+                        "messageHigh": "Push your hips higher into a V-shape"
+                    }
+                ]
+            },
+            {
+                "stepName": "Hold",
+                "instruction": "Breathe steadily in the inverted V-shape",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Bridge Pose",
+        "steps": [
+            {
+                "stepName": "Lie Down",
+                "instruction": "Lie on your back with knees bent and feet flat on floor",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    }
+                ]
+            },
+            {
+                "stepName": "Place Arms",
+                "instruction": "Keep arms beside your body with palms facing down",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Lift Hips",
+                "instruction": "Press feet into the floor and raise your hips upward",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 50,
+                        "idealMax": 105,
+                        "messageHigh": "Push your hips higher into a V-shape"
+                    }
+                ]
+            },
+            {
+                "stepName": "Open Chest",
+                "instruction": "Lift chest and roll shoulders underneath your body",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 50,
+                        "idealMax": 105,
+                        "messageLow": "Push your hips higher into a V-shape"
+                    }
+                ]
+            },
+            {
+                "stepName": "Keep Knees Parallel",
+                "instruction": "Keep knees aligned and avoid letting them spread outward",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    }
+                ]
+            },
+            {
+                "stepName": "Hold",
+                "instruction": "Breathe deeply while keeping hips lifted",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 50,
+                        "idealMax": 105,
+                        "messageLow": "Keep hips lifted, maintain the bridge"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Warrior III",
+        "steps": [
+            {
+                "stepName": "Stand Straight",
+                "instruction": "Stand tall on both feet first",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Lean Forward",
+                "instruction": "Lean your upper body forward while lifting one leg straight behind you",
+                "rules": [
+                    {
+                        "joint": "left_bent_knee",
+                        "idealMin": 75,
+                        "idealMax": 125,
+                        "messageLow": "Bend knee lower for a deeper stretch",
+                        "messageHigh": "Don't bend knee too much past ankle"
+                    }
+                ]
+            },
+            {
+                "stepName": "Extend Arms",
+                "instruction": "Reach both arms straight forward parallel to the floor",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 150,
+                        "idealMax": 180,
+                        "messageLow": "Keep left arm straight at shoulder level"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 150,
+                        "idealMax": 180,
+                        "messageLow": "Keep right arm straight at shoulder level"
+                    }
+                ]
+            },
+            {
+                "stepName": "Hold Balance",
+                "instruction": "Keep your body horizontal and hold the balance",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Extended Side Angle",
+        "steps": [
+            {
+                "stepName": "Wide Stance",
+                "instruction": "Step feet wide apart and bend front knee to 90 degrees",
+                "rules": [
+                    {
+                        "joint": "left_bent_knee",
+                        "idealMin": 75,
+                        "idealMax": 125,
+                        "messageLow": "Bend knee lower for a deeper stretch",
+                        "messageHigh": "Don't bend knee too much past ankle"
+                    }
+                ]
+            },
+            {
+                "stepName": "Lean Side",
+                "instruction": "Place front elbow on knee and extend top arm overhead",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 150,
+                        "idealMax": 180,
+                        "messageLow": "Keep left arm straight at shoulder level"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 150,
+                        "idealMax": 180,
+                        "messageLow": "Keep right arm straight at shoulder level"
+                    }
+                ]
+            },
+            {
+                "stepName": "Hold",
+                "instruction": "Look upward toward the sky and breathe deeply",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Half Moon Pose",
+        "steps": [
+            {
+                "stepName": "Lean Side",
+                "instruction": "Lean side and place bottom hand on floor or block",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 150,
+                        "idealMax": 180,
+                        "messageLow": "Keep left arm straight at shoulder level"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 150,
+                        "idealMax": 180,
+                        "messageLow": "Keep right arm straight at shoulder level"
+                    }
+                ]
+            },
+            {
+                "stepName": "Lift Leg",
+                "instruction": "Lift top leg straight behind you parallel to the floor",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    }
+                ]
+            },
+            {
+                "stepName": "Extend Arm",
+                "instruction": "Reach top arm straight upward and hold balance",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 150,
+                        "idealMax": 180,
+                        "messageLow": "Keep left arm straight at shoulder level"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 150,
+                        "idealMax": 180,
+                        "messageLow": "Keep right arm straight at shoulder level"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Deep Breathing",
+        "steps": [
+            {
+                "stepName": "Sit Comfortably",
+                "instruction": "Sit cross-legged with spine straight",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    }
+                ]
+            },
+            {
+                "stepName": "Rest Hands",
+                "instruction": "Rest hands on knees, palms facing upward",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Breathe Slow",
+                "instruction": "Take deep, slow breaths through your nose",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Anulom Vilom",
+        "steps": [
+            {
+                "stepName": "Sit Straight",
+                "instruction": "Sit on the floor with spine tall",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Alternate Nostril",
+                "instruction": "Close one nostril, inhale, then close the other and exhale",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            },
+            {
+                "stepName": "Steady Breath",
+                "instruction": "Continue alternate nostril breathing rhythmically",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Kapalbhati",
+        "steps": [
+            {
+                "stepName": "Sit Tall",
+                "instruction": "Sit comfortably with spine straight",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Active Exhales",
+                "instruction": "Exhale forcefully through nose while contracting abdomen",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            },
+            {
+                "stepName": "Breathe",
+                "instruction": "Maintain steady and rhythmic sharp exhales",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Bhramari",
+        "steps": [
+            {
+                "stepName": "Sit Tall",
+                "instruction": "Sit upright and close your eyes",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Close Ears",
+                "instruction": "Close ears with thumbs and place fingers on eyes",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            },
+            {
+                "stepName": "Humming Bee",
+                "instruction": "Inhale deeply, then make a humming bee sound while exhaling",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Pigeon Pose",
+        "steps": [
+            {
+                "stepName": "Slide Leg Forward",
+                "instruction": "Bring one knee forward behind your wrist, extend other leg straight back",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Fold Forward",
+                "instruction": "Gently lower your torso down toward the floor",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            },
+            {
+                "stepName": "Hold Stretch",
+                "instruction": "Breathe deeply and release tension in your hips",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Garland Pose",
+        "steps": [
+            {
+                "stepName": "Wide Squat",
+                "instruction": "Lower hips into a wide, deep squat position",
+                "rules": [
+                    {
+                        "joint": "left_bent_knee",
+                        "idealMin": 75,
+                        "idealMax": 125,
+                        "messageLow": "Bend knee lower for a deeper stretch",
+                        "messageHigh": "Don't bend knee too much past ankle"
+                    }
+                ]
+            },
+            {
+                "stepName": "Prayer Palms",
+                "instruction": "Bring palms together at chest, elbows pressing against inner knees",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Lengthen Spine",
+                "instruction": "Lift your chest and lengthen your spine upward",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Eagle Pose",
+        "steps": [
+            {
+                "stepName": "Wrap Legs",
+                "instruction": "Wrap one leg around the other leg carefully",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    }
+                ]
+            },
+            {
+                "stepName": "Wrap Arms",
+                "instruction": "Cross elbows in front, wrapping forearms and joining palms",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Sink Low",
+                "instruction": "Lower your hips slightly and hold the balance",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Fish Pose",
+        "steps": [
+            {
+                "stepName": "Lie on Back",
+                "instruction": "Lie flat on back with legs straight",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    }
+                ]
+            },
+            {
+                "stepName": "Arch Spine",
+                "instruction": "Press elbows into floor and arch chest upward, crown of head on floor",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Breathe Deeply",
+                "instruction": "Keep chest wide open and take slow deep breaths",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Neck Stretch",
+        "steps": [
+            {
+                "stepName": "Sit Straight",
+                "instruction": "Sit or stand with head centered",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Tilt Right",
+                "instruction": "Tilt head to the right, bringing ear toward shoulder",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            },
+            {
+                "stepName": "Tilt Left",
+                "instruction": "Now slowly tilt head to the left side",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Shoulder Rolls",
+        "steps": [
+            {
+                "stepName": "Stand Ready",
+                "instruction": "Stand tall with arms relaxed at your sides",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Roll Forward",
+                "instruction": "Roll shoulders forward in big, slow circles",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            },
+            {
+                "stepName": "Roll Backward",
+                "instruction": "Now roll shoulders backward in big circles",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Chair Twist",
+        "steps": [
+            {
+                "stepName": "Sit Up",
+                "instruction": "Sit tall in a chair or floor, feet flat",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 160,
+                        "idealMax": 180,
+                        "messageLow": "Straighten spine and stand/sit tall"
+                    }
+                ]
+            },
+            {
+                "stepName": "Twist Right",
+                "instruction": "Twist torso slowly to the right side",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            },
+            {
+                "stepName": "Twist Left",
+                "instruction": "Now slowly twist torso to the left side",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Wrist Stretch",
+        "steps": [
+            {
+                "stepName": "Extend Arm",
+                "instruction": "Extend one arm forward at shoulder height, palm up",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Pull Fingers",
+                "instruction": "Use other hand to pull fingers back gently toward body",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Switch Sides",
+                "instruction": "Switch hands and repeat the stretch on the other side",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Frog Pose",
+        "steps": [
+            {
+                "stepName": "Kneel Wide",
+                "instruction": "Kneel on the floor and slide knees as wide apart as comfortable",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    }
+                ]
+            },
+            {
+                "stepName": "Lower Torso",
+                "instruction": "Bring elbows to floor and gently push hips backward",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Hold",
+                "instruction": "Breathe deeply and release tension in inner thighs",
+                "rules": [
+                    {
+                        "joint": "left_leg",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Straighten your legs"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "poseName": "Lion Breath",
+        "steps": [
+            {
+                "stepName": "Kneel",
+                "instruction": "Kneel or sit with back straight, palms on knees",
+                "rules": [
+                    {
+                        "joint": "left_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    },
+                    {
+                        "joint": "right_arm",
+                        "idealMin": 145,
+                        "idealMax": 180,
+                        "messageLow": "Stretch arms higher overhead"
+                    }
+                ]
+            },
+            {
+                "stepName": "Inhale Deep",
+                "instruction": "Take a slow deep breath in through your nose",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            },
+            {
+                "stepName": "Roar",
+                "instruction": "Open mouth wide, stick tongue out, and exhale with a loud roar",
+                "rules": [
+                    {
+                        "joint": "spine",
+                        "idealMin": 155,
+                        "idealMax": 180,
+                        "messageLow": "Keep your posture aligned"
+                    }
+                ]
+            }
+        ]
+    }
 ]

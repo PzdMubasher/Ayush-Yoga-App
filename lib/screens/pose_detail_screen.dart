@@ -214,7 +214,7 @@ class _PoseDetailScreenState extends State<PoseDetailScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [5, 10, 15, 20].map((mins) {
         bool isSelected = _selectedDuration == mins;
-        String unit = langProvider.currentLanguage == 'hi' ? 'मिनट' : 'min';
+        String unit = langProvider.t('mins_unit');
 
         return GestureDetector(
           onTap: () => setState(() => _selectedDuration = mins),
