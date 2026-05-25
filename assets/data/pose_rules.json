@@ -2943,5 +2943,313 @@
                 ]
             }
         ]
-    }
+    },
+    {
+            "poseName": "Reverse Warrior",
+            "steps": [
+                {
+                    "stepName": "Lunge Position",
+                    "instruction": "Bend front knee and extend legs wide",
+                    "rules": [
+                        {
+                            "joint": "left_leg",
+                            "idealMin": 80,
+                            "idealMax": 120,
+                            "messageLow": "Bend front knee more"
+                        }
+                    ]
+                },
+                {
+                    "stepName": "Raise Arm",
+                    "instruction": "Stretch one arm overhead backward",
+                    "rules": [
+                        {
+                            "joint": "left_arm",
+                            "idealMin": 150,
+                            "idealMax": 180,
+                            "messageLow": "Stretch arm upward"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "poseName": "Dancer Pose",
+            "steps": [
+                {
+                    "stepName": "Balance",
+                    "instruction": "Stand firmly on one leg",
+                    "rules": [
+                        {
+                            "joint": "left_leg",
+                            "idealMin": 160,
+                            "idealMax": 180,
+                            "messageLow": "Keep standing leg straight"
+                        }
+                    ]
+                },
+                {
+                    "stepName": "Lift Back Leg",
+                    "instruction": "Raise opposite leg behind body",
+                    "rules": [
+                        {
+                            "joint": "right_leg",
+                            "idealMin": 40,
+                            "idealMax": 90,
+                            "messageLow": "Lift leg higher"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "poseName": "Handstand",
+            "steps": [
+                {
+                    "stepName": "Place Hands",
+                    "instruction": "Place palms firmly on floor",
+                    "rules": [
+                        {
+                            "joint": "left_arm",
+                            "idealMin": 160,
+                            "idealMax": 180,
+                            "messageLow": "Straighten left arm"
+                        },
+                        {
+                            "joint": "right_arm",
+                            "idealMin": 160,
+                            "idealMax": 180,
+                            "messageLow": "Straighten right arm"
+                        }
+                    ]
+                },
+                {
+                    "stepName": "Lift Legs",
+                    "instruction": "Raise legs vertically upward",
+                    "rules": [
+                        {
+                            "joint": "left_leg",
+                            "idealMin": 160,
+                            "idealMax": 180,
+                            "messageLow": "Straighten left leg"
+                        },
+                        {
+                            "joint": "right_leg",
+                            "idealMin": 160,
+                            "idealMax": 180,
+                            "messageLow": "Straighten right leg"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "poseName": "Headstand",
+            "steps": [
+                {
+                    "stepName": "Forearm Base",
+                    "instruction": "Keep forearms stable on floor",
+                    "rules": [
+                        {
+                            "joint": "left_arm",
+                            "idealMin": 80,
+                            "idealMax": 120,
+                            "messageLow": "Stabilize elbows"
+                        }
+                    ]
+                },
+                {
+                    "stepName": "Raise Body",
+                    "instruction": "Lift body vertically upward",
+                    "rules": [
+                        {
+                            "joint": "spine",
+                            "idealMin": 160,
+                            "idealMax": 180,
+                            "messageLow": "Keep body straight"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "poseName": "Wheel Pose",
+            "steps": [
+                {
+                    "stepName": "Lie Flat",
+                    "instruction": "Lie on back with knees bent",
+                    "rules": [
+                        {
+                            "joint": "spine",
+                            "idealMin": 130,
+                            "idealMax": 180,
+                            "messageLow": "Prepare your back posture"
+                        }
+                    ]
+                },
+                {
+                    "stepName": "Push Up",
+                    "instruction": "Lift body into arch position",
+                    "rules": [
+                        {
+                            "joint": "spine",
+                            "idealMin": 80,
+                            "idealMax": 130,
+                            "messageLow": "Lift hips higher"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "poseName": "Hero Pose",
+            "steps": [
+                {
+                    "stepName": "Kneel Down",
+                    "instruction": "Sit between heels comfortably",
+                    "rules": [
+                        {
+                            "joint": "left_leg",
+                            "idealMin": 40,
+                            "idealMax": 90,
+                            "messageLow": "Fold knees properly"
+                        },
+                        {
+                            "joint": "right_leg",
+                            "idealMin": 40,
+                            "idealMax": 90,
+                            "messageLow": "Fold knees properly"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "poseName": "Seated Forward Bend",
+            "steps": [
+                {
+                    "stepName": "Sit Straight",
+                    "instruction": "Extend legs forward",
+                    "rules": [
+                        {
+                            "joint": "spine",
+                            "idealMin": 150,
+                            "idealMax": 180,
+                            "messageLow": "Sit upright"
+                        }
+                    ]
+                },
+                {
+                    "stepName": "Fold Forward",
+                    "instruction": "Reach toward toes",
+                    "rules": [
+                        {
+                            "joint": "spine",
+                            "idealMin": 60,
+                            "idealMax": 120,
+                            "messageLow": "Bend deeper forward"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "poseName": "Happy Baby Pose",
+            "steps": [
+                {
+                    "stepName": "Lie Down",
+                    "instruction": "Lie on your back",
+                    "rules": [
+                        {
+                            "joint": "spine",
+                            "idealMin": 150,
+                            "idealMax": 180,
+                            "messageLow": "Relax your spine"
+                        }
+                    ]
+                },
+                {
+                    "stepName": "Lift Legs",
+                    "instruction": "Pull knees toward chest",
+                    "rules": [
+                        {
+                            "joint": "left_leg",
+                            "idealMin": 40,
+                            "idealMax": 90,
+                            "messageLow": "Pull left knee closer"
+                        },
+                        {
+                            "joint": "right_leg",
+                            "idealMin": 40,
+                            "idealMax": 90,
+                            "messageLow": "Pull right knee closer"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "poseName": "Locust Pose",
+            "steps": [
+                {
+                    "stepName": "Lie Face Down",
+                    "instruction": "Keep body flat on stomach",
+                    "rules": [
+                        {
+                            "joint": "spine",
+                            "idealMin": 140,
+                            "idealMax": 180,
+                            "messageLow": "Align your spine"
+                        }
+                    ]
+                },
+                {
+                    "stepName": "Lift Chest",
+                    "instruction": "Raise chest and legs upward",
+                    "rules": [
+                        {
+                            "joint": "spine",
+                            "idealMin": 90,
+                            "idealMax": 140,
+                            "messageLow": "Lift chest higher"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "poseName": "Puppy Pose",
+            "steps": [
+                {
+                    "stepName": "Extend Arms",
+                    "instruction": "Stretch arms forward on floor",
+                    "rules": [
+                        {
+                            "joint": "left_arm",
+                            "idealMin": 150,
+                            "idealMax": 180,
+                            "messageLow": "Stretch left arm forward"
+                        },
+                        {
+                            "joint": "right_arm",
+                            "idealMin": 150,
+                            "idealMax": 180,
+                            "messageLow": "Stretch right arm forward"
+                        }
+                    ]
+                },
+                {
+                    "stepName": "Lower Chest",
+                    "instruction": "Bring chest toward floor",
+                    "rules": [
+                        {
+                            "joint": "spine",
+                            "idealMin": 70,
+                            "idealMax": 120,
+                            "messageLow": "Lower chest more"
+                        }
+                    ]
+                }
+            ]
+        }
 ]
