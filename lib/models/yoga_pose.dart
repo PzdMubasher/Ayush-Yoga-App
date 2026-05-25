@@ -82,6 +82,7 @@ class YogaPose {
     YogaPose(name: 'Warrior III', description: 'Virabhadrasana III', benefits: ['Balance', 'Core strength'], tags: ['strength', 'power', 'energy'], imageUrl: 'assets/images/warrior3_pose.png'),
     YogaPose(name: 'Extended Side Angle', description: 'Utthita Parsvakonasana', benefits: ['Stretches legs', 'Opens chest'], tags: ['strength', 'morning'], imageUrl: 'assets/images/extended_side_angle.png'),
     YogaPose(name: 'Triangle Pose', description: 'Trikonasana', benefits: ['Stretches hips', 'Improves digestion'], tags: ['strength', 'morning'], imageUrl: 'assets/images/triangle_pose.png'),
+    YogaPose(name: 'Chair Pose', description: 'Utkatasana', benefits: ['Strengthens thighs', 'Improves posture'], tags: ['beginner', 'strength', 'morning'], imageUrl: 'assets/images/chair_pose.png'),
     YogaPose(name: 'Half Moon Pose', description: 'Ardha Chandrasana', benefits: ['Coordination', 'Core power'], tags: ['strength', 'power', 'energy'], imageUrl: 'assets/images/half_moon.png'),
     YogaPose(name: 'Bridge Pose', description: 'Setu Bandhasana', benefits: ['Thyroid health', 'Back strength'], tags: ['weightLoss', 'women', 'therapy', 'strength'], imageUrl: 'assets/images/bridge_pose.png'),
 
@@ -94,7 +95,6 @@ class YogaPose {
     YogaPose(name: 'Savasana', description: 'Corpse Pose', benefits: ['Deep relaxation', 'Reduces BP'], tags: ['meditation', 'sleep'], imageUrl: 'assets/images/savasana.png'),
 
     // --- STRENGTH & FLEXIBILITY ---
-    YogaPose(name: 'Triangle Pose', description: 'Trikonasana', benefits: ['Stretches hips', 'Improves digestion'], tags: ['strength', 'morning'], imageUrl: 'assets/images/triangle_pose.png'),
     YogaPose(name: 'Side Plank', description: 'Vasisthasana', benefits: ['Oblique strength', 'Balance'], tags: ['strength', 'power'], imageUrl: 'assets/images/side_plank.png'),
     YogaPose(name: 'Dolphin Pose', description: 'Shoulder opener', benefits: ['Strengthens arms', 'Calms brain'], tags: ['strength'], imageUrl: 'assets/images/dolphin_pose.png'),
     YogaPose(name: 'Camel Pose', description: 'Ustrasana', benefits: ['Opens heart', 'Improves posture'], tags: ['strength', 'energy'], imageUrl: 'assets/images/camel_pose.png'),
@@ -133,5 +133,18 @@ class YogaPose {
     YogaPose(name: 'Happy Baby Pose', description: 'Ananda Balasana', benefits: ['Opens inner hips', 'Relieves back tension'], tags: ['beginner', 'women', 'sleep', 'kids'], imageUrl: 'assets/images/savasana.png'),
     YogaPose(name: 'Locust Pose', description: 'Salabhasana - Core backbend', benefits: ['Strengthens spine', 'Improves posture'], tags: ['strength', 'weightLoss'], imageUrl: 'assets/images/cobra_pose.png'),
     YogaPose(name: 'Puppy Pose', description: 'Uttana Shishosana - Heart opener', benefits: ['Stretches spine', 'Opens shoulders'], tags: ['beginner', 'therapy', 'sleep'], imageUrl: 'assets/images/child_pose.png'),
+
+    // --- 11 MORE NEW POSES ---
+    YogaPose(name: 'Firefly Pose', description: 'Tittibhasana - Arm balance stretch', benefits: ['Strengthens wrists', 'Stretches inner groins'], tags: ['strength', 'power'], imageUrl: 'assets/images/crow_pose.png'),
+    YogaPose(name: 'Peacock Pose', description: 'Mayurasana - Advanced arm balance', benefits: ['Detoxifies body', 'Core strength'], tags: ['strength', 'power'], imageUrl: 'assets/images/plank_pose.png'),
+    YogaPose(name: 'Eight Angle Pose', description: 'Astavakrasana - Hand balance twist', benefits: ['Strengthens arms', 'Improves digestion'], tags: ['strength', 'power'], imageUrl: 'assets/images/side_plank.png'),
+    YogaPose(name: 'Side Crow Pose', description: 'Parsva Bakasana - Lateral arm balance', benefits: ['Strengthens wrists', 'Improves balance'], tags: ['strength', 'power'], imageUrl: 'assets/images/crow_pose.png'),
+    YogaPose(name: 'Flying Pigeon Pose', description: 'Eka Pada Galavasana - Flying arm balance', benefits: ['Hip opening', 'Upper body strength'], tags: ['strength', 'power'], imageUrl: 'assets/images/pigeon_pose.png'),
+    YogaPose(name: 'Scorpion Pose', description: 'Vrischikasana - Deep inverted backbend', benefits: ['Strengthens shoulders', 'Improves balance'], tags: ['strength', 'power'], imageUrl: 'assets/images/dolphin_pose.png'),
+    YogaPose(name: 'Forearm Stand', description: 'Pincha Mayurasana - Inverted forearm balance', benefits: ['Shoulder strength', 'Calms brain'], tags: ['strength', 'power', 'energy'], imageUrl: 'assets/images/dolphin_pose.png'),
+    YogaPose(name: 'Lizard Pose', description: 'Utthan Pristhasana - Deep hip opener', benefits: ['Hip flexibility', 'Stretches groin'], tags: ['beginner', 'therapy', 'morning'], imageUrl: 'assets/images/cobra_pose.png'),
+    YogaPose(name: 'Dragon Pose', description: 'Deep hamstring and hip stretch', benefits: ['Deep hip stretch', 'Joint mobility'], tags: ['beginner', 'therapy', 'sleep'], imageUrl: 'assets/images/warrior_pose.png'),
+    YogaPose(name: 'Compass Pose', description: 'Seated side stretch and hip opener', benefits: ['Hamstring flexibility', 'Opens shoulders'], tags: ['strength', 'power'], imageUrl: 'assets/images/triangle_pose.png'),
+    YogaPose(name: 'Split Pose', description: 'Hanumanasana - Front split', benefits: ['Deep hamstring stretch', 'Stretches thighs'], tags: ['strength', 'power', 'morning'], imageUrl: 'assets/images/forward_bend.png'),
   ];
 }
