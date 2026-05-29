@@ -35,6 +35,11 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.getByName("debug")
+            // Disable R8 minification — ML Kit native models are stripped by R8
+            // causing RuntimeException in LintDriver. Add ProGuard keep rules later
+            // if size reduction is needed.
+            isMinifyEnabled = false
+            isShrinkResources = false
         }
     }
 }

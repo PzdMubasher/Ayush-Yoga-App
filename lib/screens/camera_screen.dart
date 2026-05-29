@@ -297,6 +297,95 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
     if (pn.contains('butterfly')) {
       return step <= 1 ? floorPrep : 'assets/images/butterfly_pose.png';
     }
+    
+    // Step-wise guide images for the 21 new poses
+    if (pn.contains('reverse warrior')) {
+      return step == 0 ? 'assets/images/warrior1_step1.png' : 'assets/images/reverse_warrior.png';
+    }
+    if (pn.contains('dancer')) {
+      return step == 0 ? standingPrep : 'assets/images/dancer_pose.png';
+    }
+    if (pn.contains('handstand')) {
+      return step == 0 ? tablePrep : 'assets/images/plank_pose.png';
+    }
+    if (pn.contains('headstand')) {
+      return step == 0 ? tablePrep : 'assets/images/headstand.png';
+    }
+    if (pn.contains('wheel')) {
+      return step == 0 ? lyingPrep : 'assets/images/wheel_pose.png';
+    }
+    if (pn.contains('hero')) {
+      return floorPrep;
+    }
+    if (pn.contains('seated forward bend')) {
+      return step == 0 ? floorPrep : 'assets/images/forward_bend.png';
+    }
+    if (pn.contains('happy baby')) {
+      return step == 0 ? lyingPrep : 'assets/images/savasana.png';
+    }
+    if (pn.contains('locust')) {
+      return step == 0 ? 'assets/images/cobra_step1.png' : 'assets/images/cobra_pose.png';
+    }
+    if (pn.contains('puppy')) {
+      return step == 0 ? 'assets/images/child_step1.png' : 'assets/images/child_pose.png';
+    }
+    if (pn.contains('firefly')) {
+      if (step == 0) return 'assets/images/garland_pose.png';
+      if (step == 1) return tablePrep;
+      return 'assets/images/crow_pose.png';
+    }
+    if (pn.contains('peacock')) {
+      if (step == 0) return tablePrep;
+      if (step == 1) return 'assets/images/plank_step2.png';
+      return 'assets/images/plank_pose.png';
+    }
+    if (pn.contains('eight angle')) {
+      if (step == 0) return floorPrep;
+      if (step == 1) return 'assets/images/butterfly_pose.png';
+      return 'assets/images/side_plank.png';
+    }
+    if (pn.contains('side crow')) {
+      if (step == 0) return 'assets/images/garland_pose.png';
+      if (step == 1) return 'assets/images/chair_twist.png';
+      if (step == 2) return tablePrep;
+      return 'assets/images/crow_pose.png';
+    }
+    if (pn.contains('flying pigeon')) {
+      if (step == 0) return standingPrep;
+      if (step == 1) return 'assets/images/tree_step1.png';
+      if (step == 2) return tablePrep;
+      return 'assets/images/pigeon_pose.png';
+    }
+    if (pn.contains('scorpion')) {
+      if (step == 0) return tablePrep;
+      if (step == 1) return 'assets/images/dolphin_pose.png';
+      if (step == 2) return 'assets/images/bridge_step1.png';
+      return 'assets/images/dolphin_pose.png';
+    }
+    if (pn.contains('forearm stand')) {
+      if (step == 0) return tablePrep;
+      return 'assets/images/dolphin_pose.png';
+    }
+    if (pn.contains('lizard')) {
+      if (step == 0) return 'assets/images/warrior1_step1.png';
+      if (step == 1) return 'assets/images/cobra_step1.png';
+      return 'assets/images/cobra_pose.png';
+    }
+    if (pn.contains('dragon')) {
+      if (step == 0) return 'assets/images/warrior1_step1.png';
+      if (step == 1) return 'assets/images/warrior1_step2.png';
+      return 'assets/images/warrior_pose.png';
+    }
+    if (pn.contains('compass')) {
+      if (step == 0) return floorPrep;
+      if (step == 1) return 'assets/images/butterfly_pose.png';
+      return 'assets/images/triangle_pose.png';
+    }
+    if (pn.contains('split')) {
+      if (step == 0) return 'assets/images/warrior1_step1.png';
+      return 'assets/images/split_pose.png';
+    }
+
     if (pn.contains('savasana') || pn.contains('rest')) {
       return lyingPrep;
     }

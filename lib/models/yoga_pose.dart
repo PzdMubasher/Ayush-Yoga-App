@@ -123,11 +123,11 @@ class YogaPose {
     YogaPose(name: 'Lion Breath', description: 'Relieve tension', benefits: ['Face muscle relaxation'], tags: ['kids', 'energy'], imageUrl: 'assets/images/lion_breath.png'),
 
     // --- NEW POSES ---
-    YogaPose(name: 'Reverse Warrior', description: 'Side stretch lunge', benefits: ['Stretches side waist', 'Improves balance'], tags: ['strength', 'morning', 'energy'], imageUrl: 'assets/images/warrior_pose.png'),
-    YogaPose(name: 'Dancer Pose', description: 'Natarajasana - Balancing backbend', benefits: ['Improves balance', 'Stretches shoulders'], tags: ['strength', 'power', 'energy'], imageUrl: 'assets/images/tree_pose.png'),
+    YogaPose(name: 'Reverse Warrior', description: 'Side stretch lunge', benefits: ['Stretches side waist', 'Improves balance'], tags: ['strength', 'morning', 'energy'], imageUrl: 'assets/images/reverse_warrior.png'),
+    YogaPose(name: 'Dancer Pose', description: 'Natarajasana - Balancing backbend', benefits: ['Improves balance', 'Stretches shoulders'], tags: ['strength', 'power', 'energy'], imageUrl: 'assets/images/dancer_pose.png'),
     YogaPose(name: 'Handstand', description: 'Adho Mukha Vrksasana', benefits: ['Upper body strength', 'Balance'], tags: ['strength', 'power'], imageUrl: 'assets/images/plank_pose.png'),
-    YogaPose(name: 'Headstand', description: 'Sirsasana - King of poses', benefits: ['Improves focus', 'Core strength'], tags: ['strength', 'power', 'energy'], imageUrl: 'assets/images/dolphin_pose.png'),
-    YogaPose(name: 'Wheel Pose', description: 'Urdhva Dhanurasana', benefits: ['Back flexibility', 'Strengthens arms'], tags: ['strength', 'power', 'morning'], imageUrl: 'assets/images/bridge_pose.png'),
+    YogaPose(name: 'Headstand', description: 'Sirsasana - King of poses', benefits: ['Improves focus', 'Core strength'], tags: ['strength', 'power', 'energy'], imageUrl: 'assets/images/headstand.png'),
+    YogaPose(name: 'Wheel Pose', description: 'Urdhva Dhanurasana', benefits: ['Back flexibility', 'Strengthens arms'], tags: ['strength', 'power', 'morning'], imageUrl: 'assets/images/wheel_pose.png'),
     YogaPose(name: 'Hero Pose', description: 'Virasana - Kneeling posture', benefits: ['Stretches thighs', 'Improves posture'], tags: ['beginner', 'therapy', 'sleep'], imageUrl: 'assets/images/lotus_pose.png'),
     YogaPose(name: 'Seated Forward Bend', description: 'Paschimottanasana', benefits: ['Stretches spine', 'Calms mind'], tags: ['beginner', 'therapy', 'sleep'], imageUrl: 'assets/images/forward_bend.png'),
     YogaPose(name: 'Happy Baby Pose', description: 'Ananda Balasana', benefits: ['Opens inner hips', 'Relieves back tension'], tags: ['beginner', 'women', 'sleep', 'kids'], imageUrl: 'assets/images/savasana.png'),
@@ -145,6 +145,6 @@ class YogaPose {
     YogaPose(name: 'Lizard Pose', description: 'Utthan Pristhasana - Deep hip opener', benefits: ['Hip flexibility', 'Stretches groin'], tags: ['beginner', 'therapy', 'morning'], imageUrl: 'assets/images/cobra_pose.png'),
     YogaPose(name: 'Dragon Pose', description: 'Deep hamstring and hip stretch', benefits: ['Deep hip stretch', 'Joint mobility'], tags: ['beginner', 'therapy', 'sleep'], imageUrl: 'assets/images/warrior_pose.png'),
     YogaPose(name: 'Compass Pose', description: 'Seated side stretch and hip opener', benefits: ['Hamstring flexibility', 'Opens shoulders'], tags: ['strength', 'power'], imageUrl: 'assets/images/triangle_pose.png'),
-    YogaPose(name: 'Split Pose', description: 'Hanumanasana - Front split', benefits: ['Deep hamstring stretch', 'Stretches thighs'], tags: ['strength', 'power', 'morning'], imageUrl: 'assets/images/forward_bend.png'),
+    YogaPose(name: 'Split Pose', description: 'Hanumanasana - Front split', benefits: ['Deep hamstring stretch', 'Stretches thighs'], tags: ['strength', 'power', 'morning'], imageUrl: 'assets/images/split_pose.png'),
   ];
 }
