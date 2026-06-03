@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../model/auth_repository.dart';
 
 class LoginViewModel extends ChangeNotifier {
@@ -63,6 +64,16 @@ class LoginViewModel extends ChangeNotifier {
         _isSuccess = true;
       } else {
         _errorMessage = "Invalid email or password. Please try again.";
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        _errorMessage = "No user found for that email.";
+      } else if (e.code == 'wrong-password') {
+        _errorMessage = "Wrong password provided.";
+      } else if (e.code == 'invalid-credential') {
+        _errorMessage = "Invalid email or password.";
+      } else {
+        _errorMessage = e.message ?? "An error occurred during login.";
       }
     } catch (e) {
       _errorMessage = "An unexpected error occurred: ${e.toString()}";

@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../model/auth_repository.dart';
 
 class RegisterViewModel extends ChangeNotifier {
@@ -74,6 +75,14 @@ class RegisterViewModel extends ChangeNotifier {
         _isSuccess = true;
       } else {
         _errorMessage = "Registration failed. Please try again.";
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        _errorMessage = 'The password provided is too weak.';
+      } else if (e.code == 'email-already-in-use') {
+        _errorMessage = 'The account already exists for that email.';
+      } else {
+        _errorMessage = e.message ?? "An error occurred during registration.";
       }
     } catch (e) {
       _errorMessage = e.toString().replaceAll("Exception: ", "");

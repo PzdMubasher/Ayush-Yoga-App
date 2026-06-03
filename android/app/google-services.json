@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "298968334823",
+    "project_id": "ayush-yoga",
+    "storage_bucket": "ayush-yoga.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:298968334823:android:b041e96b42a0eec8fb7d42",
+        "android_client_info": {
+          "package_name": "com.example.yoga_day_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcwFauhz5pKqwb-kppPLtu5yoy09g7Fkc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
