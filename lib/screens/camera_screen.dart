@@ -306,7 +306,7 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
       return step == 0 ? standingPrep : 'assets/images/dancer_pose.png';
     }
     if (pn.contains('handstand')) {
-      return step == 0 ? tablePrep : 'assets/images/plank_pose.png';
+      return step == 0 ? tablePrep : 'assets/images/handstand.png';
     }
     if (pn.contains('headstand')) {
       return step == 0 ? tablePrep : 'assets/images/headstand.png';
@@ -315,71 +315,71 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
       return step == 0 ? lyingPrep : 'assets/images/wheel_pose.png';
     }
     if (pn.contains('hero')) {
-      return floorPrep;
+      return step == 0 ? floorPrep : 'assets/images/hero_pose.png';
     }
     if (pn.contains('seated forward bend')) {
       return step == 0 ? floorPrep : 'assets/images/forward_bend.png';
     }
     if (pn.contains('happy baby')) {
-      return step == 0 ? lyingPrep : 'assets/images/savasana.png';
+      return step == 0 ? lyingPrep : 'assets/images/happy_baby_pose.png';
     }
     if (pn.contains('locust')) {
-      return step == 0 ? 'assets/images/cobra_step1.png' : 'assets/images/cobra_pose.png';
+      return step == 0 ? 'assets/images/cobra_step1.png' : 'assets/images/locust_pose.png';
     }
     if (pn.contains('puppy')) {
-      return step == 0 ? 'assets/images/child_step1.png' : 'assets/images/child_pose.png';
+      return step == 0 ? 'assets/images/child_step1.png' : 'assets/images/puppy_pose.png';
     }
     if (pn.contains('firefly')) {
       if (step == 0) return 'assets/images/garland_pose.png';
       if (step == 1) return tablePrep;
-      return 'assets/images/crow_pose.png';
+      return 'assets/images/firefly_pose.png';
     }
     if (pn.contains('peacock')) {
       if (step == 0) return tablePrep;
       if (step == 1) return 'assets/images/plank_step2.png';
-      return 'assets/images/plank_pose.png';
+      return 'assets/images/peacock_pose.png';
     }
     if (pn.contains('eight angle')) {
       if (step == 0) return floorPrep;
       if (step == 1) return 'assets/images/butterfly_pose.png';
-      return 'assets/images/side_plank.png';
+      return 'assets/images/eight_angle_pose.png';
     }
     if (pn.contains('side crow')) {
       if (step == 0) return 'assets/images/garland_pose.png';
       if (step == 1) return 'assets/images/chair_twist.png';
       if (step == 2) return tablePrep;
-      return 'assets/images/crow_pose.png';
+      return 'assets/images/side_crow_pose.png';
     }
     if (pn.contains('flying pigeon')) {
       if (step == 0) return standingPrep;
       if (step == 1) return 'assets/images/tree_step1.png';
       if (step == 2) return tablePrep;
-      return 'assets/images/pigeon_pose.png';
+      return 'assets/images/flying_pigeon_pose.png';
     }
     if (pn.contains('scorpion')) {
       if (step == 0) return tablePrep;
       if (step == 1) return 'assets/images/dolphin_pose.png';
       if (step == 2) return 'assets/images/bridge_step1.png';
-      return 'assets/images/dolphin_pose.png';
+      return 'assets/images/scorpion_pose.png';
     }
     if (pn.contains('forearm stand')) {
       if (step == 0) return tablePrep;
-      return 'assets/images/dolphin_pose.png';
+      return 'assets/images/forearm_stand.png';
     }
     if (pn.contains('lizard')) {
       if (step == 0) return 'assets/images/warrior1_step1.png';
       if (step == 1) return 'assets/images/cobra_step1.png';
-      return 'assets/images/cobra_pose.png';
+      return 'assets/images/lizard_pose.png';
     }
     if (pn.contains('dragon')) {
       if (step == 0) return 'assets/images/warrior1_step1.png';
       if (step == 1) return 'assets/images/warrior1_step2.png';
-      return 'assets/images/warrior_pose.png';
+      return 'assets/images/dragon_pose.png';
     }
     if (pn.contains('compass')) {
       if (step == 0) return floorPrep;
       if (step == 1) return 'assets/images/butterfly_pose.png';
-      return 'assets/images/triangle_pose.png';
+      return 'assets/images/compass_pose.png';
     }
     if (pn.contains('split')) {
       if (step == 0) return 'assets/images/warrior1_step1.png';
@@ -811,7 +811,26 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
         lowercasePose.contains("anulom") ||
         lowercasePose.contains("kapalbhati") ||
         lowercasePose.contains("bhramari") ||
-        lowercasePose.contains("lion");
+        lowercasePose.contains("lion") ||
+        lowercasePose.contains("handstand") ||
+        lowercasePose.contains("headstand") ||
+        lowercasePose.contains("wheel") ||
+        lowercasePose.contains("hero") ||
+        lowercasePose.contains("seated forward") ||
+        lowercasePose.contains("happy baby") ||
+        lowercasePose.contains("locust") ||
+        lowercasePose.contains("puppy") ||
+        lowercasePose.contains("firefly") ||
+        lowercasePose.contains("peacock") ||
+        lowercasePose.contains("eight angle") ||
+        lowercasePose.contains("side crow") ||
+        lowercasePose.contains("flying pigeon") ||
+        lowercasePose.contains("scorpion") ||
+        lowercasePose.contains("forearm stand") ||
+        lowercasePose.contains("lizard") ||
+        lowercasePose.contains("dragon") ||
+        lowercasePose.contains("compass") ||
+        lowercasePose.contains("split");
 
     // Accumulate rules from Step 0 → _currentStepIndex (later rules override earlier for same joint)
     final Map<String, Map<String, dynamic>> activeRulesMap = {};
@@ -829,8 +848,24 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
         if (isSittingOrGroundPose) {
           // Dynamically adjust rules that expect straight limbs/spine in a bent/sitting pose
           final double currentMin = (ruleCopy['idealMin'] as num?)?.toDouble() ?? 0.0;
+          
+          final bool requiresStraightLegs = 
+              lowercasePose.contains("plank") ||
+              lowercasePose.contains("chaturanga") ||
+              lowercasePose.contains("savasana") ||
+              lowercasePose.contains("cobra") ||
+              lowercasePose.contains("handstand") ||
+              lowercasePose.contains("headstand") ||
+              lowercasePose.contains("forearm stand") ||
+              lowercasePose.contains("peacock") ||
+              lowercasePose.contains("split") ||
+              lowercasePose.contains("lizard") ||
+              lowercasePose.contains("dragon") ||
+              lowercasePose.contains("compass") ||
+              lowercasePose.contains("locust");
+
           if (rawJoint.contains("knee") || rawJoint.contains("leg") || rawJoint.contains("ankle")) {
-            if (currentMin >= 140.0) {
+            if (currentMin >= 140.0 && !requiresStraightLegs) {
               // For sitting/ground poses, knees/legs should be bent
               ruleCopy['idealMin'] = 20.0;
               ruleCopy['idealMax'] = 120.0;
@@ -862,7 +897,15 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
                   lowercasePose.contains("cobra") ||
                   lowercasePose.contains("crow") ||
                   lowercasePose.contains("bow") ||
-                  lowercasePose.contains("pigeon")) {
+                  lowercasePose.contains("pigeon") ||
+                  lowercasePose.contains("peacock") ||
+                  lowercasePose.contains("eight angle") ||
+                  lowercasePose.contains("side crow") ||
+                  lowercasePose.contains("flying pigeon") ||
+                  lowercasePose.contains("scorpion") ||
+                  lowercasePose.contains("forearm stand") ||
+                  lowercasePose.contains("puppy") ||
+                  lowercasePose.contains("happy baby")) {
                 ruleCopy['idealMin'] = 20.0;
                 ruleCopy['idealMax'] = 140.0;
                 ruleCopy['messageLow'] = 'Bend your elbows';
@@ -1165,6 +1208,18 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
       final h = landmarks[PoseLandmarkType.leftHip];
       final k = landmarks[PoseLandmarkType.leftKnee];
       
+      // Inversion check: for inverted poses, hip/knee/ankle must be physically higher than shoulder (ML Kit Y decreases upwards)
+      final invertedPoses = ["Handstand", "Headstand", "Forearm Stand", "Scorpion Pose"];
+      if (invertedPoses.contains(_targetPoseName)) {
+        final shoulder = landmarks[PoseLandmarkType.leftShoulder] ?? landmarks[PoseLandmarkType.rightShoulder];
+        final hip = landmarks[PoseLandmarkType.leftHip] ?? landmarks[PoseLandmarkType.rightHip];
+        final knee = landmarks[PoseLandmarkType.leftKnee] ?? landmarks[PoseLandmarkType.rightKnee];
+        if (shoulder != null && hip != null) {
+          if (hip.y > shoulder.y) return 0.0; // Fail check
+          if (knee != null && knee.y > hip.y) return 0.0; // Fail check
+        }
+      }
+
       final uprightStandingPoses = [
         "Mountain Pose", "Tree Pose", "Warrior I", "Warrior II", 
         "Chair Pose", "Goddess Pose"
@@ -1173,7 +1228,8 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
       
       final sittingUprightPoses = [
         "Lotus Pose", "Deep Breathing", "Anulom Vilom", "Kapalbhati",
-        "Bhramari", "Neck Stretch", "Butterfly Pose", "Chair Twist", "Lion Breath", "Boat Pose"
+        "Bhramari", "Neck Stretch", "Butterfly Pose", "Chair Twist", "Lion Breath", "Boat Pose",
+        "Hero Pose", "Seated Forward Bend", "Compass Pose", "Split Pose", "Eight Angle Pose"
       ];
       
       if (sittingUprightPoses.contains(_targetPoseName)) {
